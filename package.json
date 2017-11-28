@@ -1,0 +1,12 @@
+{ "name": "langue"
+, "description": "Official website for the Langue festival"
+, "version": "0.0.2"
+, "license": "GPL-3.0"
+, "author": "emilianobovetti"
+, "repository": "https://github.com/langue-festival/langue-festival.github.io.git"
+, "devDependencies":
+    { "elm": "^0.18.0"
+    , "purecss": "^1.0.0"
+    , "inliner": "^1.13.0"
+    }
+}
