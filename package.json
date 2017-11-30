@@ -6,6 +6,7 @@
 , "repository": "https://github.com/langue-festival/langue-festival.github.io.git"
 , "devDependencies":
     { "elm": "^0.18.0"
+    , "elm-analyse": "^0.12.1"
     , "purecss": "^1.0.0"
     , "inliner": "^1.13.0"
     }

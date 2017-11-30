@@ -1,48 +1,78 @@
 port module App exposing (main)
 
-import Model exposing (Model, updatePage, updatePageCache)
+import Page.Loader as Loader exposing (Cache)
 import Route exposing (Route)
-import Dict exposing (Dict)
 import Html exposing (Html)
-import Msg exposing (Msg)
+import Page exposing (Page)
 import Html.Attributes
-import Page.Loader
-import Page.Parser
 import Navigation
 import Template
 import Http
 
 
+type Msg
+    = UrlChange Navigation.Location
+    | LoadError Route Http.Error
+    | PageLoad Route (Page Msg) (Cache Msg)
+    | TransitionEnd
+    | OpenMenu
+    | CloseMenu
+
+
+type alias Model =
+    { currentRoute : Route
+    , currentPage : Page Msg
+    , lastRoute : Route
+    , lastPage : Page Msg
+    , animateTransition : Bool
+    , inTransition : Bool
+    , menuHidden : Bool
+    , pageCache : Cache Msg
+    }
+
+
 type alias Flags =
     { pages : List ( Route, String )
+    , firstAnimation : Bool
     }
 
 
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     let
-        pareRouteContent : ( Route, String ) -> ( Route, List (Html Msg) )
-        pareRouteContent ( route, content ) =
-            ( route, parsePage route content )
-
-        pageCache : Dict Route (List (Html Msg))
-        pageCache =
-            List.map pareRouteContent flags.pages
-                |> Dict.fromList
-
         model : Model
         model =
             { currentRoute = Route.parseLocation location
             , currentPage = []
             , lastRoute = Route.parseLocation location
             , lastPage = []
-            , animateTransition = False
+            , animateTransition = flags.firstAnimation
             , inTransition = False
             , menuHidden = True
-            , pageCache = pageCache
+            , pageCache = Loader.loadCache flags.pages
             }
     in
         handleUrlChange location model
+
+
+updatePage : Route -> Page Msg -> Model -> Model
+updatePage route page model =
+    { model
+        | currentRoute = route
+        , currentPage = page
+        , lastRoute = model.currentRoute
+        , lastPage = model.currentPage
+    }
+
+
+loaderEventToAppMsg : Loader.Event Msg -> Msg
+loaderEventToAppMsg loaderMsg =
+    case loaderMsg of
+        Loader.Success route page cache ->
+            PageLoad route page cache
+
+        Loader.Error route error ->
+            LoadError route error
 
 
 handleUrlChange : Navigation.Location -> Model -> ( Model, Cmd Msg )
@@ -50,37 +80,10 @@ handleUrlChange location model =
     if model.inTransition then
         model ! [ Route.toUrl model.currentRoute |> Navigation.load ]
     else
-        ( model, Page.Loader.load location model )
+        ( model, Loader.load location model.pageCache loaderEventToAppMsg )
 
 
-parsePage : Route -> String -> List (Html msg)
-parsePage route pageContent =
-    [ Html.div
-        [ Html.Attributes.class "pure-u-1-12 pure-u-md-1-24" ]
-        []
-    , Page.Parser.parse
-        pageContent
-        [ Html.Attributes.id route
-        , Html.Attributes.class "markdown pure-u-7-8 pure-u-md-2-3"
-        ]
-    ]
-
-
-handleContentLoad : Route -> String -> Model -> ( Model, Cmd Msg )
-handleContentLoad route pageContent model =
-    let
-        page : List (Html Msg)
-        page =
-            parsePage route pageContent
-
-        newModel : Model
-        newModel =
-            updatePageCache route page model
-    in
-        handlePageLoad route page newModel
-
-
-handlePageLoad : Route -> List (Html Msg) -> Model -> ( Model, Cmd Msg )
+handlePageLoad : Route -> Page Msg -> Model -> ( Model, Cmd Msg )
 handlePageLoad route page model =
     if model.inTransition then
         -- let the transition end
@@ -94,27 +97,40 @@ handlePageLoad route page model =
             ( newModel, closeMenuCmd ) =
                 { model | inTransition = True }
                     |> updatePage route page
-                    |> update Msg.CloseMenu
+                    |> update CloseMenu
         in
             newModel ! [ transitionEndListener, closeMenuCmd ]
     else
-        -- first load
+        -- first load, do animation from now on
         updatePage route page { model | animateTransition = True } ! []
 
 
 set404 : Route -> Model -> ( Model, Cmd Msg )
 set404 route model =
-    handleContentLoad route "#404\nNon è stato possibile trovare la pagina richiesta" model
+    let
+        content =
+            "#404\nNon è stato possibile trovare la pagina richiesta"
+
+        newModel =
+            { model | currentPage = Page.parser route content }
+    in
+        newModel ! []
 
 
 setViewError : Route -> String -> Model -> ( Model, Cmd Msg )
 setViewError route error model =
-    --TODO do not cache errors!
-    handleContentLoad route ("#Si è verificato un errore\n\n" ++ error) model
+    let
+        content =
+            "#Si è verificato un errore\n\n" ++ error
+
+        newModel =
+            { model | currentPage = Page.parser route content }
+    in
+        newModel ! []
 
 
-handleContentLoadError : Route -> Http.Error -> Model -> ( Model, Cmd Msg )
-handleContentLoadError route error model =
+handleLoadError : Route -> Http.Error -> Model -> ( Model, Cmd Msg )
+handleLoadError route error model =
     case error of
         Http.BadUrl url ->
             setViewError route ("Url non valido: " ++ url) model
@@ -131,7 +147,7 @@ handleContentLoadError route error model =
             else
                 setViewError route ("Status: " ++ toString response.status) model
 
-        Http.BadPayload payload response ->
+        Http.BadPayload _ response ->
             setViewError route ("Status: " ++ toString response.status) model
 
 
@@ -142,27 +158,23 @@ handleTransitionEnd model =
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
-    -- TODO anchor handling
     case msg of
-        Msg.UrlChange location ->
+        UrlChange location ->
             handleUrlChange location model
 
-        Msg.ContentLoad ( route, pageContent ) ->
-            handleContentLoad route pageContent model
+        LoadError route error ->
+            handleLoadError route error model
 
-        Msg.ContentLoadError ( route, error ) ->
-            handleContentLoadError route error model
+        PageLoad route page cache ->
+            handlePageLoad route page { model | pageCache = cache }
 
-        Msg.PageLoad ( route, page ) ->
-            handlePageLoad route page model
-
-        Msg.TransitionEnd ->
+        TransitionEnd ->
             handleTransitionEnd model
 
-        Msg.OpenMenu ->
+        OpenMenu ->
             { model | menuHidden = False } ! [ startCloseMenuListener () ]
 
-        Msg.CloseMenu ->
+        CloseMenu ->
             { model | menuHidden = True } ! [ stopCloseMenuListener () ]
 
 
@@ -189,7 +201,7 @@ exitTransitionAttributes =
 {- end content container attributes -}
 
 
-renderPage : Model -> List (Html Msg)
+renderPage : Model -> Page Msg
 renderPage model =
     if model.inTransition then
         [ Html.div exitTransitionAttributes
@@ -207,7 +219,7 @@ view : Model -> Html Msg
 view model =
     Html.div [ Html.Attributes.id "root-node" ]
         (Template.menu model
-            :: Template.menuToggleButton model
+            :: Template.menuToggleButton model OpenMenu CloseMenu
             :: renderPage model
         )
 
@@ -228,16 +240,16 @@ port notifyCloseMenu : (() -> msg) -> Sub msg
 
 
 subscriptions : Model -> Sub Msg
-subscriptions model =
+subscriptions _ =
     Sub.batch
-        [ notifyTransitionEnd (always Msg.TransitionEnd)
-        , notifyCloseMenu (always Msg.CloseMenu)
+        [ notifyTransitionEnd (always TransitionEnd)
+        , notifyCloseMenu (always CloseMenu)
         ]
 
 
 main : Program Flags Model Msg
 main =
-    Navigation.programWithFlags Msg.UrlChange
+    Navigation.programWithFlags UrlChange
         { init = init
         , view = view
         , update = update

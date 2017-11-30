@@ -1,45 +1,70 @@
-module Page.Loader exposing (load)
+module Page.Loader exposing (Cache, Event(Success, Error), loadCache, load)
 
-import Msg exposing (Msg(ContentLoad, ContentLoadError, PageLoad))
 import Route exposing (Route)
-import Model exposing (Model)
 import Dict exposing (Dict)
+import Page exposing (Page)
 import Navigation
 import Http
 import Task
 
 
-handleResponse : Route -> Result Http.Error String -> Msg
-handleResponse route result =
-    case result of
-        Ok page ->
-            ContentLoad ( route, page )
+type alias Cache msg =
+    Dict Route (Page msg)
 
-        Err e ->
-            ContentLoadError ( route, e )
+
+type Event msg
+    = Success Route (Page msg) (Cache msg)
+    | Error Route Http.Error
+
+
+loadCache : List ( Route, String ) -> Cache msg
+loadCache pageList =
+    let
+        parseMap : ( Route, String ) -> ( Route, Page msg )
+        parseMap ( route, content ) =
+            ( route, Page.parser route content )
+    in
+        Dict.fromList <| List.map parseMap pageList
+
+
+handleHttpResponse : Route -> Cache msg -> Result Http.Error String -> Event msg
+handleHttpResponse route cache result =
+    case result of
+        Ok content ->
+            let
+                page =
+                    Page.parser route content
+
+                newCache =
+                    Dict.insert route page cache
+            in
+                Success route page newCache
+
+        Err error ->
+            Error route error
 
 
 routeToPageUrl : Route -> String
 routeToPageUrl route =
-    "pages/" ++ (String.toLower route) ++ ".md"
+    "pages/" ++ String.toLower route ++ ".md"
 
 
-fetch : Route -> Cmd Msg
-fetch route =
+fetch : Route -> Cache msg -> (Event msg -> msg) -> Cmd msg
+fetch route cache toAppMsg =
     routeToPageUrl route
         |> Http.getString
-        |> Http.send (handleResponse route)
+        |> Http.send (handleHttpResponse route cache >> toAppMsg)
 
 
-load : Navigation.Location -> Model -> Cmd Msg
-load location model =
+load : Navigation.Location -> Cache msg -> (Event msg -> msg) -> Cmd msg
+load location cache toAppMsg =
     let
         route =
             Route.parseLocation location
     in
-        case Dict.get route model.pageCache of
+        case Dict.get route cache of
             Just page ->
-                Task.perform (\page -> PageLoad ( route, page )) (Task.succeed page)
+                Task.perform toAppMsg <| Task.succeed <| Success route page cache
 
             Nothing ->
-                fetch route
+                fetch route cache toAppMsg

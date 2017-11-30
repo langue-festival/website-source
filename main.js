@@ -1,6 +1,8 @@
+'use strict';
+
 var pages = pages || [],
 
-    app = Elm.App.fullscreen({ pages : pages }),
+    app = Elm.App.fullscreen({ pages: pages, firstAnimation: false }),
 
     rootNode;
 
@@ -54,7 +56,7 @@ app.ports.waitForTransitionEnd.subscribe(function (route) {
                      * Now we can add the event listener to the node
                      * to notify the application when the animation ended.
                      */
-                    node.addEventListener('animationend', function(event) {
+                    node.addEventListener('animationend', function (event) {
                         /*
                          * When the animation ends we have to scroll page to top.
                          */

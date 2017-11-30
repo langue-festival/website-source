@@ -22,6 +22,12 @@
 /*
  * General
  */
+* {
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+}
+
 html {
   min-height: 100%;
   position: relative;
@@ -40,7 +46,7 @@ h1, h2, h3, h4, h5, h6
   color: #500;
 }
 
-a.disabled {
+.disabled {
    pointer-events: none;
    cursor: default;
 }
@@ -50,7 +56,7 @@ a.disabled {
  */
 #menu {
   height: 100%;
-  width: 8em;
+  width: 9em;
   margin: 0;
   padding: 2em 0 0 0.6em;
   background-color: #488dd8;
@@ -59,7 +65,9 @@ a.disabled {
   box-shadow: 0 6px 10px 0 rgba(0,0,0,0.14),0 1px 18px 0 rgba(0,0,0,0.12),0 3px 5px -1px rgba(0,0,0,0.3);
 }
 
-#menu a {
+#menu a:hover,
+#menu a:focus,
+#menu a:active {
   outline: none;
 }
 
@@ -78,6 +86,7 @@ a.disabled {
   z-index: 2;
   opacity: 0;
   transition: opacity 0.5s;
+  background-color: #eee;
   background-color: rgba(0,0,0,0.4);
 }
 
@@ -152,7 +161,6 @@ a.disabled {
   height: 4em;
   width: 4em;
   border-radius: 2em;
-  outline: none;
   border: 2px solid #f2f2f2;
   /* z-depth: 4 */
   z-index: 4;
@@ -163,6 +171,7 @@ a.disabled {
 #toggle-menu:focus,
 #toggle-menu:active {
   background-color: #f2f2f2;
+  outline: none;
 }
 
 #toggle-menu:active {
@@ -271,25 +280,25 @@ a.disabled {
   height: 100%;
 }
 
-#home #first-edition,
-#home #home-tagline {
+#home .first-edition,
+#home .home-tagline {
   margin: 0.7em 0;
 }
 
-#home #first-edition,
-#home #home-tagline {
+#home .first-edition,
+#home .home-tagline {
   font-size: 24pt;
 }
 
-#home #home-tagline {
+#home .home-tagline {
   color: #000;
 }
 
-#home #home-tagline hr {
+#home .home-tagline hr {
   width: 5em;
 }
 
-#social-media a {
+.social-media a {
   text-decoration: none;
 }
 
@@ -319,8 +328,8 @@ a.disabled {
 @media screen and (min-width: 48em) {
   /* md ≥ 768px */
 
-  #home #first-edition,
-  #home #home-tagline {
+  #home .first-edition,
+  #home .home-tagline {
     font-size: 35pt;
   }
 
@@ -364,7 +373,7 @@ a.disabled {
 @media screen and (min-width: 80em) {
   /* xl ≥ 1280px */
 
-  #home #home-tagline hr {
+  #home .home-tagline hr {
     width: 7em;
   }
 }

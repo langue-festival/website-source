@@ -6,6 +6,7 @@ elm_target		:= $(build_dir)/compiled_elm.js
 node_modules	:= $(base_dir)/node_modules
 # executables in node_modules
 elm_make	:= $(node_modules)/.bin/elm-make
+elm_analyse	:= $(node_modules)/.bin/elm-analyse
 inliner		:= $(node_modules)/.bin/inliner
 
 .PHONY: elm
@@ -15,13 +16,16 @@ all : inliner
 yarn :
 	@yarn
 
-elm :
+elm-dev :
 ifeq ("$(wildcard $(elm_make))", "")
 	make yarn
 	make elm
 else
 	@cd $(elm_dir) && $(elm_make) src/App.elm --output=$(elm_target) --warn --yes
 endif
+
+elm : elm-dev
+	@cd $(elm_dir) && $(elm_analyse)
 
 inliner : yarn elm
 	@chmod a+x $(base_dir)/embed_pages.sh

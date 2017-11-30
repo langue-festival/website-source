@@ -9,13 +9,23 @@ function page_to_pair {
     page_content="$(cat "${path_name}" | sed 's/"/\\"/g')"
     page_content="$(echo "${page_content}" | awk '{ printf $0 "\\n" }')"
 
-    echo "[ \"${page_name}\" , \"${page_content}\" ],"
+    echo "    [\"${page_name}\", \"${page_content}\"]"
 }
 
 function get_pages {
+    last_file=""
+
     for file in pages/*; do
-        echo "$(page_to_pair "${file}")"
+        if [ -n "${last_file}" ]; then
+            echo "$(page_to_pair "${last_file}"),"
+        fi
+
+        last_file="${file}"
     done
+
+    if [ -n "${last_file}" ]; then
+        echo "$(page_to_pair "${last_file}")"
+    fi
 }
 
 test -d  build || mkdir build

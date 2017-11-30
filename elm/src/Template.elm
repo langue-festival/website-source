@@ -3,12 +3,18 @@ module Template exposing (menu, menuToggleButton)
 import Html exposing (Html, a, ul, li, nav, text, button, img)
 import Html.Attributes exposing (id, class, href, src)
 import Html.Events exposing (onClick)
-import Msg exposing (Msg(OpenMenu, CloseMenu))
-import Model exposing (Model)
 import Route exposing (Route)
 
 
-getLinkAttributes : Model -> List (Html.Attribute Msg)
+type alias Model model =
+    { model
+        | currentRoute : Route
+        , inTransition : Bool
+        , menuHidden : Bool
+    }
+
+
+getLinkAttributes : Model m -> List (Html.Attribute msg)
 getLinkAttributes model =
     if model.inTransition then
         [ class "pure-menu-link disabled" ]
@@ -16,7 +22,7 @@ getLinkAttributes model =
         [ class "pure-menu-link" ]
 
 
-menuItem : String -> Route -> Model -> Html Msg
+menuItem : String -> Route -> Model m -> Html msg
 menuItem linkName linkRoute model =
     let
         itemClass =
@@ -32,7 +38,7 @@ menuItem linkName linkRoute model =
             [ a (linkHref :: getLinkAttributes model) [ text linkName ] ]
 
 
-getMenuAttributes : Model -> List (Html.Attribute Msg)
+getMenuAttributes : Model m -> List (Html.Attribute msg)
 getMenuAttributes model =
     -- id needed for `document.getElementById('menu')`
     if model.menuHidden then
@@ -41,7 +47,7 @@ getMenuAttributes model =
         [ id "menu", class "opened pure-menu pure-menu-fixed" ]
 
 
-menu : Model -> Html Msg
+menu : Model m -> Html msg
 menu model =
     nav (getMenuAttributes model)
         [ ul [ class "pure-menu-list" ]
@@ -57,14 +63,14 @@ menu model =
         ]
 
 
-menuToggleButton : Model -> Html Msg
-menuToggleButton model =
+menuToggleButton : Model m -> msg -> msg -> Html msg
+menuToggleButton model openMenuMsg closeMenuMsg =
     let
         toggle =
             if model.menuHidden then
-                OpenMenu
+                openMenuMsg
             else
-                CloseMenu
+                closeMenuMsg
     in
         button [ id "toggle-menu", onClick toggle ]
             [ img [ src "assets/images/menu-icon.svg" ] [] ]
