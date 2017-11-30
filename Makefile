@@ -16,7 +16,7 @@ all : inliner
 yarn :
 	@yarn
 
-elm-dev :
+elm :
 ifeq ("$(wildcard $(elm_make))", "")
 	make yarn
 	make elm
@@ -24,7 +24,7 @@ else
 	@cd $(elm_dir) && $(elm_make) src/App.elm --output=$(elm_target) --warn --yes
 endif
 
-elm : elm-dev
+elm-analyse : elm
 	@cd $(elm_dir) && $(elm_analyse)
 
 inliner : yarn elm
