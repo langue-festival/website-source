@@ -24,6 +24,8 @@ else
 endif
 
 inliner : yarn elm
+	@chmod a+x $(base_dir)/embed_pages.sh
+	@$(base_dir)/embed_pages.sh
 	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(base_dir)/index.html
 
 clean :

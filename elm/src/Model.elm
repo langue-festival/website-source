@@ -11,6 +11,7 @@ type alias Model =
     , currentPage : List (Html Msg)
     , lastRoute : Route
     , lastPage : List (Html Msg)
+    , animateTransition : Bool
     , inTransition : Bool
     , menuHidden : Bool
     , pageCache : Dict Route (List (Html Msg))

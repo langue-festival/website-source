@@ -2,6 +2,7 @@ port module App exposing (main)
 
 import Model exposing (Model, updatePage, updatePageCache)
 import Route exposing (Route)
+import Dict exposing (Dict)
 import Html exposing (Html)
 import Msg exposing (Msg)
 import Html.Attributes
@@ -10,20 +11,35 @@ import Page.Parser
 import Navigation
 import Template
 import Http
-import Dict
 
 
-init : Navigation.Location -> ( Model, Cmd Msg )
-init location =
+type alias Flags =
+    { pages : List ( Route, String )
+    }
+
+
+init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
+init flags location =
     let
+        pareRouteContent : ( Route, String ) -> ( Route, List (Html Msg) )
+        pareRouteContent ( route, content ) =
+            ( route, parsePage route content )
+
+        pageCache : Dict Route (List (Html Msg))
+        pageCache =
+            List.map pareRouteContent flags.pages
+                |> Dict.fromList
+
+        model : Model
         model =
             { currentRoute = Route.parseLocation location
             , currentPage = []
             , lastRoute = Route.parseLocation location
             , lastPage = []
+            , animateTransition = False
             , inTransition = False
             , menuHidden = True
-            , pageCache = Dict.empty
+            , pageCache = pageCache
             }
     in
         handleUrlChange location model
@@ -37,20 +53,27 @@ handleUrlChange location model =
         ( model, Page.Loader.load location model )
 
 
+parsePage : Route -> String -> List (Html msg)
+parsePage route pageContent =
+    [ Html.div
+        [ Html.Attributes.class "pure-u-1-12 pure-u-md-1-24" ]
+        []
+    , Page.Parser.parse
+        pageContent
+        [ Html.Attributes.id route
+        , Html.Attributes.class "markdown pure-u-7-8 pure-u-md-2-3"
+        ]
+    ]
+
+
 handleContentLoad : Route -> String -> Model -> ( Model, Cmd Msg )
 handleContentLoad route pageContent model =
     let
+        page : List (Html Msg)
         page =
-            [ Html.div
-                [ Html.Attributes.class "pure-u-1-12 pure-u-md-1-24" ]
-                []
-            , Page.Parser.parse
-                pageContent
-                [ Html.Attributes.id route
-                , Html.Attributes.class "markdown pure-u-7-8 pure-u-md-2-3"
-                ]
-            ]
+            parsePage route pageContent
 
+        newModel : Model
         newModel =
             updatePageCache route page model
     in
@@ -62,11 +85,9 @@ handlePageLoad route page model =
     if model.inTransition then
         -- let the transition end
         model ! []
-    else if Dict.size model.pageCache <= 1 then
-        -- first load
-        updatePage route page model ! []
-    else
+    else if model.animateTransition then
         let
+            transitionEndListener : Cmd Msg
             transitionEndListener =
                 waitForTransitionEnd route
 
@@ -76,6 +97,9 @@ handlePageLoad route page model =
                     |> update Msg.CloseMenu
         in
             newModel ! [ transitionEndListener, closeMenuCmd ]
+    else
+        -- first load
+        updatePage route page { model | animateTransition = True } ! []
 
 
 set404 : Route -> Model -> ( Model, Cmd Msg )
@@ -211,9 +235,9 @@ subscriptions model =
         ]
 
 
-main : Program Never Model Msg
+main : Program Flags Model Msg
 main =
-    Navigation.program Msg.UrlChange
+    Navigation.programWithFlags Msg.UrlChange
         { init = init
         , view = view
         , update = update

@@ -1,4 +1,6 @@
-var app = Elm.App.fullscreen(),
+var pages = pages || [],
+
+    app = Elm.App.fullscreen({ pages : pages }),
 
     rootNode;
 
