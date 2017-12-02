@@ -6,6 +6,18 @@ var pages = pages || [],
 
     rootNode;
 
+var observer = new MutationObserver(function (mutations) {
+    mutations.forEach(function (mutation) {
+        var firstNode = mutation.addedNodes[0];
+
+        if (firstNode) {
+            console.log(mutation);
+        }
+    });
+});
+
+observer.observe(document.body, { childList : true });
+
 function scrollToTop (route) {
     /*
      * We have to wait that the node with `enter-transition`
@@ -79,9 +91,9 @@ app.ports.waitForTransitionEnd.subscribe(function (route) {
 });
 
 function closeMenuListener (event) {
-    var clickInside = document.getElementById('menu').contains(event.target);
+    var clickInsideMenu = document.getElementById('menu').contains(event.target);
 
-    if ( ! clickInside) {
+    if ( ! clickInsideMenu) {
         app.ports.notifyCloseMenu.send(null);
         document.removeEventListener('click', closeMenuListener, false);
     }

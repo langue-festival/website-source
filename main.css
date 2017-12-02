@@ -237,6 +237,7 @@ h1, h2, h3, h4, h5, h6
   0%, 100% {
     transform: scale(1);
     transform-origin: 50% 30em;
+
     /* z-depth: 2 */
     box-shadow: 0 4px 5px 0 rgba(0,0,0,0.14),0 1px 10px 0 rgba(0,0,0,0.12),0 2px 4px -1px rgba(0,0,0,0.3);
   }
@@ -310,7 +311,7 @@ h1, h2, h3, h4, h5, h6
   height: 8em;
   width: 8em;
   border-radius: 4em;
-  margin: 0 2em;
+  margin-right: 2em;
 }
 
 #chi-siamo p {

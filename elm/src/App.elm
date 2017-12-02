@@ -112,7 +112,10 @@ set404 route model =
             "#404\nNon è stato possibile trovare la pagina richiesta"
 
         newModel =
-            { model | currentPage = Page.parser route content }
+            { model
+                | currentRoute = route
+                , currentPage = Page.parser route content
+            }
     in
         newModel ! []
 
@@ -124,7 +127,10 @@ setViewError route error model =
             "#Si è verificato un errore\n\n" ++ error
 
         newModel =
-            { model | currentPage = Page.parser route content }
+            { model
+                | currentRoute = route
+                , currentPage = Page.parser route content
+            }
     in
         newModel ! []
 
@@ -151,11 +157,6 @@ handleLoadError route error model =
             setViewError route ("Status: " ++ toString response.status) model
 
 
-handleTransitionEnd : Model -> ( Model, Cmd Msg )
-handleTransitionEnd model =
-    { model | inTransition = False } ! []
-
-
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
@@ -169,7 +170,7 @@ update msg model =
             handlePageLoad route page { model | pageCache = cache }
 
         TransitionEnd ->
-            handleTransitionEnd model
+            { model | inTransition = False } ! []
 
         OpenMenu ->
             { model | menuHidden = False } ! [ startCloseMenuListener () ]
