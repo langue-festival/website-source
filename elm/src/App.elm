@@ -24,6 +24,7 @@ type alias Model =
     , currentPage : Page Msg
     , lastRoute : Route
     , lastPage : Page Msg
+    , underConstruction : Bool
     , animateTransition : Bool
     , inTransition : Bool
     , menuHidden : Bool
@@ -37,27 +38,16 @@ type alias Flags =
     }
 
 
-underConstruction : Page Msg
-underConstruction =
-    Page.parser "home" "# Sito in costruzione"
-
-
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     let
-        currentPage : Page Msg
-        currentPage =
-            if location.hostname == "www.languefestival.it" then
-                underConstruction
-            else
-                Page.empty
-
         model : Model
         model =
             { currentRoute = Route.parseLocation location
-            , currentPage = currentPage
+            , currentPage = Page.empty
             , lastRoute = Route.parseLocation location
             , lastPage = Page.empty
+            , underConstruction = location.hostname == "www.languefestival.it"
             , animateTransition = flags.firstAnimation
             , inTransition = False
             , menuHidden = True
@@ -214,8 +204,8 @@ exitTransitionAttributes =
 {- end content container attributes -}
 
 
-renderPage : Model -> Page Msg
-renderPage model =
+viewPage : Model -> Page Msg
+viewPage model =
     if model.inTransition then
         [ Html.div exitTransitionAttributes
             model.lastPage
@@ -228,13 +218,19 @@ renderPage model =
         ]
 
 
+viewContent : Model -> List (Html Msg)
+viewContent model =
+    if model.underConstruction then
+        Page.parser "home" "# Sito in costruzione"
+    else
+        Template.menu model
+            :: Template.menuToggleButton model OpenMenu CloseMenu
+            :: viewPage model
+
+
 view : Model -> Html Msg
 view model =
-    Html.div [ Html.Attributes.id "root-node" ]
-        (Template.menu model
-            :: Template.menuToggleButton model OpenMenu CloseMenu
-            :: renderPage model
-        )
+    Html.div [ Html.Attributes.id "root-node" ] <| viewContent model
 
 
 port waitForTransitionEnd : String -> Cmd msg

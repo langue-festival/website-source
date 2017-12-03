@@ -16,7 +16,7 @@ var pages = pages || [],
 //    });
 //});
 
-observer.observe(document.body, { childList : true });
+//observer.observe(document.body, { childList : true });
 
 function scrollToTop (route) {
     /*
