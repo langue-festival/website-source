@@ -221,7 +221,7 @@ viewPage model =
 viewContent : Model -> List (Html Msg)
 viewContent model =
     if model.underConstruction then
-        Page.parser "home" "# Sito in costruzione"
+        Page.parser "under-construction" "# Sito in costruzione"
     else
         Template.menu model
             :: Template.menuToggleButton model OpenMenu CloseMenu
