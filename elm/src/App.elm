@@ -47,7 +47,7 @@ init flags location =
     let
         currentPage : Page Msg
         currentPage =
-            if location.hostname == "languefestival.it" then
+            if Debug.log "hostname" location.hostname == "languefestival.it" then
                 underConstruction
             else
                 Page.empty
