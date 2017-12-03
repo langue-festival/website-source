@@ -37,15 +37,27 @@ type alias Flags =
     }
 
 
+underConstruction : Page Msg
+underConstruction =
+    Page.parser "home" "# Sito in costruzione"
+
+
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     let
+        currentPage : Page Msg
+        currentPage =
+            if location.hostname == "languefestival.it" then
+                underConstruction
+            else
+                Page.empty
+
         model : Model
         model =
             { currentRoute = Route.parseLocation location
-            , currentPage = []
+            , currentPage = currentPage
             , lastRoute = Route.parseLocation location
-            , lastPage = []
+            , lastPage = Page.empty
             , animateTransition = flags.firstAnimation
             , inTransition = False
             , menuHidden = True

@@ -1,4 +1,4 @@
-module Page exposing (Page, parser)
+module Page exposing (Page, parser, empty)
 
 import Route exposing (Route)
 import Html exposing (Html)
@@ -8,6 +8,11 @@ import Markdown
 
 type alias Page msg =
     List (Html msg)
+
+
+empty : Page msg
+empty =
+    []
 
 
 parserOptions : Markdown.Options
