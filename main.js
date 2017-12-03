@@ -6,15 +6,15 @@ var pages = pages || [],
 
     rootNode;
 
-var observer = new MutationObserver(function (mutations) {
-    mutations.forEach(function (mutation) {
-        var firstNode = mutation.addedNodes[0];
-
-        if (firstNode) {
-            console.log(mutation);
-        }
-    });
-});
+// TODO anchor handling
+//var observer = new MutationObserver(function (mutations) {
+//    mutations.forEach(function (mutation) {
+//        var firstNode = mutation.addedNodes[0];
+//        if (firstNode) {
+//            console.log(mutation);
+//        }
+//    });
+//});
 
 observer.observe(document.body, { childList : true });
 
