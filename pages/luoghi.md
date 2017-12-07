@@ -1,5 +1,4 @@
-Luoghi
-======
+<h1 class="main-title">Luoghi</h1>
 
 Lorem ipsum dolor sit amet, eam quis posidonium dissentias ei, eu quidam labitur quaestio qui. Mel id quodsi insolens, sea id delenit adversarium complectitur. Nec ne saepe labitur vivendum. Movet mucius pertinax te sit.
 

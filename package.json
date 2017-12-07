@@ -1,13 +1,17 @@
-{ "name": "langue"
-, "description": "Official website for the Langue festival"
-, "version": "0.0.2"
-, "license": "GPL-3.0"
-, "author": "emilianobovetti"
-, "repository": "https://github.com/langue-festival/langue-festival.github.io.git"
-, "devDependencies":
-    { "elm": "^0.18.0"
-    , "elm-analyse": "^0.12.1"
-    , "purecss": "^1.0.0"
-    , "inliner": "^1.13.0"
+{
+    "name": "langue",
+    "description": "Official website for the Langue festival",
+    "version": "0.0.2",
+    "license": "GPL-3.0",
+    "author": "emilianobovetti",
+    "repository": "https://github.com/langue-festival/langue-festival.github.io.git",
+    "devDependencies": {
+        "autoprefixer": "^7.2.1",
+        "elm": "^0.18.0",
+        "elm-analyse": "^0.12.1",
+        "inliner": "^1.13.0",
+        "node-sass": "^4.7.2",
+        "postcss-cli": "^4.1.1",
+        "purecss": "^1.0.0"
     }
 }

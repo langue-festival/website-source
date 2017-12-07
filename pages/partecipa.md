@@ -1,5 +1,4 @@
-Partecipa
-=========
+<h1 class="main-title">Partecipa</h1>
 
 Qui vi descriveremo come poter essere parte attiva di **Langue**. Siamo una macchina piccola, ma in continua cerca di espansione. Non abbiamo uffici stampa, gli autori dobbiamo cercarceli per strada o sperare che ci vengano a bussare alla porta; e non abbiamo molte mani disponibili nel rendere questo festival quel meraviglioso paradiso a cui aspiriamo. Quindi abbiamo bisogno di tutte le mani che avete a disposizione: per scrivere o per portare i microfoni. Ora vi diciamo come potete contattarci.
 

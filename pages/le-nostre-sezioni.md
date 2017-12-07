@@ -1,5 +1,4 @@
-Le nostre sezioni
-=================
+<h1 class="main-title">Le nostre<br>sezioni</h1>
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Morbi non commodo ipsum, id commodo lacus. Curabitur vehicula, justo in tristique rutrum, turpis sapien consequat dolor, eu lacinia tortor enim at magna. Maecenas vehicula sodales ex, in suscipit libero. Nulla ut sagittis lectus, vitae rhoncus tortor. Duis sit amet scelerisque mauris. Vivamus velit orci, pellentesque et consequat eget, molestie nec ligula. Integer magna enim, luctus eget justo vel, viverra consectetur odio. Nullam et libero blandit, "pharetra" diam a, consequat magna. Ut porta, nisl quis egestas dignissim, orci quam congue justo, ut dapibus velit justo in lorem. Suspendisse vel ex velit. In hac habitasse platea dictumst. Ut iaculis vitae lacus eget euismod. Praesent vitae lorem quis nunc posuere ullamcorper sed at velit. Mauris egestas, ante vitae molestie sagittis, nunc ipsum porttitor tellus, tempus suscipit ante ante ac lectus.
 

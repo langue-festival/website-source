@@ -1,13 +1,19 @@
-# directories and elm target file
+# directories
 base_dir		:= $(CURDIR)
 elm_dir			:= $(base_dir)/elm
-build_dir		:= $(base_dir)/build
-elm_target		:= $(build_dir)/compiled_elm.js
 node_modules	:= $(base_dir)/node_modules
-# executables in node_modules
-elm_make	:= $(node_modules)/.bin/elm-make
-elm_analyse	:= $(node_modules)/.bin/elm-analyse
-inliner		:= $(node_modules)/.bin/inliner
+# target
+sass_target		:= $(base_dir)/compiled_style.css
+elm_target		:= $(base_dir)/compiled_elm.js
+inline_pages	:= $(base_dir)/compiled_pages.js
+inliner_target	:= $(base_dir)/index.html
+# node_modules executables
+bin			:= $(node_modules)/.bin
+elm_make	:= $(bin)/elm-make
+elm_analyse	:= $(bin)/elm-analyse
+node_sass	:= $(bin)/node-sass
+postcss		:= $(bin)/postcss
+inliner		:= $(bin)/inliner
 
 .PHONY: elm
 
@@ -27,12 +33,25 @@ endif
 elm-analyse : elm
 	@cd $(elm_dir) && $(elm_analyse)
 
-inliner : yarn elm
-	@chmod a+x $(base_dir)/embed_pages.sh
-	@$(base_dir)/embed_pages.sh
-	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(base_dir)/index.html
+sass :
+ifeq ("$(wildcard $(node_sass))", "")
+	make yarn
+	make sass
+else
+	@$(node_sass) --output-style compressed main.scss > $(sass_target)
+endif
+
+dev : elm sass
+	@rm -f $(inline_pages)
+
+inliner : yarn elm sass
+	@chmod a+x $(base_dir)/inline_pages.sh
+	@$(base_dir)/inline_pages.sh $(inline_pages)
+	@$(postcss) $(sass_target) --use autoprefixer --replace
+	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(inliner_target)
 
 clean :
 	@rm -rf $(node_modules) $(base_dir)/yarn.lock
-	@rm -rf $(build_dir) $(elm_dir)/elm-stuff
-	@rm -f index.html
+	@rm -rf $(elm_dir)/elm-stuff
+	@rm -f $(sass_target) $(elm_target)
+	@rm -f $(inline_pages) $(inliner_target)

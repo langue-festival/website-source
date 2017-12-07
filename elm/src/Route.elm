@@ -20,4 +20,4 @@ parseLocation location =
             route
 
         Nothing ->
-            "home"
+            "index"

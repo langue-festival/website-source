@@ -1,13 +1,14 @@
+<h1 class="main-title">Home</h1>
 
-<h2 class="first-edition">Prima Edizione</h2>
-<img class="langue-home" src="assets/images/langue-home.svg" alt="Langue" height="50px" />
-<h1 class="home-tagline">Festival della Poesia<hr>di San Lorenzo</h1>
+### Festival della poesia - prima edizione
 
-<div class="social-media">
-  <a href="https://www.facebook.com/langue">
-    <img src="assets/images/social-media/2657542_-_facebook_media_social_website.png" />
-  </a>
-  <a href="https://www.twitter.com/langue">
-    <img src="assets/images/social-media/2657545_-_media_social_twitter_website.png" />
-  </a>
+## 26 Maggio 2018 — San Lorenzo
+
+<div class="pure-g">
+  <div class="box pure-u-1">
+    <h1>Cos'è Langue</h1>
+     <p><em>Langue</em> è un festival che nasce per una letteratura e per un luogo. Vogliamo dare spazio alla poesia, alla sua rinnovata emergenza e alla sua forza recentemente dissipatasi nelle poche voci autorevoli ancora riconosciute dal pubblico.
+     </p>
+     <a class="read-on" href="#langue">Continua</a>
+  </div>
 </div>

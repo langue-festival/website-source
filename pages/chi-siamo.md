@@ -1,5 +1,4 @@
-Chi siamo
-=========
+<h1 class="main-title">Chi<br>siamo</h1>
 
 ![Alt text](assets/pictures/giorgio-papitto.jpg "Giorgio Papitto")
 

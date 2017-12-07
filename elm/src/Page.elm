@@ -1,18 +1,26 @@
-module Page exposing (Page, parser, empty)
+module Page exposing (Page, parser, view, empty)
 
 import Route exposing (Route)
 import Html exposing (Html)
-import Html.Attributes
 import Markdown
+import Template
 
 
 type alias Page msg =
-    List (Html msg)
+    Html msg
+
+
+type alias Model model msg =
+    { model
+        | route : Route
+        , page : Page msg
+        , menuHidden : Bool
+    }
 
 
 empty : Page msg
 empty =
-    []
+    Html.div [] []
 
 
 parserOptions : Markdown.Options
@@ -24,15 +32,11 @@ parserOptions =
     }
 
 
-parser : Route -> String -> Page msg
-parser route pageContent =
-    [ Html.div
-        [ Html.Attributes.class "pure-u-md-1-24" ]
-        []
-    , Markdown.toHtmlWith
-        parserOptions
-        [ Html.Attributes.id route
-        , Html.Attributes.class "markdown pure-u-1 pure-u-md-2-3"
-        ]
-        pageContent
-    ]
+parser : String -> Page msg
+parser pageContent =
+    Markdown.toHtmlWith parserOptions Template.pageAttributes pageContent
+
+
+view : Model m msg -> List (Html msg)
+view model =
+    [ Html.section (Template.pageContainerAttributes model) [ model.page ] ]

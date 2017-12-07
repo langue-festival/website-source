@@ -1,3 +1,46 @@
+@import "node_modules/purecss/build/pure-min";
+@import "node_modules/purecss/build/grids-responsive-min";
+
+$assets-path: "assets";
+$fonts-path: "#{$assets-path}/fonts";
+$images-path: "#{$assets-path}/images";
+
+@function font-url($name) {
+  @return url("#{$fonts-path}/#{$name}");
+}
+
+@function image-url($name) {
+  @return url("#{$images-path}/#{$name}");
+}
+
+@font-face {
+  font-family: "GlacialIndifference";
+  src: font-url("GlacialIndifference-Regular.otf") format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "GlacialIndifference";
+  src: font-url("GlacialIndifference-Italic.otf") format('truetype');
+  font-weight: normal;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: "GlacialIndifference";
+  src: font-url("GlacialIndifference-Bold.otf") format('truetype');
+  font-weight: bold;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "CooperHewitt-Heavy";
+  src: font-url("CooperHewitt-Heavy.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+}
+
 /*
  * General
  */
@@ -11,27 +54,20 @@ $menu-height: 6em;
 $menu-font-size: 1.3em;
 $menu-font-size-xl: 1em;
 
-$glacial-indifference-bold: 'GlacialIndifferenceBold', sans-serif;
-$cooper-hewitt-heavy: 'CooperHewittHeavy', sans-serif;
+$glacial-indifference: "GlacialIndifference", sans-serif;
+$cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
 
 $light-blue: #a7cde2;
 $middle-blue: #057aa5;
 $dark-blue: #041e41;
-$green: #5fc831;
 $light-pink: #fae8d2;
 $dark-pink: #f87fb8;
-$red: #500;
+$green: #5fc831;
+$light-red: #c55;
+$dark-red: #500;
 
-$assets-path: "../assets";
-$images-path: "#{$assets-path}/images";
-
-@function image-url($name) {
-  @return url("#{$images-path}/#{$name}");
-}
 
 * {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
   box-sizing: border-box;
 }
 
@@ -45,7 +81,7 @@ body, #root-node {
 
 h1, h2, h3, h4, h5, h6
 .heading {
-  color: $red;
+  color: $dark-red;
 }
 
 .disabled {
@@ -66,7 +102,7 @@ h1, h2, h3, h4, h5, h6
   }
 
   .menu-toggle {
-    background-color: $light-blue;
+    background-color: transparent;
     border: none;
     height: 100%;
     padding: 0 1em;
@@ -86,17 +122,23 @@ h1, h2, h3, h4, h5, h6
   }
 
   .heading-logo {
+    float: right;
+    /*
+     * TODO
+
     margin-top: $header-margin;
 
     img {
       height: 4.2em;
       width: 10em;
     }
+    */
   }
 }
 
 .pure-menu-list {
-  font-family: $glacial-indifference-bold;
+  font-family: $glacial-indifference;
+  font-weight: bold;
   font-size: 1.1em;
   text-align: left;
   width: 100%;
@@ -109,7 +151,7 @@ h1, h2, h3, h4, h5, h6
     content: '';
     display: block;
     height: 2px;
-    width: 3em;
+    width: 4em;
     background-color: transparent;
     transition: all .5s;
     position: relative;
@@ -121,7 +163,7 @@ h1, h2, h3, h4, h5, h6
   }
 
   @mixin after-decorator {
-    width: 2em;
+    width: 3em;
     background-color: white;
   }
 
@@ -135,6 +177,7 @@ h1, h2, h3, h4, h5, h6
 
   .pure-menu-item {
     display: block;
+    z-index: 2;
     margin: 0;
 
     @media screen and (min-width: $min-width-xl) {
@@ -146,6 +189,7 @@ h1, h2, h3, h4, h5, h6
       padding: 0.5em 1em 0.2em 1em;
       background-color: transparent;
       font-size: $menu-font-size;
+      text-decoration: none;
       margin: 0;
 
        @media screen and (min-width: $min-width-xl) {
@@ -172,11 +216,11 @@ h1, h2, h3, h4, h5, h6
   left: 0;
   height: 100vh;
   width: 100vw;
+  z-index: 1;
 
   @media screen and (min-width: $min-width-xl) {
     position: static;
     background-color: transparent;
-    z-index: -1;
     height: 100%;
     width: 0;
     float: left;
@@ -236,19 +280,29 @@ h1, h2, h3, h4, h5, h6
   text-align: center;
 
   .markdown {
+    * { font-family: $glacial-indifference; }
+
     min-height: 100%;
     text-align: left;
     padding-left: 5em;
+    padding-top: 1em;
     z-index: 1;
+    font-size: 1.3em;
 
     .main-title {
       position: absolute;
-      transform: translateX(-100%) translateY(-128%) rotate(-90deg);
+      transform: translateX(-102%) translateY(-118%) rotate(-90deg);
       transform-origin: 100% 100%;
-      font-family: $glacial-indifference-bold;
+      font-family: $glacial-indifference;
+      font-weight: bold;
       text-transform: uppercase;
-      letter-spacing: 0.4em;
+      letter-spacing: 0.3em;
+      text-align: right;
       color: $dark-blue;
+
+      @media screen and (min-width: $min-width-md) {
+        transform: translateX(-103%) translateY(-118%) rotate(-90deg);
+      }
     }
 
     @media screen and (min-width: $min-width-md) {
@@ -265,6 +319,7 @@ h1, h2, h3, h4, h5, h6
   transition: opacity 0.5s;
   background-color: #eee;
   background-color: rgba(0,0,0,0.4);
+  z-index: -1;
 }
 
 .content-container.darken:after {
@@ -302,7 +357,8 @@ h1, h2, h3, h4, h5, h6
 
   .landing-date {
     color: $dark-pink;
-    font-family: $glacial-indifference-bold;
+    font-family: $glacial-indifference;
+    font-weight: bold;
     font-size: 2em;
     margin-bottom: 0;
 
@@ -327,31 +383,27 @@ h1, h2, h3, h4, h5, h6
 }
 
 .home {
-  text-align: center;
+  .box {
+    background-color: $light-blue;
+    padding: 0.7em 1em;
 
-  .first-edition,
-  .home-tagline {
-    margin: 0.7em 0;
+    h1 {
+      text-transform: uppercase;
+      margin: 0;
+      font-size: 1em;
+    }
 
-    @media screen and (min-width: $min-width-md) {
-      font-size: 3em;
+    p {
+      font-size: 0.8em;
+    }
+
+    .read-on {
+      text-transform: uppercase;
+      text-decoration: none;
+      color: $light-pink;
     }
   }
-
-  .first-edition,
-  .home-tagline {
-    font-size: 3em;
-  }
-
-  .home-tagline {
-    color: black;
-  }
-
-  .home-tagline hr {
-    width: 5em;
-  }
 }
-
 .chi-siamo {
 
   img {

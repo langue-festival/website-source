@@ -22,7 +22,7 @@ loadCache pageList =
     let
         parseMap : ( Route, String ) -> ( Route, Page msg )
         parseMap ( route, content ) =
-            ( route, Page.parser route content )
+            ( route, Page.parser content )
     in
         Dict.fromList <| List.map parseMap pageList
 
@@ -33,7 +33,7 @@ handleHttpResponse route cache result =
         Ok content ->
             let
                 page =
-                    Page.parser route content
+                    Page.parser content
 
                 newCache =
                     Dict.insert route page cache
