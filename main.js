@@ -11,6 +11,13 @@ var rootNode
 
   , app = Elm.App.fullscreen(flags);
 
+// TODO bypass under-construction
+var show = function () {
+    flags.underConstruction = false;
+
+    app = Elm.App.fullscreen(flags);
+};
+
 // TODO anchor handling
 //var observer = new MutationObserver(function (mutations) {
 //    mutations.forEach(function (mutation) {
@@ -33,14 +40,14 @@ app.ports.scrollToTop.subscribe(function () {
 });
 
 /* Menu events handlers */
-function closeMenuListener (event) {
+var closeMenuListener = function (event) {
     var clickInsideMenu = document.getElementById('menu').contains(event.target);
 
     if ( ! clickInsideMenu) {
         app.ports.notifyCloseMenu.send(null);
         document.removeEventListener('click', closeMenuListener, false);
     }
-}
+};
 
 app.ports.startCloseMenuListener.subscribe(function () {
     document.addEventListener('click', closeMenuListener, false);
