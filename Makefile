@@ -2,18 +2,18 @@
 base_dir		:= $(CURDIR)
 elm_dir			:= $(base_dir)/elm
 node_modules	:= $(base_dir)/node_modules
+node_bin		:= $(node_modules)/.bin
 # target
 sass_target		:= $(base_dir)/compiled_style.css
 elm_target		:= $(base_dir)/compiled_elm.js
 inline_pages	:= $(base_dir)/compiled_pages.js
 inliner_target	:= $(base_dir)/index.html
 # node_modules executables
-bin			:= $(node_modules)/.bin
-elm_make	:= $(bin)/elm-make
-elm_analyse	:= $(bin)/elm-analyse
-node_sass	:= $(bin)/node-sass
-postcss		:= $(bin)/postcss
-inliner		:= $(bin)/inliner
+elm_make	:= $(node_bin)/elm-make
+elm_analyse	:= $(node_bin)/elm-analyse
+node_sass	:= $(node_bin)/node-sass
+postcss		:= $(node_bin)/postcss
+inliner		:= $(node_bin)/inliner
 
 .PHONY: elm
 
@@ -25,10 +25,8 @@ yarn :
 elm :
 ifeq ("$(wildcard $(elm_make))", "")
 	make yarn
-	make elm
-else
-	@cd $(elm_dir) && $(elm_make) src/App.elm --output=$(elm_target) --warn --yes
 endif
+	@cd $(elm_dir) && $(elm_make) src/App.elm --output=$(elm_target) --warn --yes
 
 elm-analyse : elm
 	@cd $(elm_dir) && $(elm_analyse)
@@ -36,10 +34,8 @@ elm-analyse : elm
 sass :
 ifeq ("$(wildcard $(node_sass))", "")
 	make yarn
-	make sass
-else
-	@$(node_sass) --output-style compressed main.scss > $(sass_target)
 endif
+	@$(node_sass) --output-style compressed main.scss > $(sass_target)
 
 dev : elm sass
 	@rm -f $(inline_pages)

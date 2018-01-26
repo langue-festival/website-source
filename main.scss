@@ -15,21 +15,21 @@ $images-path: "#{$assets-path}/images";
 
 @font-face {
   font-family: "GlacialIndifference";
-  src: font-url("GlacialIndifference-Regular.otf") format('truetype');
+  src: font-url("GlacialIndifference-Regular.otf") format("truetype");
   font-weight: normal;
   font-style: normal;
 }
 
 @font-face {
   font-family: "GlacialIndifference";
-  src: font-url("GlacialIndifference-Italic.otf") format('truetype');
+  src: font-url("GlacialIndifference-Italic.otf") format("truetype");
   font-weight: normal;
   font-style: italic;
 }
 
 @font-face {
   font-family: "GlacialIndifference";
-  src: font-url("GlacialIndifference-Bold.otf") format('truetype');
+  src: font-url("GlacialIndifference-Bold.otf") format("truetype");
   font-weight: bold;
   font-style: normal;
 }
@@ -49,10 +49,13 @@ $min-width-md: 48em;   /* md ≥ 768px */
 $min-width-lg: 64em;   /* lg ≥ 1024px */
 $min-width-xl: 80em;   /* xl ≥ 1280px */
 
-$header-margin: 1em;
+
 $menu-height: 6em;
+$menu-height-xl: 7em;
 $menu-font-size: 1.3em;
 $menu-font-size-xl: 1em;
+$header-margin: 1em;
+$menu-margin-xl: 2em;
 
 $glacial-indifference: "GlacialIndifference", sans-serif;
 $cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
@@ -75,6 +78,7 @@ body, #root-node {
   margin: 0;
   padding: 0;
   height: 100%;
+  color: black;
   background-color: $light-pink;
 }
 
@@ -95,6 +99,32 @@ h1, h2, h3, h4, h5, h6
 .pure-menu {
   height: $menu-height;
   background-color: $dark-blue;
+  transition: height 0.5s;
+
+  @media screen and (min-width: $min-width-xl) {
+    height: $menu-height-xl;
+
+    .pure-menu-list {
+      transition: margin-top 0.5s;
+      margin-top: $menu-margin-xl;
+    }
+
+    .social-media, .heading-logo {
+      transition: opacity 0.5s;
+    }
+
+    &.roll-up {
+      height: $menu-height-xl - 3em;
+
+      .pure-menu-list {
+        margin-top: $menu-margin-xl - 1.5em;
+      }
+
+      .social-media, .heading-logo {
+        opacity: 0;
+      }
+    }
+  }
 
   .pure-menu-heading {
     float: left;
@@ -123,16 +153,12 @@ h1, h2, h3, h4, h5, h6
 
   .heading-logo {
     float: right;
-    /*
-     * TODO
-
     margin-top: $header-margin;
 
     img {
       height: 4.2em;
       width: 10em;
     }
-    */
   }
 }
 
@@ -143,17 +169,13 @@ h1, h2, h3, h4, h5, h6
   text-align: left;
   width: 100%;
 
-  @media screen and (min-width: $min-width-xl) {
-    margin-top: 1.4em;
-  }
-
   .pure-menu-item:after {
-    content: '';
+    content: "";
     display: block;
     height: 2px;
     width: 4em;
     background-color: transparent;
-    transition: all .5s;
+    transition: all 0.5s;
     position: relative;
     left: $menu-font-size;
 
@@ -241,7 +263,7 @@ h1, h2, h3, h4, h5, h6
 }
 
 #menu:before {
-  content: '';
+  content: "";
   display: block;
 }
 
@@ -279,13 +301,16 @@ h1, h2, h3, h4, h5, h6
   margin-top: $menu-height;
   text-align: center;
 
+  @media screen and (min-width: $min-width-xl) {
+    margin-top: $menu-height-xl;
+  }
+
   .markdown {
     * { font-family: $glacial-indifference; }
 
     min-height: 100%;
     text-align: left;
-    padding-left: 5em;
-    padding-top: 1em;
+    padding: 1em 1em 0 5em;
     z-index: 1;
     font-size: 1.3em;
 
@@ -312,7 +337,7 @@ h1, h2, h3, h4, h5, h6
 }
 
 .content-container:after {
-  content: '';
+  content: "";
   top: 0;
   left: 0;
   opacity: 0;

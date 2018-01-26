@@ -13,6 +13,7 @@ type alias Page msg =
 type alias Model model msg =
     { model
         | route : Route
+        , yScroll : Int
         , page : Page msg
         , menuHidden : Bool
     }

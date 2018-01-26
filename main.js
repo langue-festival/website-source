@@ -1,10 +1,15 @@
 'use strict';
 
-var rootNode,
+var rootNode
 
-    pages = pages || [],
+  , pages = pages || []
 
-    app = Elm.App.fullscreen({ pages: pages });
+  , flags =
+        { pages: pages
+        , yScroll: document.documentElement.scrollTop
+        }
+
+  , app = Elm.App.fullscreen(flags);
 
 // TODO anchor handling
 //var observer = new MutationObserver(function (mutations) {
@@ -18,10 +23,16 @@ var rootNode,
 
 //observer.observe(document.body, { childList : true });
 
+/* Scroll handlers */
+document.addEventListener('scroll', function(event) {
+    app.ports.notifyYScroll.send(event.pageY); // TODO `document.documentElement.scrollTop` instead?
+});
+
 app.ports.scrollToTop.subscribe(function () {
     document.documentElement.scrollTop = 0;
 });
 
+/* Menu events handlers */
 function closeMenuListener (event) {
     var clickInsideMenu = document.getElementById('menu').contains(event.target);
 

@@ -14,6 +14,7 @@ type Msg
     = UrlChange Navigation.Location
     | LoadError Route Http.Error
     | PageLoad Route (Page Msg) (Cache Msg)
+    | OnYScroll Int
     | OpenMenu
     | CloseMenu
 
@@ -21,6 +22,7 @@ type Msg
 type alias Model =
     { route : Route
     , page : Page Msg
+    , yScroll : Int
     , underConstruction : Bool
     , pageCache : Cache Msg
     , menuHidden : Bool
@@ -29,6 +31,7 @@ type alias Model =
 
 type alias Flags =
     { pages : List ( Route, String )
+    , yScroll : Int
     }
 
 
@@ -39,6 +42,7 @@ init flags location =
         model =
             { route = Route.parseLocation location
             , page = Page.empty
+            , yScroll = flags.yScroll
             , underConstruction = location.hostname == "www.languefestival.it"
             , pageCache = Loader.loadCache flags.pages
             , menuHidden = True
@@ -140,6 +144,9 @@ update msg model =
         PageLoad route page cache ->
             handlePageLoad route page { model | pageCache = cache }
 
+        OnYScroll offset ->
+            { model | yScroll = offset } ! []
+
         OpenMenu ->
             { model | menuHidden = False } ! [ startCloseMenuListener () ]
 
@@ -203,9 +210,15 @@ port stopCloseMenuListener : () -> Cmd msg
 port notifyCloseMenu : (() -> msg) -> Sub msg
 
 
+port notifyYScroll : (Int -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
-    notifyCloseMenu (always CloseMenu)
+    Sub.batch
+        [ notifyCloseMenu (always CloseMenu)
+        , notifyYScroll OnYScroll
+        ]
 
 
 main : Program Flags Model Msg

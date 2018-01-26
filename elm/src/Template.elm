@@ -9,6 +9,7 @@ import Route exposing (Route)
 type alias Model model =
     { model
         | route : Route
+        , yScroll : Int
         , menuHidden : Bool
     }
 
@@ -33,11 +34,15 @@ menuItem currentRoute linkName linkRoute =
 
 getMenuAttributes : Model m -> List (Html.Attribute msg)
 getMenuAttributes model =
-    -- id needed for `document.getElementById('menu')`
-    if model.menuHidden then
-        [ id "menu", class "closed" ]
-    else
-        [ id "menu", class "opened" ]
+    let
+        -- id needed for `document.getElementById('menu')`
+        commonAttributes =
+            [ id "menu" ]
+    in
+        if model.menuHidden then
+            class "closed" :: commonAttributes
+        else
+            class "opened" :: commonAttributes
 
 
 socialMedia : Html msg
@@ -88,9 +93,22 @@ logo =
         [ img [ src "assets/images/langue-logo.svg" ] [] ]
 
 
+getHeaderAttributes : Model m -> List (Html.Attribute msg)
+getHeaderAttributes model =
+    let
+        -- id needed for `document.getElementById('menu')`
+        commonAttributes =
+            [ class "pure-menu pure-menu-horizontal pure-menu-fixed" ]
+    in
+        if model.yScroll > 10 then
+            class "roll-up" :: commonAttributes
+        else
+            commonAttributes
+
+
 header : Model m -> msg -> msg -> Html msg
 header model openMenuMsg closeMenuMsg =
-    Html.header [ class "pure-menu pure-menu-horizontal pure-menu-fixed" ]
+    Html.header (getHeaderAttributes model)
         [ menuToggleButton model openMenuMsg closeMenuMsg
         , logo
         , menu model
