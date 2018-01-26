@@ -7,6 +7,7 @@ var rootNode
   , flags =
         { pages: pages
         , yScroll: document.documentElement.scrollTop
+        , underConstruction: document.location.hostname == "www.languefestival.it"
         }
 
   , app = Elm.App.fullscreen(flags);

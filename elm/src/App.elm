@@ -32,25 +32,19 @@ type alias Model =
 type alias Flags =
     { pages : List ( Route, String )
     , yScroll : Int
-    , underConstruction : Maybe Bool
+    , underConstruction : Bool
     }
 
 
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     let
-        underConstruction : Bool
-        underConstruction =
-            Maybe.withDefault
-                (location.hostname == "www.languefestival.it")
-                flags.underConstruction
-
         model : Model
         model =
             { route = Route.parseLocation location
             , page = Page.empty
             , yScroll = flags.yScroll
-            , underConstruction = underConstruction
+            , underConstruction = flags.underConstruction
             , pageCache = Loader.loadCache flags.pages
             , menuHidden = True
             }
