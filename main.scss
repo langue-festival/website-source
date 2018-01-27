@@ -49,13 +49,18 @@ $min-width-md: 48em;   /* md ≥ 768px */
 $min-width-lg: 64em;   /* lg ≥ 1024px */
 $min-width-xl: 80em;   /* xl ≥ 1280px */
 
-
 $menu-height: 6em;
-$menu-height-xl: 7em;
+$menu-height-xl: 13em;
+$menu-top-margin: 1em;
 $menu-font-size: 1.3em;
 $menu-font-size-xl: 1em;
-$header-margin: 1em;
-$menu-margin-xl: 2em;
+$menu-margin-xl: 9em;
+
+$menu-slide-transition: 0.5s;
+
+$menu-roll-up-transition: 0.5s;
+$menu-roll-up-height: 3em;
+$menu-roll-up-margin: 0;
 
 $glacial-indifference: "GlacialIndifference", sans-serif;
 $cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
@@ -67,7 +72,7 @@ $light-pink: #fae8d2;
 $dark-pink: #f87fb8;
 $green: #5fc831;
 $light-red: #c55;
-$dark-red: #500;
+$dark-red: #c62a2f;
 
 
 * {
@@ -99,28 +104,60 @@ h1, h2, h3, h4, h5, h6
 .pure-menu {
   height: $menu-height;
   background-color: $dark-blue;
-  transition: height 0.5s;
+  transition: height $menu-roll-up-transition;
+
+  .header-title, .heading-logo {
+    display: none;
+  }
 
   @media screen and (min-width: $min-width-xl) {
     height: $menu-height-xl;
 
+    .header-title {
+      display: block;
+      left: 1em;
+      font-family: $cooper-hewitt-heavy;
+
+      .header-title-main {
+        color: $dark-pink;
+        font-size: 1.5em;
+        font-style: italic;
+      }
+
+      .header-title-date {
+        color: white;
+        font-size: 0.8em;
+        letter-spacing: 0.4em;
+      }
+    }
+
     .pure-menu-list {
-      transition: margin-top 0.5s;
+      transition: margin-top $menu-roll-up-transition;
       margin-top: $menu-margin-xl;
     }
 
-    .social-media, .heading-logo {
-      transition: opacity 0.5s;
+    .heading-logo {
+      display: block;
+    }
+
+    .header-title, .social-media, .heading-logo {
+      transition: bottom $menu-roll-up-transition, opacity $menu-roll-up-transition;
+      position: relative;
+      bottom: 0;
     }
 
     &.roll-up {
-      height: $menu-height-xl - 3em;
+      height: $menu-roll-up-height;
 
-      .pure-menu-list {
-        margin-top: $menu-margin-xl - 1.5em;
+      .header-title, .social-media, .heading-logo {
+        bottom: $menu-height-xl - $menu-roll-up-height;
       }
 
-      .social-media, .heading-logo {
+      .pure-menu-list {
+        margin-top: $menu-roll-up-margin;
+      }
+
+      .heading-logo {
         opacity: 0;
       }
     }
@@ -153,9 +190,9 @@ h1, h2, h3, h4, h5, h6
 
   .heading-logo {
     float: right;
-    margin-top: $header-margin;
 
     img {
+      margin-top: $menu-margin-xl - 0.8em;
       height: 4.2em;
       width: 10em;
     }
@@ -175,7 +212,7 @@ h1, h2, h3, h4, h5, h6
     height: 2px;
     width: 4em;
     background-color: transparent;
-    transition: all 0.5s;
+    transition: all $menu-slide-transition;
     position: relative;
     left: $menu-font-size;
 
@@ -240,24 +277,22 @@ h1, h2, h3, h4, h5, h6
   width: 100vw;
   z-index: 1;
 
-  @media screen and (min-width: $min-width-xl) {
-    position: static;
-    background-color: transparent;
-    height: 100%;
-    width: 0;
-    float: left;
-  }
-
   .social-media {
     position: absolute;
     bottom: $menu-height + 1em;
     text-align: center;
     width: 100%;
+  }
 
-    @media screen and (min-width: $min-width-xl) {
-      position: absolute;
-      left: 83vw;
-      top: $header-margin;
+  @media screen and (min-width: $min-width-xl) {
+    background-color: transparent;
+    height: 100%;
+    width: 0;
+    top: 0;
+
+    .social-media {
+      left: 95vw;
+      bottom: 9em;
     }
   }
 }
@@ -269,7 +304,7 @@ h1, h2, h3, h4, h5, h6
 
 #menu.opened {
   transform: translateX(0);
-  transition: transform 0.7s;
+  transition: transform $menu-slide-transition;
 
   @media screen and (min-width: $min-width-xl) {
     transform: translateX(0);
@@ -279,7 +314,7 @@ h1, h2, h3, h4, h5, h6
 
 #menu.closed {
   transform: translateX(-101%);
-  transition: transform 0.7s;
+  transition: transform $menu-slide-transition;
 
   @media screen and (min-width: $min-width-xl) {
     transform: translateX(0);
@@ -341,7 +376,7 @@ h1, h2, h3, h4, h5, h6
   top: 0;
   left: 0;
   opacity: 0;
-  transition: opacity 0.5s;
+  transition: opacity $menu-slide-transition;
   background-color: #eee;
   background-color: rgba(0,0,0,0.4);
   z-index: -1;

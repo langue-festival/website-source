@@ -14,8 +14,9 @@ var rootNode
 
 // TODO bypass under-construction
 var show = function () {
-    flags.underConstruction = false;
+    document.getElementById('root-node').remove();
 
+    flags.underConstruction = false;
     app = Elm.App.fullscreen(flags);
 };
 

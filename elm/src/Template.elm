@@ -106,10 +106,31 @@ getHeaderAttributes model =
             commonAttributes
 
 
+br : Html msg
+br =
+    Html.br [] []
+
+
+headerTitle : Html msg
+headerTitle =
+    Html.div [ class "header-title pure-menu-heading" ]
+        [ Html.p [ class "header-title-main" ]
+            [ text "LANGUE"
+            , br
+            , text "FESTIVAL DELLA POESIA"
+            , br
+            , text "DI SAN LORENZO"
+            ]
+        , Html.p [ class "header-title-date" ]
+            [ text "26 MAGGIO 2018" ]
+        ]
+
+
 header : Model m -> msg -> msg -> Html msg
 header model openMenuMsg closeMenuMsg =
     Html.header (getHeaderAttributes model)
         [ menuToggleButton model openMenuMsg closeMenuMsg
+        , headerTitle
         , logo
         , menu model
         ]
