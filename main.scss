@@ -44,10 +44,10 @@ $images-path: "#{$assets-path}/images";
 /*
  * General
  */
-$min-width-sm: 35.5em; /* sm ≥ 568px */
-$min-width-md: 48em;   /* md ≥ 768px */
-$min-width-lg: 64em;   /* lg ≥ 1024px */
-$min-width-xl: 80em;   /* xl ≥ 1280px */
+$sm-width: 35.5em; /* sm ≥ 568px */
+$md-width: 48em;   /* md ≥ 768px */
+$lg-width: 64em;   /* lg ≥ 1024px */
+$xl-width: 80em;   /* xl ≥ 1280px */
 
 $menu-height: 6em;
 $menu-height-xl: 13em;
@@ -156,7 +156,7 @@ h1, h2, h3, h4, h5, h6
     outline: none;
   }
 
-  @media screen and (min-width: $min-width-xl) {
+  @media screen and (min-width: $xl-width) {
     height: $menu-height-xl;
 
     .header-title {
@@ -235,7 +235,7 @@ h1, h2, h3, h4, h5, h6
     position: relative;
     left: $menu-font-size;
 
-    @media screen and (min-width: $min-width-xl) {
+    @media screen and (min-width: $xl-width) {
       left: $menu-font-size-xl;
     }
   }
@@ -273,7 +273,7 @@ h1, h2, h3, h4, h5, h6
       @include after-decorator;
     }
 
-    @media screen and (min-width: $min-width-xl) {
+    @media screen and (min-width: $xl-width) {
       display: inline-block;
 
       .pure-menu-link {
@@ -303,7 +303,7 @@ h1, h2, h3, h4, h5, h6
     width: 100%;
   }
 
-  @media screen and (min-width: $min-width-xl) {
+  @media screen and (min-width: $xl-width) {
     background-color: transparent;
     height: 100%;
     width: 0;
@@ -325,7 +325,7 @@ h1, h2, h3, h4, h5, h6
   transform: translateX(0);
   transition: transform $menu-slide-transition;
 
-  @media screen and (min-width: $min-width-xl) {
+  @media screen and (min-width: $xl-width) {
     transform: translateX(0);
     transition: none;
   }
@@ -335,7 +335,7 @@ h1, h2, h3, h4, h5, h6
   transform: translateX(-101%);
   transition: transform $menu-slide-transition;
 
-  @media screen and (min-width: $min-width-xl) {
+  @media screen and (min-width: $xl-width) {
     transform: translateX(0);
     transition: none;
   }
@@ -377,7 +377,7 @@ h1, h2, h3, h4, h5, h6
     }
   }
 
-  @media screen and (min-width: $min-width-md) {
+  @media screen and (min-width: $md-width) {
     .markdown {
       padding-left: 6em;
 
@@ -387,7 +387,7 @@ h1, h2, h3, h4, h5, h6
     }
   }
 
-  @media screen and (min-width: $min-width-xl) {
+  @media screen and (min-width: $xl-width) {
     margin-top: $menu-height-xl;
   }
 
@@ -473,22 +473,9 @@ h1, h2, h3, h4, h5, h6
     }
   }
 
-  @media screen and (orientation: landscape) {
-    .landing-main * {
-      font-size: 1.8em;
-    }
-
-    .enter {
-      bottom: unset;
-      left: unset;
-      right: 1em;
-      top: 1em;
-    }
-  }
-
-  @media screen and (min-width: $min-width-md) {
-    background-image: image-url("landing-background-md.png");
-    background-repeat: no-repeat;
+  @media screen and (min-width: $md-width) {
+    /*background-image: image-url("landing-background-md.png");
+    background-repeat: no-repeat;*/
     background-position: top right;
 
     .landing-main * {
@@ -503,6 +490,23 @@ h1, h2, h3, h4, h5, h6
 
     .landing-logo img {
       width: 15em;
+    }
+  }
+
+  @media screen and (orientation: landscape) and (max-width: $md-width) {
+    .landing-main * {
+      font-size: 1.6em;
+    }
+
+    .landing-date {
+      font-size: 1.2em;
+    }
+
+    .enter {
+      bottom: unset;
+      left: unset;
+      right: 1em;
+      top: 1em;
     }
   }
 }
@@ -537,7 +541,7 @@ h1, h2, h3, h4, h5, h6
     width: 8em;
     margin-right: 2em;
 
-    @media screen and (min-width: $min-width-lg) {
+    @media screen and (min-width: $lg-width) {
       height: 10em;
       width: 10em;
     }
