@@ -115,7 +115,8 @@ headerTitle : Html msg
 headerTitle =
     Html.div [ class "header-title pure-menu-heading" ]
         [ Html.p [ class "header-title-main" ]
-            [ text "LANGUE"
+            [ Html.span [ class "header-langue" ]
+                [ text "LANGUE" ]
             , br
             , text "FESTIVAL DELLA POESIA"
             , br

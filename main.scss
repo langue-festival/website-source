@@ -107,25 +107,72 @@ h1, h2, h3, h4, h5, h6
   background-color: $dark-blue;
   transition: height $menu-roll-up-transition;
 
-  .header-title, .heading-logo {
-    display: none;
+  .pure-menu-heading {
+    float: left;
+    padding: 0;
+  }
+
+  .header-title {
+    font-family: $cooper-hewitt-heavy;
+
+    .header-title-main {
+      color: white;
+    }
+
+    .header-langue {
+      color: $dark-pink;
+      font-size: 1.2em;
+      font-style: italic;
+    }
+
+    .header-title-date {
+      display: none;
+    }
+  }
+
+  .heading-logo {
+    float: right;
+    margin-top: 1em;
+
+    img {
+      height: 4.2em;
+      width: 10em;
+    }
+  }
+
+  .menu-toggle {
+    background-color: transparent;
+    border: none;
+    height: 100%;
+    padding: 0 1em;
+  }
+
+  a:hover,
+  a:focus,
+  a:active,
+  .menu-toggle:hover,
+  .menu-toggle:focus,
+  .menu-toggle:active {
+    outline: none;
   }
 
   @media screen and (min-width: $min-width-xl) {
     height: $menu-height-xl;
 
     .header-title {
-      display: block;
       left: 1em;
       font-family: $cooper-hewitt-heavy;
 
       .header-title-main {
-        color: $dark-pink;
+        font-size: 1.2em;
+      }
+
+      .header-langue {
         font-size: 1.5em;
-        font-style: italic;
       }
 
       .header-title-date {
+        display: block;
         color: white;
         font-size: 0.8em;
         letter-spacing: 0.4em;
@@ -137,14 +184,18 @@ h1, h2, h3, h4, h5, h6
       margin-top: $menu-margin-xl;
     }
 
-    .heading-logo {
-      display: block;
-    }
-
     .header-title, .social-media, .heading-logo {
       transition: bottom $menu-roll-up-transition, opacity $menu-roll-up-transition;
       position: relative;
       bottom: 0;
+    }
+
+    .heading-logo {
+      margin-top: $menu-margin-xl - 0.8em;
+    }
+
+    .menu-toggle {
+      display: none;
     }
 
     &.roll-up {
@@ -161,41 +212,6 @@ h1, h2, h3, h4, h5, h6
       .heading-logo {
         opacity: 0;
       }
-    }
-  }
-
-  .pure-menu-heading {
-    float: left;
-    padding: 0;
-  }
-
-  .menu-toggle {
-    background-color: transparent;
-    border: none;
-    height: 100%;
-    padding: 0 1em;
-
-    @media screen and (min-width: $min-width-xl) {
-      display: none;
-    }
-  }
-
-  a:hover,
-  a:focus,
-  a:active,
-  .menu-toggle:hover,
-  .menu-toggle:focus,
-  .menu-toggle:active {
-    outline: none;
-  }
-
-  .heading-logo {
-    float: right;
-
-    img {
-      margin-top: $menu-margin-xl - 0.8em;
-      height: 4.2em;
-      width: 10em;
     }
   }
 }
