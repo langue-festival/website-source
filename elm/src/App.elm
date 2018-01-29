@@ -155,6 +155,11 @@ update msg model =
             { model | menuHidden = True } ! [ stopCloseMenuListener () ]
 
 
+responsiveBr : Html Msg
+responsiveBr =
+    Html.br [ Html.Attributes.class "rwd-break" ] []
+
+
 viewIndex : List (Html Msg)
 viewIndex =
     [ Html.div [ Html.Attributes.class "content-container landing" ]
@@ -162,18 +167,17 @@ viewIndex =
             [ Html.div [ Html.Attributes.class "langue pure-u-1" ]
                 [ Html.text "LANGUE" ]
             , Html.div [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "FESTIVAL" ]
+                [ Html.text "FESTIVAL ", responsiveBr, Html.text "DELLA" ]
             , Html.div [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "DELLA" ]
-            , Html.div [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "POESIA" ]
-            , Html.div [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "DI SAN" ]
+                [ Html.text "POESIA ", responsiveBr, Html.text "DI SAN" ]
             , Html.div [ Html.Attributes.class "pure-u-1" ]
                 [ Html.text "LORENZO" ]
             ]
         , Html.p [ Html.Attributes.class "landing-date" ]
-            [ Html.text "26 MAGGIO 2018" ]
+            [ Html.span [ Html.Attributes.class "landing-rome" ]
+                [ Html.text "ROMA, " ]
+            , Html.text "26 MAGGIO 2018"
+            ]
         , Html.a
             [ Html.Attributes.href <| Route.toUrl "home"
             , Html.Attributes.class "enter pure-button"
