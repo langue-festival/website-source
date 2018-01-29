@@ -473,6 +473,19 @@ h1, h2, h3, h4, h5, h6
     }
   }
 
+  @media screen and (orientation: landscape) {
+    .landing-main * {
+      font-size: 1.8em;
+    }
+
+    .enter {
+      bottom: unset;
+      left: unset;
+      right: 1em;
+      top: 1em;
+    }
+  }
+
   @media screen and (min-width: $min-width-md) {
     background-image: image-url("landing-background-md.png");
     background-repeat: no-repeat;
