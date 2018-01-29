@@ -48,7 +48,7 @@ getMenuAttributes model =
 socialMedia : Html msg
 socialMedia =
     Html.div [ class "social-media" ]
-        [ a [ href "https://www.facebook.com/langue" ]
+        [ a [ href "https://www.facebook.com/LangueFPSL" ]
             [ img [ src "assets/images/social-media/facebook.png" ] [] ]
         ]
 
