@@ -179,6 +179,8 @@ viewIndex =
             , Html.Attributes.class "enter pure-button"
             ]
             [ Html.text "ENTRA" ]
+        , Html.div [ Html.Attributes.class "landing-logo" ]
+            [ Html.img [ Html.Attributes.src "assets/images/langue-logo.svg" ] [] ]
         ]
     ]
 

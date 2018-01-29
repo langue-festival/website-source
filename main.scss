@@ -66,14 +66,14 @@ $glacial-indifference: "GlacialIndifference", sans-serif;
 $cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
 
 $light-blue: #a7cde2;
-$middle-blue: #308aa2;
-$dark-blue: #070033;
+$middle-blue: #38a0bb;
+$dark-blue: #1a203a;
 $light-pink: #fae8d2;
-$dark-pink: #f366b4;
+$dark-pink: #ff63b1;
 $green: #5fc831;
 $light-red: #c55;
 $dark-red: #c62a2f;
-$yellow: #ffbb49;
+$yellow: #ffbd4a;
 
 
 * {
@@ -131,11 +131,11 @@ h1, h2, h3, h4, h5, h6
   }
 
   .heading-logo {
-    float: right;
-    margin-top: 1em;
+    position: absolute;
+    right: 3px;
+    top: 1em;
 
     img {
-      height: 4.2em;
       width: 10em;
     }
   }
@@ -191,7 +191,9 @@ h1, h2, h3, h4, h5, h6
     }
 
     .heading-logo {
-      margin-top: $menu-margin-xl - 0.8em;
+      float: right;
+      top: unset;
+      margin-top: $menu-margin-xl - 1.1em;
     }
 
     .menu-toggle {
@@ -413,8 +415,8 @@ h1, h2, h3, h4, h5, h6
  * Index
  */
 .landing {
-  /*background-image: image-url("landing-background.png");*/
-  background-repeat: no-repeat;
+  /*background-image: image-url("landing-background.png");
+  background-repeat: no-repeat;*/
   background-color: $dark-blue;
   border-bottom: 0.5em solid $yellow;
   border-top: 0.5em solid $yellow;
@@ -425,7 +427,7 @@ h1, h2, h3, h4, h5, h6
   .landing-main * {
     color: $middle-blue;
     font-family: $cooper-hewitt-heavy;
-    font-size: 3.2em;
+    font-size: 2.4em;
   }
 
   .langue {
@@ -437,7 +439,7 @@ h1, h2, h3, h4, h5, h6
     color: $yellow;
     font-family: $glacial-indifference;
     font-weight: bold;
-    font-size: 2em;
+    font-size: 1.4em;
     margin-bottom: 0;
   }
 
@@ -446,7 +448,7 @@ h1, h2, h3, h4, h5, h6
     $font-size: 1.5em;
 
     position: absolute;
-    right: 1em;
+    left: 1em;
     bottom: 1em;
     height: $button-dim;
     width: $button-dim;
@@ -461,20 +463,23 @@ h1, h2, h3, h4, h5, h6
     text-align: center;
   }
 
+  .landing-logo {
+    position: absolute;
+    bottom: 1em;
+    right: 1em;
+
+    img {
+      width: 10em;
+    }
+  }
+
   @media screen and (min-width: $min-width-md) {
     background-image: image-url("landing-background-md.png");
+    background-repeat: no-repeat;
     background-position: top right;
 
-    .landing-main * {
-      font-size: 3.5em;
-    }
-
-    .landing-date {
-      font-size: 3em;
-    }
-
-    .enter {
-      font-size: 1.7em;
+    .landing-logo img {
+      width: 15em;
     }
   }
 }
