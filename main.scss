@@ -431,7 +431,7 @@ a:active,
     p {
       color: $middle-blue;
       font-family: $cooper-hewitt-heavy;
-      font-size: 8vh;
+      font-size: 8vmin;
       margin: 0;
     }
 
@@ -453,7 +453,7 @@ a:active,
   .landing-date {
     color: $yellow;
     font-family: $glacial-indifference;
-    font-size: 6vh;
+    font-size: 6vmin;
     margin: 0;
   }
 
@@ -463,7 +463,7 @@ a:active,
 
   .enter {
     $button-dim: 5em;
-    $font-size: 1.2em;
+    $font-size: 4vmin;
 
     position: absolute;
     left: 0.5em;
@@ -477,25 +477,21 @@ a:active,
     line-height: $font-size;
     color: $dark-blue;
     background-color: $middle-blue;
-    padding: 1.8em 0;
+    padding: 7.5vmin 0;
     text-align: center;
   }
 
   .landing-logo {
     position: absolute;
-    bottom: 1em;
-    right: 1em;
+    bottom: 0.3em;
+    right: 0.3em;
 
     img {
-      width: 40vw;
+      width: 35vmin;
     }
   }
 
   @media screen and (orientation: landscape) {
-    .landing-main p {
-      font-size: 10vh;
-    }
-
     .enter {
       bottom: unset;
       left: unset;
@@ -504,18 +500,7 @@ a:active,
     }
   }
 
-  @media screen and (min-width: $sm-width) {
-    .enter {
-      font-size: 1.5em;
-    }
-  }
-
   @media screen and (min-width: $md-width) {
-    .langue:after {
-      position: relative;
-      bottom: 14px;
-    }
-
     .landing-main {
       margin-top: 1.7em;
     }
@@ -527,19 +512,20 @@ a:active,
     .landing-logo img {
       width: 30vw;
     }
+
+    .enter {
+      font-size: 5vmin;
+      padding: 10vmin 0;
+    }
   }
 
   @media screen and (min-width: $lg-width) {
     .landing-main p {
-      font-size: 13vh;
+      font-size: 13vmin;
     }
 
     .landing-date {
-      font-size: 10vh;
-    }
-
-    .enter {
-      font-size: 2em;
+      font-size: 10vmin;
     }
   }
 }
