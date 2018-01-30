@@ -98,12 +98,6 @@ h1, h2, h3, h4, h5, h6
   cursor: default;
 }
 
-.rwd-break {
-  @media screen and (min-width: $md-width) {
-    display: none;
-  }
-}
-
 /*
  * Header
  */
@@ -431,7 +425,7 @@ a:active,
     p {
       color: $middle-blue;
       font-family: $cooper-hewitt-heavy;
-      font-size: 8vmin;
+      font-size: 10vmin;
       margin: 0;
     }
 
@@ -444,7 +438,7 @@ a:active,
   .langue:after {
     content: "";
     display: block;
-    height: 4px;
+    height: 0.1em;
     width: 3.8em;
     background-color: $yellow;
     margin-bottom: 0.3em;
@@ -453,7 +447,7 @@ a:active,
   .landing-date {
     color: $yellow;
     font-family: $glacial-indifference;
-    font-size: 6vmin;
+    font-size: 8vmin;
     margin: 0;
   }
 
@@ -463,7 +457,7 @@ a:active,
 
   .enter {
     $button-dim: 5em;
-    $font-size: 4vmin;
+    $font-size: 5vmin;
 
     position: absolute;
     left: 0.5em;
@@ -477,7 +471,7 @@ a:active,
     line-height: $font-size;
     color: $dark-blue;
     background-color: $middle-blue;
-    padding: 7.5vmin 0;
+    padding: 9vmin 0;
     text-align: center;
   }
 
@@ -487,15 +481,19 @@ a:active,
     right: 0.3em;
 
     img {
-      width: 35vmin;
+      width: 45vmin;
     }
   }
 
   @media screen and (orientation: landscape) {
+    .rwd-break {
+      display: none;
+    }
+
     .enter {
       bottom: unset;
       left: unset;
-      right: 1em;
+      right: 0.4em;
       top: 1em;
     }
   }
@@ -507,10 +505,6 @@ a:active,
 
     .landing-rome {
       display: inline;
-    }
-
-    .landing-logo img {
-      width: 30vw;
     }
 
     .enter {
