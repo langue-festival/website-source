@@ -427,15 +427,18 @@ a:active,
   text-align: left;
   margin-top: 0;
 
-  .landing-main * {
-    color: $middle-blue;
-    font-family: $cooper-hewitt-heavy;
-    font-size: 2.4em;
-  }
+  .landing-main {
+    p {
+      color: $middle-blue;
+      font-family: $cooper-hewitt-heavy;
+      font-size: 8vh;
+      margin: 0;
+    }
 
-  .langue {
-    font-style: italic;
-    color: $pink;
+    .langue {
+      font-style: italic;
+      color: $pink;
+    }
   }
 
   .langue:after {
@@ -450,9 +453,8 @@ a:active,
   .landing-date {
     color: $yellow;
     font-family: $glacial-indifference;
-    font-weight: bold;
-    font-size: 1.4em;
-    margin-bottom: 0;
+    font-size: 6vh;
+    margin: 0;
   }
 
   .landing-rome {
@@ -485,17 +487,13 @@ a:active,
     right: 1em;
 
     img {
-      width: 10em;
+      width: 40vw;
     }
   }
 
   @media screen and (orientation: landscape) {
-    .landing-main * {
-      font-size: 1.6em;
-    }
-
-    .landing-date {
-      font-size: 1.2em;
+    .landing-main p {
+      font-size: 10vh;
     }
 
     .enter {
@@ -507,8 +505,8 @@ a:active,
   }
 
   @media screen and (min-width: $sm-width) {
-    .landing-main * {
-      font-size: 3em;
+    .enter {
+      font-size: 1.5em;
     }
   }
 
@@ -522,39 +520,27 @@ a:active,
       margin-top: 1.7em;
     }
 
-    .landing-main * {
-      font-size: 4em;
-    }
-
-    .landing-date {
-      font-size: 2em;
-    }
-
     .landing-rome {
       display: inline;
     }
 
-    .enter {
-      font-size: 1.5em;
-    }
-
     .landing-logo img {
-      width: 15em;
+      width: 30vw;
     }
   }
 
   @media screen and (min-width: $lg-width) {
-    .landing-main * {
-      font-size: 5em;
+    .landing-main p {
+      font-size: 13vh;
     }
 
     .landing-date {
-      font-size: 3em;
+      font-size: 10vh;
     }
-  }
 
-  .rwd-break {
-    font-size: 0;
+    .enter {
+      font-size: 2em;
+    }
   }
 }
 
