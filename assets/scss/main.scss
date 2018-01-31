@@ -1,7 +1,6 @@
 @import "node_modules/purecss/build/pure-min";
 @import "node_modules/purecss/build/grids-responsive-min";
 
-$assets-path: "assets";
 $fonts-path: "#{$assets-path}/fonts";
 $images-path: "#{$assets-path}/images";
 
@@ -44,38 +43,38 @@ $images-path: "#{$assets-path}/images";
 /*
  * General
  */
-$sm-width: 35.5em; /* sm ≥ 568px */
-$md-width: 48em;   /* md ≥ 768px */
-$lg-width: 64em;   /* lg ≥ 1024px */
-$xl-width: 80em;   /* xl ≥ 1280px */
+ $sm-width: 35.5em; /* sm ≥ 568px */
+ $md-width: 48em;   /* md ≥ 768px */
+ $lg-width: 64em;   /* lg ≥ 1024px */
+ $xl-width: 80em;   /* xl ≥ 1280px */
 
-$menu-height: 6em;
-$menu-height-xl: 13em;
-$menu-top-margin: 1em;
-$menu-font-size: 1.3em;
-$menu-font-size-xl: 1em;
-$menu-margin-xl: 9em;
+ $menu-height: 6em;
+ $menu-height-xl: 13em;
+ $menu-top-margin: 1em;
+ $menu-font-size: 1.3em;
+ $menu-font-size-xl: 1em;
+ $menu-margin-xl: 9em;
 
-$menu-slide-transition: 0.5s;
+ $menu-slide-transition: 0.5s;
 
-$menu-roll-up-transition: 0.5s;
-$menu-roll-up-height: 3em;
-$menu-roll-up-margin: 0;
+ $menu-roll-up-transition: 0.5s;
+ $menu-roll-up-height: 3em;
+ $menu-roll-up-margin: 0;
 
-$glacial-indifference: "GlacialIndifference", sans-serif;
-$cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
+ $glacial-indifference: "GlacialIndifference", sans-serif;
+ $cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
 
-$background: #fae8d2;
+ $background: #fae8d2;
 
-$light-blue: #a7cde2;
-$middle-blue: #38a0bb;
-$dark-blue: #1a203a;
+ $light-blue: #a7cde2;
+ $middle-blue: #38a0bb;
+ $dark-blue: #1a203a;
 
-$yellow: #ffbd4a;
-$pink: #ff63b1;
-$red: #c62a2f;
+ $yellow: #ffbd4a;
+ $pink: #ff63b1;
+ $red: #c62a2f;
 
-* {
+ * {
   box-sizing: border-box;
 }
 
@@ -101,7 +100,7 @@ h1, h2, h3, h4, h5, h6
 /*
  * Header
  */
-.pure-menu {
+ .pure-menu {
   height: $menu-height;
   background-color: $dark-blue;
   transition: height $menu-roll-up-transition;
@@ -285,7 +284,7 @@ a:active,
 /*
  * Menu
  */
-#menu {
+ #menu {
   position: absolute;
   background-color: $dark-blue;
   top: $menu-height;
@@ -343,7 +342,7 @@ a:active,
 /*
  * Content container
  */
-.content-container {
+ .content-container {
   display: block;
   position: absolute;
   height: auto;
@@ -548,7 +547,6 @@ a:active,
 }
 
 .chi-siamo {
-
   img {
     float: left;
     height: 8em;

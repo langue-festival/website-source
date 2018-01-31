@@ -1,12 +1,13 @@
 # directories
 base_dir		:= $(CURDIR)
 elm_dir			:= $(base_dir)/elm
+build_dir		:= $(base_dir)/build
 node_modules	:= $(base_dir)/node_modules
 node_bin		:= $(node_modules)/.bin
 # target
-sass_target		:= $(base_dir)/compiled_style.css
-elm_target		:= $(base_dir)/compiled_elm.js
-inline_pages	:= $(base_dir)/compiled_pages.js
+sass_target		:= $(build_dir)/compiled_style.css
+elm_target		:= $(build_dir)/compiled_elm.js
+inline_pages	:= $(build_dir)/compiled_pages.js
 inliner_target	:= $(base_dir)/index.html
 # node_modules executables
 elm_make	:= $(node_bin)/elm-make
@@ -22,25 +23,30 @@ all : inliner
 yarn :
 	@yarn
 
-elm :
-ifeq ("$(wildcard $(elm_make))", "")
+build-dir :
+	@mkdir -p $(build_dir)
+
+check-yarn :
+ifeq ("$(wildcard $(node_bin))", "")
 	make yarn
 endif
+
+elm : build-dir check-yarn
 	@cd $(elm_dir) && $(elm_make) src/App.elm --output=$(elm_target) --warn --yes
 
 elm-analyse : elm
 	@cd $(elm_dir) && $(elm_analyse)
 
-sass :
-ifeq ("$(wildcard $(node_sass))", "")
-	make yarn
-endif
-	@$(node_sass) --output-style compressed main.scss > $(sass_target)
+dev-sass : build-dir check-yarn
+	@$(node_sass) --output-style compressed assets/scss/dev.scss > $(sass_target)
 
-dev : elm sass
+prod-sass : build-dir check-yarn
+	@$(node_sass) --output-style compressed assets/scss/prod.scss > $(sass_target)
+
+dev : elm dev-sass
 	@rm -f $(inline_pages)
 
-inliner : yarn elm sass
+inliner : yarn elm prod-sass
 	@chmod a+x $(base_dir)/inline_pages.sh
 	@$(base_dir)/inline_pages.sh $(inline_pages)
 	@$(postcss) $(sass_target) --use autoprefixer --replace

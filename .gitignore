@@ -1,8 +1,6 @@
 elm/elm-stuff
 node_modules
 sysconfcpus
+build
 
-compiled_style.css
-compiled_elm.js
-compiled_pages.js
 index.html
