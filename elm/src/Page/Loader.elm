@@ -9,7 +9,7 @@ import Task
 
 
 type alias Cache msg =
-    Dict Route (Page msg)
+    Dict String (Page msg)
 
 
 type Event msg
@@ -17,12 +17,12 @@ type Event msg
     | Error Route Http.Error
 
 
-loadCache : List ( Route, String ) -> Cache msg
+loadCache : List ( String, String ) -> Cache msg
 loadCache pageList =
     let
-        parseMap : ( Route, String ) -> ( Route, Page msg )
-        parseMap ( route, content ) =
-            ( route, Page.parser content )
+        parseMap : ( String, String ) -> ( String, Page msg )
+        parseMap ( routeName, content ) =
+            ( routeName, Page.parser content )
     in
         Dict.fromList <| List.map parseMap pageList
 
@@ -36,7 +36,7 @@ handleHttpResponse route cache result =
                     Page.parser content
 
                 newCache =
-                    Dict.insert route page cache
+                    Dict.insert route.name page cache
             in
                 Success route page newCache
 
@@ -46,7 +46,7 @@ handleHttpResponse route cache result =
 
 routeToPageUrl : Route -> String
 routeToPageUrl route =
-    "pages/" ++ String.toLower route ++ ".md"
+    "pages/" ++ (String.toLower route.name) ++ ".md"
 
 
 fetch : Route -> Cache msg -> (Event msg -> msg) -> Cmd msg
@@ -62,7 +62,7 @@ load location cache toAppMsg =
         route =
             Route.parseLocation location
     in
-        case Dict.get route cache of
+        case Dict.get route.name cache of
             Just page ->
                 Task.perform toAppMsg <| Task.succeed <| Success route page cache
 

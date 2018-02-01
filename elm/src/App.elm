@@ -30,7 +30,7 @@ type alias Model =
 
 
 type alias Flags =
-    { pages : List ( Route, String )
+    { pages : List ( String, String )
     , yScroll : Int
     , underConstruction : Bool
     }
@@ -74,7 +74,12 @@ handlePageLoad route page model =
             { model | route = route, page = page }
                 |> update CloseMenu
     in
-        newModel ! [ closeMenuCmd, scrollToTop () ]
+        case route.anchor of
+            Just anchor ->
+                newModel ! [ closeMenuCmd, scrollIntoView anchor ]
+
+            Nothing ->
+                newModel ! [ closeMenuCmd, scrollToTop () ]
 
 
 set404 : Route -> Model -> ( Model, Cmd Msg )
@@ -179,7 +184,7 @@ viewIndex =
             , Html.text "26 MAGGIO 2018"
             ]
         , Html.a
-            [ Html.Attributes.href <| Route.toUrl "home"
+            [ Html.Attributes.href <| Route.toUrl <| Route.fromName "home"
             , Html.Attributes.class "enter pure-button"
             ]
             [ Html.text "ENTRA" ]
@@ -192,20 +197,40 @@ viewIndex =
 viewContent : Model -> List (Html Msg)
 viewContent model =
     if model.underConstruction then
-        Page.view { model | route = "under-construction", page = Page.parser "# Sito in costruzione" }
-    else if model.route == "index" then
+        Page.view
+            { model
+                | route = Route.fromName "under-construction"
+                , page = Page.parser "# Sito in costruzione"
+            }
+    else if model.route.name == "index" then
         viewIndex
     else
         Template.header model OpenMenu CloseMenu
             :: Page.view model
 
 
+getRootNodeAttributes : Model -> List (Html.Attribute msg)
+getRootNodeAttributes { menuHidden } =
+    let
+        commonAttributes : List (Html.Attribute msg)
+        commonAttributes =
+            [ Html.Attributes.id "root-node" ]
+    in
+        if menuHidden then
+            commonAttributes
+        else
+            Html.Attributes.class "no-scroll" :: commonAttributes
+
+
 view : Model -> Html Msg
 view model =
-    Html.div [ Html.Attributes.id "root-node" ] <| viewContent model
+    Html.div (getRootNodeAttributes model) <| viewContent model
 
 
 port scrollToTop : () -> Cmd msg
+
+
+port scrollIntoView : String -> Cmd msg
 
 
 port startCloseMenuListener : () -> Cmd msg

@@ -3,7 +3,7 @@ module Template exposing (Model, header, pageAttributes, pageContainerAttributes
 import Html exposing (Html, a, ul, li, nav, text, button, img)
 import Html.Attributes exposing (id, class, href, src)
 import Html.Events exposing (onClick)
-import Route exposing (Route)
+import Route exposing (Route, route, fromName)
 
 
 type alias Model model =
@@ -12,24 +12,6 @@ type alias Model model =
         , yScroll : Int
         , menuHidden : Bool
     }
-
-
-menuItem : Route -> String -> Route -> Html msg
-menuItem currentRoute linkName linkRoute =
-    let
-        itemClass =
-            if linkRoute == currentRoute then
-                "pure-menu-item pure-menu-selected"
-            else
-                "pure-menu-item"
-
-        linkHref =
-            href <| Route.toUrl linkRoute
-    in
-        li [ class itemClass ]
-            [ a [ linkHref, class "pure-menu-link" ]
-                [ text linkName ]
-            ]
 
 
 getMenuAttributes : Model m -> List (Html.Attribute msg)
@@ -47,30 +29,87 @@ getMenuAttributes model =
 
 socialMedia : Html msg
 socialMedia =
-    Html.div [ class "social-media" ]
-        [ a [ href "https://www.facebook.com/LangueFPSL" ]
+    li [ class "pure-menu-item social-media" ]
+        [ a [ href "https://www.facebook.com/LangueFPSL", class "pure-menu-link" ]
             [ img [ src "assets/images/social-media/facebook.png" ] [] ]
         ]
+
+
+menuParentItem : Route -> String -> Route -> List (Html msg) -> Html msg
+menuParentItem currentRoute itemName linkRoute items =
+    let
+        numItems =
+            List.length items
+
+        attributes1 =
+            [ class "pure-menu-item" ]
+
+        attributes2 =
+            if linkRoute == currentRoute then
+                class "pure-menu-selected" :: attributes1
+            else
+                attributes1
+
+        attributes3 =
+            if numItems > 0 then
+                class "pure-menu-has-children pure-menu-allow-hover" :: attributes2
+            else
+                attributes2
+
+        linkHref =
+            href <| Route.toUrl linkRoute
+
+        link =
+            a [ linkHref, class "pure-menu-link" ]
+                [ text itemName ]
+    in
+        if numItems > 0 then
+            li attributes3
+                [ link, ul [ class "pure-menu-children" ] items ]
+        else
+            li attributes3 [ link ]
+
+
+menuItem : Route -> String -> Route -> Html msg
+menuItem currentRoute itemName linkRoute =
+    menuParentItem currentRoute itemName linkRoute []
 
 
 menu : Model m -> Html msg
 menu model =
     let
+        item : String -> Route -> Html msg
         item =
             menuItem model.route
+
+        parentItem : String -> Route -> List (Html msg) -> Html msg
+        parentItem =
+            menuParentItem model.route
     in
         nav (getMenuAttributes model)
             [ ul [ class "pure-menu-list" ]
-                [ item "Home" "home"
-                , item "Cos'è Langue" "langue"
-                , item "Luoghi" "luoghi"
-                , item "Programma" "programma"
-                , item "News e Stampa" "news-e-stampa"
-                , item "Le nostre sezioni" "le-nostre-sezioni"
-                , item "Chi siamo" "chi-siamo"
-                , item "Partecipa" "partecipa"
+                [ item "Home" <| fromName "home"
+                , parentItem "Langue"
+                    (fromName "langue")
+                    [ item "Chi siamo" <| route "langue" "chi-siamo"
+                    , item "Persone importanti" <| route "langue" "persone-importanti"
+                    , item "Contatti" <| route "langue" "contatti"
+                    , item "Info" <| route "langue" "info"
+                    ]
+                , parentItem "Il programma"
+                    (fromName "programma")
+                    [ item "Le sezioni" <| route "programma" "sezioni"
+                    , item "I luoghi" <| route "programma" "luoghi"
+                    ]
+                , parentItem "Partecipa / Join us"
+                    (fromName "partecipa")
+                    [ item "Come volontario/a" <| route "partecipa" "volontari"
+                    , item "Come poeta/poetessa" <| route "partecipa" "poeti"
+                    ]
+                , item "Sostienici / Support us" <| Route.fromName "sostienici"
+                , item "Ringraziamenti" <| Route.fromName "ringraziamenti"
+                , socialMedia
                 ]
-            , socialMedia
             ]
 
 
@@ -89,16 +128,15 @@ menuToggleButton model openMenuMsg closeMenuMsg =
 
 logo : Html msg
 logo =
-    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl "home" ]
+    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| fromName "home" ]
         [ img [ src "assets/images/langue-logo.svg" ] [] ]
 
 
 getHeaderAttributes : Model m -> List (Html.Attribute msg)
 getHeaderAttributes model =
     let
-        -- id needed for `document.getElementById('menu')`
         commonAttributes =
-            [ class "pure-menu pure-menu-horizontal pure-menu-fixed" ]
+            [ class "pure-menu" ]
     in
         if model.yScroll > 10 then
             class "roll-up" :: commonAttributes
@@ -129,10 +167,12 @@ headerTitle =
 
 header : Model m -> msg -> msg -> Html msg
 header model openMenuMsg closeMenuMsg =
-    Html.header (getHeaderAttributes model)
-        [ menuToggleButton model openMenuMsg closeMenuMsg
-        , headerTitle
-        , logo
+    Html.div (getHeaderAttributes model)
+        [ Html.header [ class "header-container pure-menu-heading" ]
+            [ menuToggleButton model openMenuMsg closeMenuMsg
+            , headerTitle
+            , logo
+            ]
         , menu model
         ]
 
@@ -146,7 +186,7 @@ pageContainerAttributes : Model m -> List (Html.Attribute msg)
 pageContainerAttributes model =
     let
         containerClass =
-            model.route ++ " content-container pure-g"
+            model.route.name ++ " content-container pure-g"
     in
         if model.menuHidden then
             [ class containerClass ]

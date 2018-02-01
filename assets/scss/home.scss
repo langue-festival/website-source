@@ -1,0 +1,22 @@
+.home {
+  .box {
+    background-color: $yellow;
+    padding: 0.7em 1em;
+
+    h1 {
+      text-transform: uppercase;
+      margin: 0;
+      font-size: 1em;
+    }
+
+    p {
+      font-size: 0.8em;
+    }
+
+    .read-on {
+      text-transform: uppercase;
+      text-decoration: none;
+      color: $background;
+    }
+  }
+}

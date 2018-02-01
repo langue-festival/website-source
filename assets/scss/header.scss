@@ -1,0 +1,245 @@
+.header-container {
+  height: $menu-height;
+  width: 100vw;
+  background-color: $dark-blue;
+  transition: height $menu-roll-up-transition;
+  position: fixed;
+  top: 0;
+  z-index: 3;
+}
+
+.pure-menu-heading {
+  float: left;
+  padding: 0;
+}
+
+.header-title {
+  font-family: $cooper-hewitt-heavy;
+
+  .header-title-main {
+    color: white;
+  }
+
+  .header-langue {
+    color: $pink;
+    font-size: 1.2em;
+    font-style: italic;
+  }
+
+  .header-title-date {
+    display: none;
+  }
+}
+
+.heading-logo {
+  position: absolute;
+  right: 1em;
+  bottom: 0.9em;
+
+  img {
+    max-width: 10em;
+    width: 30vw;
+  }
+}
+
+.menu-toggle {
+  background-color: transparent;
+  border: none;
+  height: 100%;
+  padding: 0 1em;
+}
+
+a:hover,
+a:focus,
+a:active,
+.menu-toggle:hover,
+.menu-toggle:focus,
+.menu-toggle:active {
+  outline: none;
+}
+
+.pure-menu-list {
+  font-family: $glacial-indifference;
+  height: 100vh;
+}
+
+.pure-menu-children {
+  display: block;
+  position: initial;
+  padding-left: 1em;
+}
+
+.pure-menu-children li {
+  float: left;
+}
+
+.pure-menu-allow-hover:hover > .pure-menu-children {
+  position: initial;
+}
+
+.pure-menu-item {
+  z-index: 2;
+  margin: 0;
+  height: unset;
+  width: 15em;
+  float: left;
+
+  .pure-menu-link {
+    color: $light-blue;
+    padding: 0.5em 1em 0.2em 1em;
+    background-color: transparent;
+    font-size: $menu-font-size;
+    text-decoration: none;
+    margin: 0;
+  }
+}
+
+#menu {
+  position: absolute;
+  background-color: $dark-blue;
+  border-top: 3px solid white;
+  max-width: $menu-max-width;
+  top: $menu-height;
+  z-index: 2;
+
+  .social-media {
+    clear: both;
+    text-align: center;
+    margin: 2em 0;
+    max-width: $menu-max-width;
+    width: 100vw;
+  }
+
+  .social-media:after {
+    display: none;
+  }
+}
+
+.opened {
+  transform: translateX(0);
+  transition: transform $menu-slide-transition;
+}
+
+.closed {
+  transform: translateX(-101%);
+  transition: transform $menu-slide-transition;
+}
+
+@media screen and (min-width: $xl-width) {
+  .pure-menu-list {
+    height: 0;
+  }
+
+  .pure-menu-item {
+    display: inline-block;
+    font-size: 0.9em;
+    width: unset;
+  }
+
+  .pure-menu-item:after {
+    left: $menu-font-size-xl;
+  }
+
+  .pure-menu-children {
+    position: absolute;
+    display: none;
+    left: 0;
+    top: auto;
+    margin: 0;
+    padding: 0;
+    width: inherit;
+  }
+
+  .pure-menu-children li {
+    float: none;
+  }
+
+  .pure-menu-allow-hover:hover > .pure-menu-children {
+    position: absolute;
+    display: block;
+  }
+
+  .pure-menu-link {
+    font-size: $menu-font-size-xl;
+  }
+
+  .header-title, .social-media, .heading-logo {
+    transition: bottom $menu-roll-up-transition, opacity $menu-roll-up-transition;
+    position: relative;
+    bottom: 0;
+  }
+
+  .heading-logo {
+    float: right;
+    right: 1em;
+    top: unset;
+    margin-top: $menu-margin-xl - 2.7em;
+  }
+
+  .menu-toggle {
+    display: none;
+  }
+
+  .social-media {
+    left: 95vw;
+    bottom: 9em;
+  }
+
+  #menu {
+    transition: top $menu-roll-up-transition;
+    background-color: transparent;
+    transform: translateX(0);
+    display: inline-block;
+    position: fixed;
+    max-width: 100vw;
+    width: 100vw;
+    border: 0;
+    z-index: 4;
+    height: 0;
+    top: $menu-margin-xl;
+  }
+
+  .header-container {
+    height: $menu-height-xl;
+  }
+
+  .header-title {
+    left: 1em;
+    font-family: $cooper-hewitt-heavy;
+
+    .header-title-main {
+      font-size: 1.2em;
+    }
+
+    .header-langue {
+      font-size: 1.5em;
+    }
+
+    .header-title-date {
+      display: block;
+      color: white;
+      font-size: 0.8em;
+      letter-spacing: 0.4em;
+    }
+  }
+
+  .roll-up .header-container {
+    height: $menu-roll-up-height;
+
+    .header-title, .social-media, .heading-logo {
+      bottom: $menu-height-xl - $menu-roll-up-height;
+    }
+
+    .pure-menu-list {
+      margin-top: $menu-roll-up-margin;
+    }
+
+    .heading-logo {
+      opacity: 0;
+    }
+  }
+
+  .roll-up #menu {
+    top: $menu-roll-up-margin;
+  }
+}

@@ -1,0 +1,110 @@
+.landing {
+  background-color: $dark-blue;
+  border-bottom: 0.5em solid $yellow;
+  border-top: 0.5em solid $yellow;
+  padding: 1.2em 0.8em;
+  text-align: left;
+  margin-top: 0;
+
+  .landing-main {
+    p {
+      color: $middle-blue;
+      font-family: $cooper-hewitt-heavy;
+      font-size: 10vmin;
+      margin: 0;
+    }
+
+    .langue {
+      font-style: italic;
+      color: $pink;
+    }
+  }
+
+  .langue:after {
+    content: "";
+    display: block;
+    height: 0.1em;
+    width: 3.8em;
+    background-color: $yellow;
+    margin-bottom: 0.3em;
+  }
+
+  .landing-date {
+    color: $yellow;
+    font-family: $glacial-indifference;
+    font-size: 8vmin;
+    margin: 0;
+  }
+
+  .landing-rome {
+    display: none;
+  }
+
+  .enter {
+    $button-dim: 5em;
+    $font-size: 5vmin;
+
+    position: absolute;
+    left: 0.5em;
+    bottom: 0.5em;
+    height: $button-dim;
+    width: $button-dim;
+    border-radius: $button-dim;
+    border: 0.2em solid $pink;
+    font-family: $cooper-hewitt-heavy;
+    font-size: $font-size;
+    line-height: $font-size;
+    color: $dark-blue;
+    background-color: $middle-blue;
+    padding: 9vmin 0;
+    text-align: center;
+  }
+
+  .landing-logo {
+    position: absolute;
+    bottom: 0.3em;
+    right: 0.3em;
+
+    img {
+      width: 45vmin;
+    }
+  }
+
+  @media screen and (orientation: landscape) {
+    .rwd-break {
+      display: none;
+    }
+
+    .enter {
+      bottom: unset;
+      left: unset;
+      right: 0.4em;
+      top: 1em;
+    }
+  }
+
+  @media screen and (min-width: $md-width) {
+    .landing-main {
+      margin-top: 1.7em;
+    }
+
+    .landing-rome {
+      display: inline;
+    }
+
+    .enter {
+      font-size: 5vmin;
+      padding: 10vmin 0;
+    }
+  }
+
+  @media screen and (min-width: $lg-width) {
+    .landing-main p {
+      font-size: 13vmin;
+    }
+
+    .landing-date {
+      font-size: 10vmin;
+    }
+  }
+}

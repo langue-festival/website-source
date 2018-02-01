@@ -53,7 +53,6 @@ inliner : yarn elm prod-sass
 	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(inliner_target)
 
 clean :
-	@rm -rf $(node_modules) $(base_dir)/yarn.lock
+	@rm -rf $(node_modules) $(build_dir) $(base_dir)/yarn.lock
 	@rm -rf $(elm_dir)/elm-stuff
-	@rm -f $(sass_target) $(elm_target)
-	@rm -f $(inline_pages) $(inliner_target)
+	@rm -f $(inliner_target)
