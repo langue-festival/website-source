@@ -45,7 +45,7 @@ var show = function () {
 };
 
 /* Scroll handlers */
-var scrollToTop = function (duration) {
+var animateScrollToTop = function (duration) {
     var time = 0,
         deltaTime = 20,
 
@@ -105,7 +105,7 @@ app.ports.scrollIntoView.subscribe(function (id) {
 });
 
 app.ports.scrollToTop.subscribe(function () {
-    scrollToTop(500);
+    docElement.scrollTop = 0;
 });
 
 /* Menu events handlers */
@@ -121,7 +121,7 @@ var closeMenuListener = function (event) {
 app.ports.startCloseMenuListener.subscribe(function () {
     document.addEventListener('click', closeMenuListener, false);
 
-    scrollToTop(500);
+    docElement.scrollTop = 0;
     setTimeout(function () {
         rootNode().style.height = menu().offsetHeight + headerContainer().offsetHeight + 'px';
     }, 500);

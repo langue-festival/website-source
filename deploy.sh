@@ -13,7 +13,7 @@ SHA="$(git rev-parse --verify HEAD)"
 
 git config user.name "travis-ci@langue-festival.github.io"
 git config user.email "${COMMIT_AUTHOR_EMAIL}"
-git add -A assets pages CNAME index.html
+git add -A -f assets pages CNAME index.html
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 
 # Get the deploy key by using travis's stored variables to decrypt deploy_key.enc
