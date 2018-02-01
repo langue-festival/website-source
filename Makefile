@@ -25,7 +25,7 @@ yarn :
 
 build-env :
 	@mkdir -p $(build_dir)/assets
-	@ln -s $(base_dir)/assets/fonts $(build_dir)/assets/fonts
+	@ln -s $(base_dir)/assets/fonts $(build_dir)/assets
 
 check-yarn :
 ifeq ("$(wildcard $(node_bin))", "")
