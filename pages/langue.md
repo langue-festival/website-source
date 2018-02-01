@@ -7,25 +7,25 @@ La poesia, per noi, è prima di tutto una struttura, un *modus operandi*, una si
 Chi siamo
 ---------
 
-![Alt text](assets/pictures/giorgio-papitto.jpg "Giorgio Papitto")
+![Giorgio Papitto](assets/pictures/giorgio-papitto.jpg "Giorgio Papitto")
 
-###Giorgio Papitto
-####organizzatore
+### Giorgio Papitto
+#### organizzatore
 A lungo abitante del quartiere di San Lorenzo, recentemente si è trasferito a Bologna per terminare gli studi in scienze linguistiche. Appassionato di tutto quanto sappia significare, e quindi amante di tutto. Da poco è rimasto coinvolto nella spada dei versi, per lo più contemporanei, e da allora fa quanto gli è concesso per cercare uno spazio condiviso in cui si viva umilmente ogni forma d’arte: attento ai linguaggi giovanili e giovani, cerca di farsene promotore e padre. Langue rappresenta un’occasione per indossare i panni del primo.
 
-![Alt text](assets/pictures/giulia-gilesi.jpg "Giulia Gilesi")
+![Giulia Gilesi](assets/pictures/giulia-gilesi.jpg "Giulia Gilesi")
 
-###Giulia Gilesi
-####organizzatrice
+### Giulia Gilesi
+#### organizzatrice
 Nata a Roma, ha appena concluso la sua laurea magistrale presso l’Alma Mater Studiorum e si è trasferita a Londra per approfondire gli studi museali. Amante dell’arte in ogni sua forma e aspirante curatrice, ha già contribuito all’organizzazione di un evento culturale bolognese. Ora ha deciso di cimentarsi in Langue: un festival che colleziona poesie e poeti e che inaugura una riscoperta di un mondo fatto di versi, internazionale e affermato, giocoso ed esordiente, cinematografico e performativo.
 
 Persone importanti
 ------------------
 
-![Alt text](assets/pictures/emiliano-bovetti.jpg "Emiliano Bovetti")
+![Emiliano Bovetti](assets/pictures/emiliano-bovetti.jpg "Emiliano Bovetti")
 
-###Emiliano Bovetti
-####sviluppatore web
+### Emiliano Bovetti
+#### sviluppatore web
 Traduttore di codici web, sta completando la sua laurea in  Informatica come si chiama? presso Roma Tre. Anche per lui, il sito rappresenta un’opera prima.
 
 Prisca Baccaille
@@ -36,16 +36,14 @@ fonico del festival
 
 Contatti
 --------
-Per metterti in contatto con noi puoi scrivere direttamente alla mail del festival, oppure contattarci individualmente:
-festival.langue@gmail.com
+
+Per metterti in contatto con noi puoi scrivere direttamente alla [mail](festival.langue@gmail.com) del festival, oppure contattarci individualmente:
 Giorgio Papitto -info.giorgiopapitto@gmail.com
 Giulia Gilesi - giuliagilesi@hotmail.it
 
-
-Emiliano Bovetti
+Emiliano Bovetti - emiliano.bovetti@gmail.com
 Prisca Baccaille
 Giacomo Tropea [?]
-
 
 [ringraziamenti per contributi non economici qui?: Marinelli, ]
 

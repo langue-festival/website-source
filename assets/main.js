@@ -96,12 +96,12 @@ app.ports.scrollIntoView.subscribe(function (id) {
             scrollToElement(element);
 
             verbose && console.log('DOM mutations: ', mutations);
-            verbose && console.log('Scrolling to: ', id, ', element: ', element);
+            verbose && console.log('Scrolling to: ', id, ' - element: ', element);
             observer.disconnect();
         });
 
     if (element) {
-        verbose && console.log('Scrolling to: ', id);
+        verbose && console.log('Scrolling to: ', id, ' - element: ', element);
         scrollToElement(element);
     } else {
         verbose && console.log('Element ', id, ' not found, waiting for DOM mutations...');

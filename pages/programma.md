@@ -5,6 +5,7 @@ Scarica il [programma](programma.pdf)
 
 Le sezioni
 ----------
+
 Le sezioni rappresentano una componente essenziale di Langue. La partecipazione di tutti costituisce l’unica vera opportunità di arricchirci insieme!
 
 Per partecipare, consulta la pagina [Partecipa] apposita del festival, non essere timido!
@@ -23,7 +24,7 @@ Intendiamo coinvolgere i bambini della scuola primaria del quartiere e farli par
 
 I luoghi
 --------
+
 L’evento principale si terrà in Piazza dell’Immacolata, crocevia di mille rotte studentesche e non. Partners preziosi del festival saranno:
 Giufà Libreria Caffè, dove si svolgeranno presentazioni, letture e interviste: un luogo ristretto e intimo che secondo noi rappresenta con efficacia la densa freschezza dei linguaggi esordienti
 Esc Atelier un punto di riferimento per la comunità di San Lorenzo e gestito dagli studenti, già promotore di eventi letterari e culturali tra cui il Livre e il Liminal, ospiterà la sezione della videopoetry e tanto altro.
-
