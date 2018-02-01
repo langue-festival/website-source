@@ -15,11 +15,17 @@ var pages = pages || [],
     app = Elm.App.fullscreen(flags);
 
 var cacheFunctionResult = function (fn) {
-    var result;
+    var result,
 
-    return (function () {
-        return result || (result = fn());
-    });
+        cachedFunction = function () {
+            return result || (result = fn());
+        };
+
+    cachedFunction.update = function () {
+        return result = fn();
+    };
+
+    return cachedFunction;
 };
 
 var rootNode = cacheFunctionResult(function () {
@@ -39,7 +45,19 @@ var headerContainer = cacheFunctionResult(function () {
 });
 
 var show = function () {
+    var observer = new MutationObserver(function (mutations) {
+
+        contentContainer.update();
+        headerContainer.update();
+        rootNode.update();
+        menu.update();
+
+        observer.disconnect();
+    });
+
     rootNode().remove();
+
+    observer.observe(docElement, { childList: true, subtree: true });
 
     flags.underConstruction = false;
     app = Elm.App.fullscreen(flags);
@@ -97,14 +115,17 @@ app.ports.scrollIntoView.subscribe(function (id) {
 
             verbose && console.log('DOM mutations: ', mutations);
             verbose && console.log('Scrolling to: ', id, ' - element: ', element);
+
             observer.disconnect();
         });
 
     if (element) {
         verbose && console.log('Scrolling to: ', id, ' - element: ', element);
+
         scrollToElement(element);
     } else {
         verbose && console.log('Element ', id, ' not found, waiting for DOM mutations...');
+
         observer.observe(contentContainer(), { childList: true, subtree: true });
     }
 });
