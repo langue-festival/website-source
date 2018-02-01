@@ -7,6 +7,7 @@ import Page exposing (Page)
 import Html.Attributes
 import Navigation
 import Template
+import Asset
 import Http
 
 
@@ -23,6 +24,7 @@ type alias Model =
     { route : Route
     , page : Page Msg
     , yScroll : Int
+    , appVersion : String
     , underConstruction : Bool
     , pageCache : Cache Msg
     , menuHidden : Bool
@@ -31,6 +33,7 @@ type alias Model =
 
 type alias Flags =
     { pages : List ( String, String )
+    , appVersion : String
     , yScroll : Int
     , underConstruction : Bool
     }
@@ -44,6 +47,7 @@ init flags location =
             { route = Route.parseLocation location
             , page = Page.empty
             , yScroll = flags.yScroll
+            , appVersion = flags.appVersion
             , underConstruction = flags.underConstruction
             , pageCache = Loader.loadCache flags.pages
             , menuHidden = True
@@ -165,8 +169,8 @@ responsiveBr =
     Html.br [ Html.Attributes.class "rwd-break" ] []
 
 
-viewIndex : List (Html Msg)
-viewIndex =
+viewIndex : Model -> List (Html Msg)
+viewIndex model =
     [ Html.div [ Html.Attributes.class "content-container landing" ]
         [ Html.div [ Html.Attributes.class "landing-main pure-g" ]
             [ Html.p [ Html.Attributes.class "langue pure-u-1" ]
@@ -189,7 +193,7 @@ viewIndex =
             ]
             [ Html.text "ENTRA" ]
         , Html.div [ Html.Attributes.class "landing-logo" ]
-            [ Html.img [ Html.Attributes.src "assets/images/langue-logo.svg" ] [] ]
+            [ Html.img [ Asset.src model "assets/images/langue-logo.svg" ] [] ]
         ]
     ]
 
@@ -203,7 +207,7 @@ viewContent model =
                 , page = Page.parser "# Sito in costruzione"
             }
     else if model.route.name == "index" then
-        viewIndex
+        viewIndex model
     else
         Template.header model OpenMenu CloseMenu
             :: Page.view model

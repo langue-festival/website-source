@@ -37,11 +37,11 @@ fonico del festival
 Contatti
 --------
 
-Per metterti in contatto con noi puoi scrivere direttamente alla [mail](festival.langue@gmail.com) del festival, oppure contattarci individualmente:
-Giorgio Papitto -info.giorgiopapitto@gmail.com
-Giulia Gilesi - giuliagilesi@hotmail.it
+Per metterti in contatto con noi puoi scrivere direttamente a <festival.langue@gmail.com>, oppure contattarci individualmente: <br>
+Giorgio Papitto - <info.giorgiopapitto@gmail.com> <br>
+Giulia Gilesi - <giuliagilesi@hotmail.it> <br>
 
-Emiliano Bovetti - emiliano.bovetti@gmail.com
+Emiliano Bovetti - <emiliano.bovetti@gmail.com>
 Prisca Baccaille
 Giacomo Tropea [?]
 

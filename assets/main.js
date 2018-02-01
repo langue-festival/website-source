@@ -8,6 +8,7 @@ var pages = pages || [],
 
     flags = {
         pages: pages,
+        appVersion: '0.0.2',
         yScroll: docElement.scrollTop,
         underConstruction: document.location.hostname == 'www.languefestival.it'
     },
@@ -74,7 +75,8 @@ var animateScrollToTop = function (duration) {
 
         interval = setInterval(function() {
             var timePercent = time / duration,
-                yPercent = (1 - Math.cos(Math.PI * timePercent)) / 2;
+                //yPercent = (1 - Math.cos(Math.PI * timePercent)) / 2;
+                yPercent = Math.pow((1 - Math.cos(Math.PI * timePercent)) / 2, 2);
 
             if (yEnd == docElement.scrollTop) {
                 clearInterval(interval);

@@ -1,9 +1,10 @@
 module Template exposing (Model, header, pageAttributes, pageContainerAttributes)
 
 import Html exposing (Html, a, ul, li, nav, text, button, img)
-import Html.Attributes exposing (id, class, href, src)
+import Html.Attributes exposing (id, class, href)
 import Html.Events exposing (onClick)
 import Route exposing (Route, route, fromName)
+import Asset
 
 
 type alias Model model =
@@ -11,6 +12,7 @@ type alias Model model =
         | route : Route
         , yScroll : Int
         , menuHidden : Bool
+        , appVersion : String
     }
 
 
@@ -27,11 +29,11 @@ getMenuAttributes model =
             class "opened" :: commonAttributes
 
 
-socialMedia : Html msg
-socialMedia =
+socialMedia : Model m -> Html msg
+socialMedia model =
     li [ class "pure-menu-item social-media" ]
         [ a [ href "https://www.facebook.com/LangueFPSL", class "pure-menu-link" ]
-            [ img [ src "assets/images/social-media/facebook.png" ] [] ]
+            [ img [ Asset.src model "assets/images/social-media/facebook.png" ] [] ]
         ]
 
 
@@ -108,7 +110,7 @@ menu model =
                     ]
                 , item "Sostienici / Support us" <| Route.fromName "sostienici"
                 , item "Ringraziamenti" <| Route.fromName "ringraziamenti"
-                , socialMedia
+                , socialMedia model
                 ]
             ]
 
@@ -123,13 +125,13 @@ menuToggleButton model openMenuMsg closeMenuMsg =
                 closeMenuMsg
     in
         button [ class "menu-toggle pure-menu-heading", onClick toggle ]
-            [ img [ src "assets/images/menu-icon.svg" ] [] ]
+            [ img [ Asset.src model "assets/images/menu-icon.svg" ] [] ]
 
 
-logo : Html msg
-logo =
+logo : Model m -> Html msg
+logo model =
     a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| fromName "home" ]
-        [ img [ src "assets/images/langue-logo.svg" ] [] ]
+        [ img [ Asset.src model "assets/images/langue-logo.svg" ] [] ]
 
 
 getHeaderAttributes : Model m -> List (Html.Attribute msg)
@@ -171,7 +173,7 @@ header model openMenuMsg closeMenuMsg =
         [ Html.header [ class "header-container pure-menu-heading" ]
             [ menuToggleButton model openMenuMsg closeMenuMsg
             , headerTitle
-            , logo
+            , logo model
             ]
         , menu model
         ]
