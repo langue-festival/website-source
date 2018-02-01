@@ -2,6 +2,8 @@
 
 var pages = pages || [],
 
+    verbose = false,
+
     docElement = document.documentElement,
 
     flags = {
@@ -25,18 +27,17 @@ var rootNode = cacheFunctionResult(function () {
 });
 
 var contentContainer = cacheFunctionResult(function () {
-   return document.querySelector('.content-container');
+    return document.querySelector('.content-container');
 });
 
 var menu = cacheFunctionResult(function () {
-   return document.getElementById('menu');
+    return document.getElementById('menu');
 });
 
 var headerContainer = cacheFunctionResult(function () {
-   return document.querySelector('.header-container');
+    return document.querySelector('.header-container');
 });
 
-// TODO bypass under-construction
 var show = function () {
     rootNode().remove();
 
@@ -94,12 +95,16 @@ app.ports.scrollIntoView.subscribe(function (id) {
             element = document.getElementById(id);
             scrollToElement(element);
 
+            verbose && console.log('DOM mutations: ', mutations);
+            verbose && console.log('Scrolling to: ', id, ', element: ', element);
             observer.disconnect();
         });
 
     if (element) {
+        verbose && console.log('Scrolling to: ', id);
         scrollToElement(element);
     } else {
+        verbose && console.log('Element ', id, ' not found, waiting for DOM mutations...');
         observer.observe(contentContainer(), { childList: true, subtree: true });
     }
 });
@@ -113,6 +118,8 @@ var closeMenuListener = function (event) {
     var clickInsideMenu = document.getElementById('menu').contains(event.target);
 
     if ( ! clickInsideMenu) {
+        verbose && console.log('Click outside menu, sending close message');
+
         app.ports.notifyCloseMenu.send(null);
         document.removeEventListener('click', closeMenuListener, false);
     }
@@ -121,14 +128,16 @@ var closeMenuListener = function (event) {
 app.ports.startCloseMenuListener.subscribe(function () {
     document.addEventListener('click', closeMenuListener, false);
 
+    verbose && console.log('Opened responsive menu, scrolling to top and locking root-node\'s height');
+
     docElement.scrollTop = 0;
-    setTimeout(function () {
-        rootNode().style.height = menu().offsetHeight + headerContainer().offsetHeight + 'px';
-    }, 500);
+    rootNode().style.height = menu().offsetHeight + headerContainer().offsetHeight + 'px';
 });
 
 app.ports.stopCloseMenuListener.subscribe(function () {
     document.removeEventListener('click', closeMenuListener, false);
+
+    verbose && console.log('Closed responsive menu, unlocking root-node\'s height');
 
     rootNode().style.height = 'auto';
 });
