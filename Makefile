@@ -23,30 +23,28 @@ all : inliner
 yarn :
 	@yarn
 
-build-dir :
-	@mkdir -p $(build_dir)
+build-env :
+	@mkdir -p $(build_dir)/assets
+	@ln -s $(base_dir)/assets/fonts $(build_dir)/assets/fonts
 
 check-yarn :
 ifeq ("$(wildcard $(node_bin))", "")
 	make yarn
 endif
 
-elm : build-dir check-yarn
+elm : build-env check-yarn
 	@cd $(elm_dir) && $(elm_make) src/App.elm --output=$(elm_target) --warn --yes
 
 elm-analyse : elm
 	@cd $(elm_dir) && $(elm_analyse)
 
-dev-sass : build-dir check-yarn
-	@$(node_sass) --output-style compressed assets/scss/dev.scss > $(sass_target)
+sass : build-env check-yarn
+	@$(node_sass) --output-style compressed assets/scss/main.scss > $(sass_target)
 
-prod-sass : build-dir check-yarn
-	@$(node_sass) --output-style compressed assets/scss/prod.scss > $(sass_target)
-
-dev : elm dev-sass
+dev : elm sass
 	@rm -f $(inline_pages)
 
-inliner : yarn elm prod-sass
+inliner : yarn elm sass
 	@chmod a+x $(base_dir)/inline_pages.sh
 	@$(base_dir)/inline_pages.sh $(inline_pages)
 	@$(postcss) $(sass_target) --use autoprefixer --replace
