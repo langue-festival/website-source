@@ -2,9 +2,11 @@
 
 var pages = pages || [],
 
+    docElement = document.documentElement,
+
     flags = {
         pages: pages,
-        yScroll: document.documentElement.scrollTop,
+        yScroll: docElement.scrollTop,
         underConstruction: document.location.hostname == 'www.languefestival.it'
     },
 
@@ -26,12 +28,12 @@ var contentContainer = cacheFunctionResult(function () {
    return document.querySelector('.content-container');
 });
 
-var menuOffsetHeight = cacheFunctionResult(function () {
-   return document.getElementById('menu').offsetHeight;
+var menu = cacheFunctionResult(function () {
+   return document.getElementById('menu');
 });
 
-var headerContainerOffsetHeight = cacheFunctionResult(function () {
-   return document.querySelector('.header-container').offsetHeight;
+var headerContainer = cacheFunctionResult(function () {
+   return document.querySelector('.header-container');
 });
 
 // TODO bypass under-construction
@@ -48,24 +50,37 @@ var scrollToTop = function (duration) {
         deltaTime = 20,
 
         yEnd = 0,
-        yStart = document.documentElement.scrollTop,
+        yStart = docElement.scrollTop,
         yGap = yStart - yEnd,
 
         interval = setInterval(function() {
             var timePercent = time / duration,
                 yPercent = (1 - Math.cos(Math.PI * timePercent)) / 2;
 
-            if (yEnd == document.documentElement.scrollTop) {
+            if (yEnd == docElement.scrollTop) {
                 clearInterval(interval);
             } else if (time >= duration) {
-                document.documentElement.scrollTop = yEnd;
+                docElement.scrollTop = yEnd;
                 clearInterval(interval);
             } else {
-                document.documentElement.scrollTop = yStart - (yGap * yPercent);
+                docElement.scrollTop = yStart - (yGap * yPercent);
                 time += deltaTime;
             }
 
         }, deltaTime);
+};
+
+var scrollToElement = function (element) {
+    if ( ! element) {
+        return;
+    }
+
+    rootNode().style.height = 'auto';
+    element.scrollIntoView(true);
+
+    if (docElement.scrollTop + window.innerHeight < docElement.offsetHeight) {
+        document.documentElement.scrollTop -= headerContainer().offsetHeight;
+    }
 };
 
 document.addEventListener('scroll', function(event) {
@@ -73,16 +88,20 @@ document.addEventListener('scroll', function(event) {
 });
 
 app.ports.scrollIntoView.subscribe(function (id) {
-    var observer = new MutationObserver(function (mutations) {
-        var element = document.getElementById(id);
+    var element = document.getElementById(id),
 
-        console.log(id, element);
-        element && element.scrollIntoView(true);
+        observer = new MutationObserver(function (mutations) {
+            element = document.getElementById(id);
+            scrollToElement(element);
 
-        observer.disconnect();
-    });
+            observer.disconnect();
+        });
 
-    observer.observe(contentContainer(), { childList: true });
+    if (element) {
+        scrollToElement(element);
+    } else {
+        observer.observe(contentContainer(), { childList: true, subtree: true });
+    }
 });
 
 app.ports.scrollToTop.subscribe(function () {
@@ -104,7 +123,7 @@ app.ports.startCloseMenuListener.subscribe(function () {
 
     scrollToTop(500);
     setTimeout(function () {
-        rootNode().style.height = menuOffsetHeight() + headerContainerOffsetHeight() + 'px';
+        rootNode().style.height = menu().offsetHeight + headerContainer().offsetHeight + 'px';
     }, 500);
 });
 

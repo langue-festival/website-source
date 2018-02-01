@@ -35,6 +35,7 @@ Giacomo Tropea
 fonico del festival
 
 Contatti
+--------
 Per metterti in contatto con noi puoi scrivere direttamente alla mail del festival, oppure contattarci individualmente:
 festival.langue@gmail.com
 Giorgio Papitto -info.giorgiopapitto@gmail.com
@@ -49,5 +50,6 @@ Giacomo Tropea [?]
 [ringraziamenti per contributi non economici qui?: Marinelli, ]
 
 Info
+----
 La prima edizione di Langue - Festival della poesia di San Lorenzo si svolgerà a Roma in Piazza dell’Immacolata il 26 maggio dalle ore 16 in poi. L’evento è gratuito.
 [Mappa; opzione ‘Scarica la Mappa’?]

@@ -45,7 +45,7 @@ menuParentItem currentRoute itemName linkRoute items =
             [ class "pure-menu-item" ]
 
         attributes2 =
-            if linkRoute == currentRoute then
+            if (numItems > 0 && linkRoute.name == currentRoute.name) || linkRoute == currentRoute then
                 class "pure-menu-selected" :: attributes1
             else
                 attributes1
@@ -98,13 +98,13 @@ menu model =
                     ]
                 , parentItem "Il programma"
                     (fromName "programma")
-                    [ item "Le sezioni" <| route "programma" "sezioni"
-                    , item "I luoghi" <| route "programma" "luoghi"
+                    [ item "Le sezioni" <| route "programma" "le-sezioni"
+                    , item "I luoghi" <| route "programma" "i-luoghi"
                     ]
                 , parentItem "Partecipa / Join us"
                     (fromName "partecipa")
-                    [ item "Come volontario/a" <| route "partecipa" "volontari"
-                    , item "Come poeta/poetessa" <| route "partecipa" "poeti"
+                    [ item "Come volontario/a" <| route "partecipa" "come-volontario-a"
+                    , item "Come poeta/poetessa" <| route "partecipa" "come-poeta-poetessa"
                     ]
                 , item "Sostienici / Support us" <| Route.fromName "sostienici"
                 , item "Ringraziamenti" <| Route.fromName "ringraziamenti"

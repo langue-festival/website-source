@@ -1,3 +1,29 @@
-<h1 class="main-title">Programma</h1>
+<h1 class="main-title">Il programma</h1>
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora "incidunt" ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur? At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere.
+Ecco gli ospiti!
+Scarica il [programma](programma.pdf)
+
+Le sezioni
+----------
+Le sezioni rappresentano una componente essenziale di Langue. La partecipazione di tutti costituisce l’unica vera opportunità di arricchirci insieme!
+
+Per partecipare, consulta la pagina [Partecipa] apposita del festival, non essere timido!
+
+Letture Aperte
+A tema libero, ogni aspirante, emergente, affermato poeta con un’opera compiuta o meno può partecipare alla categoria, la quale prevede una durata di circa 30 minuti per la lettura delle proprie poesie.
+Video Poetry
+Il genere della Video Poetry, al confine tra letteratura e cinema, ha bisogno di un pubblico.
+
+Tema, San Lorenzo
+E’ possibile solo per questa categoria sottoporre nuovamente la propria candidatura, quindi anche autori che hanno già inviato una richiesta di partecipazione per un’altra delle sezioni del festival possono mandare un loro lavoro su San Lorenzo. Il tema in questo caso è vincolato e vuole essere un omaggio al quartiere, che ci ospiterà durante la giornata. Massimo due poesie ad autore.
+World Wide Poets
+Attraverso la sezione internazionale del festival avremo la possibilità di scoprire autori provenienti da realtà e culture diverse, proponendo quindi un ricco incontro di lingue e linguaggi.
+Poetucoli di San Lollo [?]
+Intendiamo coinvolgere i bambini della scuola primaria del quartiere e farli partecipare al festival con i loro lavori ai quali si dedicheranno nell’anno scolastico. Le poesie dei Poetucoli verranno distribuite all’interno del quartiere, ai partecipanti del festival e ai passanti, chiunque voglia conoscere cos’è San Lorenzo dalle parole di chi ci cresce.
+
+I luoghi
+--------
+L’evento principale si terrà in Piazza dell’Immacolata, crocevia di mille rotte studentesche e non. Partners preziosi del festival saranno:
+Giufà Libreria Caffè, dove si svolgeranno presentazioni, letture e interviste: un luogo ristretto e intimo che secondo noi rappresenta con efficacia la densa freschezza dei linguaggi esordienti
+Esc Atelier un punto di riferimento per la comunità di San Lorenzo e gestito dagli studenti, già promotore di eventi letterari e culturali tra cui il Livre e il Liminal, ospiterà la sezione della videopoetry e tanto altro.
+

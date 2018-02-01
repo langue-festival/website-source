@@ -6,6 +6,10 @@
   text-align: left;
   margin-top: 0;
 
+  &.content-container {
+    height: 100vh;
+  }
+
   .landing-main {
     p {
       color: $middle-blue;

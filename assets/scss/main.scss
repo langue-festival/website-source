@@ -48,9 +48,9 @@ $images-path: "#{$assets-path}/images";
  $lg-width: 64em;   /* lg ≥ 1024px */
  $xl-width: 80em;   /* xl ≥ 1280px */
 
+ $header-height: 6em;
+ $header-height-xl: 13em;
  $menu-max-width: 25em;
- $menu-height: 6em;
- $menu-height-xl: 13em;
  $menu-top-margin: 1em;
  $menu-font-size: 1.3em;
  $menu-font-size-xl: 1em;
@@ -60,7 +60,7 @@ $images-path: "#{$assets-path}/images";
 
  $menu-roll-up-transition: 0.5s;
  $menu-roll-up-height: 3em;
- $menu-roll-up-margin: 0;
+ $menu-roll-up-margin: 0.7em;
 
  $glacial-indifference: "GlacialIndifference", sans-serif;
  $cooper-hewitt-heavy: "CooperHewitt-Heavy", sans-serif;
@@ -99,14 +99,14 @@ h1, h2, h3, h4, h5, h6 {
 
 .content-container {
   display: block;
-  margin-top: $menu-height;
+  margin-top: $header-height;
 
   .markdown {
-    * { font-family: $glacial-indifference; }
+    &, * { font-family: $glacial-indifference; }
 
     min-height: 100%;
     text-align: left;
-    padding: 1em 1em 0 5em;
+    padding: 1em 1em 0 3.3em;
     z-index: 1;
     font-size: 1.3em;
 
@@ -134,7 +134,7 @@ h1, h2, h3, h4, h5, h6 {
   }
 
   @media screen and (min-width: $xl-width) {
-    margin-top: $menu-height-xl;
+    margin-top: $header-height-xl;
   }
 }
 
@@ -159,4 +159,4 @@ h1, h2, h3, h4, h5, h6 {
 @import "header.scss";
 @import "index.scss";
 @import "home.scss";
-@import "chi-siamo.scss";
+@import "langue.scss";
