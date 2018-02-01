@@ -135,7 +135,7 @@ a:active,
 
 .closed {
   transform: translateX(-101%);
-  transition: transform $menu-slide-transition;
+  /*transition: transform $menu-slide-transition;*/
 }
 
 .social-media {
