@@ -158,7 +158,7 @@ update msg model =
             { model | yScroll = offset } ! []
 
         OpenMenu ->
-            { model | menuHidden = False } ! [ startCloseMenuListener () ]
+            { model | menuHidden = False } ! [ startCloseMenuListener (), scrollToTop () ]
 
         CloseMenu ->
             { model | menuHidden = True } ! [ stopCloseMenuListener () ]

@@ -2,19 +2,31 @@
   height: $header-height;
   width: 100vw;
   background-color: $dark-blue;
+  z-index: 3;
+
+  /* mobile menu fixed */
   transition: height $menu-roll-up-transition;
   position: fixed;
   top: 0;
-  z-index: 3;
+  /**/
 }
 
+/* mobile menu fixed */
 .pure-menu-heading {
   float: left;
   padding: 0;
 }
+/**/
 
 .header-title {
   font-family: $cooper-hewitt-heavy;
+
+  /* mobile menu non-fixed
+  p { margin: 0; }
+  margin-left: 5em;
+  margin-top: 0.5em;
+  padding: 0;
+  /**/
 
   .header-title-main {
     color: white;
@@ -47,6 +59,13 @@
   border: none;
   height: 100%;
   padding: 0 1em;
+
+  /* mobile menu non-fixed
+  position: fixed;
+  top: 1.5em;
+  height: auto;
+  z-index: 4;
+  /**/
 }
 
 a:hover,
@@ -159,6 +178,7 @@ a:active,
   bottom: 0;
 }
 
+/* mobile menu fixed */
 .roll-up .header-container {
   height: $menu-roll-up-height;
 
@@ -174,6 +194,7 @@ a:active,
     opacity: 0;
   }
 }
+/**/
 
 @media screen and (min-width: $xl-width) {
   .pure-menu-list {

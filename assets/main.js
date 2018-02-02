@@ -1,26 +1,48 @@
 'use strict';
 
-var pages = pages || [],
+var app = {};
 
-    verbose = false,
+app.pages = typeof pages === 'undefined' ? [] : pages;
 
-    docElement = document.documentElement,
+app.verbose = false;
 
-    flags = {
-        pages: pages,
-        appVersion: '0.0.2',
-        yScroll: docElement.scrollTop,
-        underConstruction: document.location.hostname == 'www.languefestival.it'
-    },
+app.win = window;
 
-    app = Elm.App.fullscreen(flags);
+app.doc = document;
 
-var cacheFunctionResult = function (fn) {
-    var result,
+app.root = app.doc.documentElement;
 
-        cachedFunction = function () {
-            return result || (result = fn());
-        };
+app.flags = {
+    pages: app.pages,
+    appVersion: '0.0.2',
+    yScroll: app.root.scrollTop,
+    underConstruction: app.doc.location.hostname === 'www.languefestival.it'
+};
+
+app.elm = Elm.App.fullscreen(app.flags);
+
+app.querySelector = function (query) {
+    return app.doc.querySelector(query);
+};
+
+app.getElementById = function (id) {
+    return app.doc.getElementById(id);
+};
+
+app.log = function () {
+    if (arguments.length === 0) {
+        app.verbose = true;
+    } else if (app.verbose === true) {
+        console.log.apply(null, arguments);
+    }
+};
+
+app.cacheFunctionResult = function (fn) {
+    var result;
+
+    var cachedFunction = function () {
+        return result || (result = fn());
+    };
 
     cachedFunction.update = function () {
         return result = fn();
@@ -29,138 +51,150 @@ var cacheFunctionResult = function (fn) {
     return cachedFunction;
 };
 
-var rootNode = cacheFunctionResult(function () {
-    return document.getElementById('root-node');
+app.cache = {};
+
+app.cache.elmRoot = app.cacheFunctionResult(function () {
+    return app.getElementById('root-node');
 });
 
-var contentContainer = cacheFunctionResult(function () {
-    return document.querySelector('.content-container');
+app.cache.contentContainer = app.cacheFunctionResult(function () {
+    return app.querySelector('.content-container');
 });
 
-var menu = cacheFunctionResult(function () {
-    return document.getElementById('menu');
+app.cache.menu = app.cacheFunctionResult(function () {
+    return app.getElementById('menu');
 });
 
-var headerContainer = cacheFunctionResult(function () {
-    return document.querySelector('.header-container');
+app.cache.headerContainer = app.cacheFunctionResult(function () {
+    return app.querySelector('.header-container');
 });
 
-var show = function () {
-    var observer = new MutationObserver(function (mutations) {
+app.cache.update = function () {
+    Object.keys(app.cache).forEach(function (key) {
+        var update = app.cache[key].update;
 
-        contentContainer.update();
-        headerContainer.update();
-        rootNode.update();
-        menu.update();
-
-        observer.disconnect();
+        typeof update === 'function' && update();
     });
-
-    rootNode().remove();
-
-    observer.observe(docElement, { childList: true, subtree: true });
-
-    flags.underConstruction = false;
-    app = Elm.App.fullscreen(flags);
 };
 
-/* Scroll handlers */
-var animateScrollToTop = function (duration) {
+app.show = function () {
+    var observer = new MutationObserver(function (mutations) {
+        observer.disconnect();
+
+        app.log('Updating app cached nodes');
+        app.cache.update();
+    });
+
+    app.cache.elmRoot().remove();
+
+    observer.observe(app.root, { childList: true, subtree: true });
+
+    app.flags.underConstruction = false;
+    app.elm = Elm.App.fullscreen(app.flags);
+};
+
+
+app.animate = {};
+
+app.animate.scrollTop = function (duration) {
     var time = 0,
         deltaTime = 20,
 
         yEnd = 0,
-        yStart = docElement.scrollTop,
-        yGap = yStart - yEnd,
+        yStart = app.root.scrollTop,
+        yGap = yStart - yEnd;
 
-        interval = setInterval(function() {
-            var timePercent = time / duration,
-                //yPercent = (1 - Math.cos(Math.PI * timePercent)) / 2;
-                yPercent = Math.pow((1 - Math.cos(Math.PI * timePercent)) / 2, 2);
+    var interval = setInterval(function() {
+        var timePercent = time / duration,
+            //yPercent = (1 - Math.cos(Math.PI * timePercent)) / 2;
+            yPercent = Math.pow((1 - Math.cos(Math.PI * timePercent)) / 2, 2);
 
-            if (yEnd == docElement.scrollTop) {
-                clearInterval(interval);
-            } else if (time >= duration) {
-                docElement.scrollTop = yEnd;
-                clearInterval(interval);
-            } else {
-                docElement.scrollTop = yStart - (yGap * yPercent);
-                time += deltaTime;
-            }
+        if (yEnd === app.root.scrollTop) {
+            clearInterval(interval);
+        } else if (time >= duration) {
+            app.root.scrollTop = yEnd;
+            clearInterval(interval);
+        } else {
+            app.root.scrollTop = yStart - yGap * yPercent;
+            time += deltaTime;
+        }
 
-        }, deltaTime);
+    }, deltaTime);
 };
 
-var scrollToElement = function (element) {
+/* Scroll handlers */
+app.scrollToElement = function (element) {
     if ( ! element) {
         return;
     }
 
-    rootNode().style.height = 'auto';
+    app.cache.elmRoot().style.height = 'auto';
     element.scrollIntoView(true);
 
-    if (docElement.scrollTop + window.innerHeight < docElement.offsetHeight) {
-        document.documentElement.scrollTop -= headerContainer().offsetHeight;
+    if (app.root.scrollTop + app.win.innerHeight < app.root.offsetHeight) {
+        app.root.scrollTop -= app.cache.headerContainer().offsetHeight;
     }
 };
 
-document.addEventListener('scroll', function(event) {
-    app.ports.notifyYScroll.send(document.documentElement.scrollTop);
+app.doc.addEventListener('scroll', function(event) {
+    app.elm.ports.notifyYScroll.send(app.root.scrollTop);
 });
 
-app.ports.scrollIntoView.subscribe(function (id) {
-    var element = document.getElementById(id),
+app.elm.ports.scrollIntoView.subscribe(function (id) {
+    var element = app.getElementById(id);
 
-        observer = new MutationObserver(function (mutations) {
-            element = document.getElementById(id);
-            scrollToElement(element);
+    var observer = new MutationObserver(function (mutations) {
+        element = app.getElementById(id);
 
-            verbose && console.log('DOM mutations: ', mutations);
-            verbose && console.log('Scrolling to: ', id, ' - element: ', element);
+        app.log('DOM mutations:', mutations);
+        app.log('Scrolling to id:', id, '- element:', element);
 
-            observer.disconnect();
-        });
+        app.scrollToElement(element);
+
+        observer.disconnect();
+    });
 
     if (element) {
-        verbose && console.log('Scrolling to: ', id, ' - element: ', element);
+        app.log('Scrolling to id:', id, ' - element:', element);
 
-        scrollToElement(element);
+        app.scrollToElement(element);
     } else {
-        verbose && console.log('Element ', id, ' not found, waiting for DOM mutations...');
+        app.log('Element with id', id, 'not found, waiting for DOM mutations...');
 
-        observer.observe(contentContainer(), { childList: true, subtree: true });
+        observer.observe(app.cache.contentContainer(), { childList: true, subtree: true });
     }
 });
 
-app.ports.scrollToTop.subscribe(function () {
-    docElement.scrollTop = 0;
+app.elm.ports.scrollToTop.subscribe(function () {
+    app.log('Scrolling to top');
+
+    app.root.scrollTop = 0;
 });
 
 /* Menu events handlers */
-var closeMenuListener = function (event) {
-    var clickInsideMenu = document.getElementById('menu').contains(event.target);
+app.closeMenuListener = function (event) {
+    var clickInsideMenu = app.cache.menu().contains(event.target);
 
     if ( ! clickInsideMenu) {
-        verbose && console.log('Click outside menu, sending close message');
+        app.log('Click outside menu, sending close message');
 
-        app.ports.notifyCloseMenu.send(null);
-        document.removeEventListener('click', closeMenuListener, false);
+        app.elm.ports.notifyCloseMenu.send(null);
+        app.doc.removeEventListener('click', app.closeMenuListener, false);
     }
 };
 
-app.ports.startCloseMenuListener.subscribe(function () {
-    document.addEventListener('click', closeMenuListener, false);
+app.elm.ports.startCloseMenuListener.subscribe(function () {
+    app.doc.addEventListener('click', app.closeMenuListener, false);
 
-    verbose && console.log('Opened responsive menu, scrolling to top and locking root-node\'s height');
+    app.log('Opened responsive menu, locking root-node height');
 
-    docElement.scrollTop = 0;
-    rootNode().style.height = menu().offsetHeight + headerContainer().offsetHeight + 'px';
+    app.cache.elmRoot().style.height = app.cache.menu().offsetHeight + app.cache.headerContainer().offsetHeight + 'px';
 });
 
-app.ports.stopCloseMenuListener.subscribe(function () {
-    document.removeEventListener('click', closeMenuListener, false);
+app.elm.ports.stopCloseMenuListener.subscribe(function () {
+    app.doc.removeEventListener('click', app.closeMenuListener, false);
 
-    verbose && console.log('Closed responsive menu, unlocking root-node\'s height');
+    app.log('Closed responsive menu, unlocking root-node height');
 
-    rootNode().style.height = 'auto';
+    app.cache.elmRoot().style.height = 'auto';
 });
