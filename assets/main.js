@@ -4,18 +4,18 @@ var app = {};
 
 /*
  * If `compiled_pages.js` is loaded the `pages`
- *  variable will contain pages contens
+ *  variable will hold pages contens
  */
-app.pages = typeof pages === 'object' ? pages: [];
+app.pages = typeof pages === 'object' ? pages : [];
 
 /*
- * If set to `true` app.log function will
- *  show its messages
+ * Boolean flag, if set to `true` then `app.log`
+ *  function will log its messages to the console
  */
 app.verbose = false;
 
 /*
- * References to global objects and functions
+ * Shortcuts to global objects and functions
  */
 app.win = window;
 
@@ -38,12 +38,12 @@ app.getElementById = function (id) {
  *  present here then Elm app will make a request
  *  to pages/page-name.md
  *
- * appVersion: for the moment this will jus be appended
- *  to assets url in order to download the latest versions
+ * appVersion: for the moment this will just be used
+ *  as query string in assets url to download latest versions
  *
  * yScroll: initial value of `document.documentElement.scrollTop`
  *
- * underConstruction: boolean flag, if it's `true` the website
+ * underConstruction: boolean flag, if `true` the website
  *  will not be shown
  */
 app.flags = {
@@ -100,7 +100,7 @@ app.cacheFunctionResult = function (fn) {
  *  and never removed
  * In order to not call `getElementById` every time
  *  one of these nodes are needed, we will use
- *  `app.cacheFunctionResult` to cache the results
+ *  `app.cacheFunctionResult` to cache results
  */
 app.cache = {};
 
@@ -133,7 +133,7 @@ app.cache.update = function () {
 };
 
 /*
- * Will set `app.underConstruction` flag to `true` and
+ * Will set `app.underConstruction` flag to `false` and
  *  restart Elm app
  * At the moment Elm's ports will not be reattached so
  *  the website will not work correctly after this
@@ -192,7 +192,7 @@ app.animate.scrollTop = function (duration) {
 /*
  * Scrolls the page to the element
  * Then, if the page has not reached bottom,
- *  will scroll up  as the header height
+ *  will scroll up as the header height
  */
 app.scrollToElement = function (element) {
     if ( ! element) {
