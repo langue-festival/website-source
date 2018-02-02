@@ -55,9 +55,11 @@ handleHttpResponse route cache result =
     case result of
         Ok content ->
             let
+                page : Page msg
                 page =
                     Page.parser content
 
+                newCache : Cache msg
                 newCache =
                     Dict.insert route.name page cache
             in
@@ -90,6 +92,7 @@ is already present in current cache no request will be made.
 load : Navigation.Location -> Cache msg -> (Event msg -> msg) -> Cmd msg
 load location cache toAppMsg =
     let
+        route : Route
         route =
             Route.fromLocation location
     in

@@ -33,7 +33,7 @@ type alias Model model =
 menuAttributes : Model m -> List (Html.Attribute msg)
 menuAttributes model =
     let
-        -- id needed for `document.getElementById('menu')`
+        commonAttributes : List (Html.Attribute msg)
         commonAttributes =
             [ id "menu" ]
     in
@@ -54,27 +54,33 @@ socialMedia model =
 menuParentItem : Route -> String -> Route -> List (Html msg) -> Html msg
 menuParentItem currentRoute itemName linkRoute items =
     let
+        numItems : Int
         numItems =
             List.length items
 
+        attributes1 : List (Html.Attribute msg)
         attributes1 =
             [ class "pure-menu-item" ]
 
+        attributes2 : List (Html.Attribute msg)
         attributes2 =
             if (numItems > 0 && linkRoute.name == currentRoute.name) || linkRoute == currentRoute then
                 class "pure-menu-selected" :: attributes1
             else
                 attributes1
 
+        attributes3 : List (Html.Attribute msg)
         attributes3 =
             if numItems > 0 then
                 class "pure-menu-has-children pure-menu-allow-hover" :: attributes2
             else
                 attributes2
 
+        linkHref : Html.Attribute msg
         linkHref =
             href <| Route.toUrl linkRoute
 
+        link : Html msg
         link =
             a [ linkHref, class "pure-menu-link" ]
                 [ text itemName ]
@@ -132,6 +138,7 @@ menu model =
 menuToggleButton : Model m -> msg -> msg -> Html msg
 menuToggleButton model openMenuMsg closeMenuMsg =
     let
+        toggle : msg
         toggle =
             if model.menuHidden then
                 openMenuMsg
@@ -151,6 +158,7 @@ logo model =
 getHeaderAttributes : Model m -> List (Html.Attribute msg)
 getHeaderAttributes model =
     let
+        commonAttributes : List (Html.Attribute msg)
         commonAttributes =
             [ class "pure-menu" ]
     in
@@ -212,10 +220,11 @@ pageAttributes =
 pageContainerAttributes : Model m -> List (Html.Attribute msg)
 pageContainerAttributes model =
     let
-        containerClass =
-            model.route.name ++ " content-container pure-g"
+        containerAttributes : List (Html.Attribute msg)
+        containerAttributes =
+            [ class model.route.name, class "content-container pure-g" ]
     in
         if model.menuHidden then
-            [ class containerClass ]
+            containerAttributes
         else
-            [ class ("darken " ++ containerClass) ]
+            class "darken" :: containerAttributes
