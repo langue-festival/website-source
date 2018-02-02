@@ -44,7 +44,7 @@ init flags location =
     let
         model : Model
         model =
-            { route = Route.parseLocation location
+            { route = Route.fromLocation location
             , page = Page.empty
             , yScroll = flags.yScroll
             , appVersion = flags.appVersion

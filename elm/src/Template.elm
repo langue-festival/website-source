@@ -1,4 +1,18 @@
-module Template exposing (Model, header, pageAttributes, pageContainerAttributes)
+module Template exposing (header, pageAttributes, pageContainerAttributes)
+
+{-| This modules is an helper to generate common html.
+
+
+# Common Html
+
+@docs header
+
+
+# Common Element's Attributes
+
+@docs pageAttributes, pageContainerAttributes
+
+-}
 
 import Html exposing (Html, a, ul, li, nav, text, button, img)
 import Html.Attributes exposing (id, class, href)
@@ -16,8 +30,8 @@ type alias Model model =
     }
 
 
-getMenuAttributes : Model m -> List (Html.Attribute msg)
-getMenuAttributes model =
+menuAttributes : Model m -> List (Html.Attribute msg)
+menuAttributes model =
     let
         -- id needed for `document.getElementById('menu')`
         commonAttributes =
@@ -88,7 +102,7 @@ menu model =
         parentItem =
             menuParentItem model.route
     in
-        nav (getMenuAttributes model)
+        nav (menuAttributes model)
             [ ul [ class "pure-menu-list" ]
                 [ item "Home" <| fromName "home"
                 , parentItem "Langue"
@@ -167,6 +181,13 @@ headerTitle =
         ]
 
 
+{-| Generates an `Html msg` from a `Model`, a `msg`
+to send when the menu is opened and a second `msg`
+to send when it's closed.
+
+    Template.header model OpenMenu CloseMenu
+
+-}
 header : Model m -> msg -> msg -> Html msg
 header model openMenuMsg closeMenuMsg =
     Html.div (getHeaderAttributes model)
@@ -179,11 +200,15 @@ header model openMenuMsg closeMenuMsg =
         ]
 
 
+{-| List of `Html.Attribute`s for the markdown parsed page.
+-}
 pageAttributes : List (Html.Attribute msg)
 pageAttributes =
     [ class "markdown pure-u-1 pure-u-md-5-6 pure-u-lg-2-3" ]
 
 
+{-| Produces a list of `Html.Attribute`s for the content's container.
+-}
 pageContainerAttributes : Model m -> List (Html.Attribute msg)
 pageContainerAttributes model =
     let

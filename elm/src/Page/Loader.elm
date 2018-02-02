@@ -1,5 +1,21 @@
 module Page.Loader exposing (Cache, Event(Success, Error), loadCache, load)
 
+{-| This library is useful to load markdown formatted pages.
+It also cares about caching already loaded pages, so once
+a `Route` is loaded successfully it will be cached.
+
+
+# Definitions
+
+@docs Cache, Event
+
+
+# Common Helpers
+
+@docs loadCache, load
+
+-}
+
 import Route exposing (Route)
 import Dict exposing (Dict)
 import Page exposing (Page)
@@ -17,6 +33,13 @@ type Event msg
     | Error Route Http.Error
 
 
+{-| Creates a cache from a list of `(String, String)`.
+The first string of the pair should contain the route's name,
+while the second string the page content formatted in markdown.
+
+    loadCache [ ( "home", "# Hello, World" ) ]
+
+-}
 loadCache : List ( String, String ) -> Cache msg
 loadCache pageList =
     let
@@ -46,7 +69,7 @@ handleHttpResponse route cache result =
 
 routeToPageUrl : Route -> String
 routeToPageUrl route =
-    "pages/" ++ (String.toLower route.name) ++ ".md"
+    "pages/" ++ String.toLower route.name ++ ".md"
 
 
 fetch : Route -> Cache msg -> (Event msg -> msg) -> Cmd msg
@@ -56,11 +79,19 @@ fetch route cache toAppMsg =
         |> Http.send (handleHttpResponse route cache >> toAppMsg)
 
 
+{-| Loads a page given a `Navigation.Location`, a `Cache` and a function
+that converts an `Event` to an application `msg`.
+The `Location` is parsed with `Route` module, if the resulting route name
+is already present in current cache no request will be made.
+
+    load location pageCache loaderEventToAppMsg
+
+-}
 load : Navigation.Location -> Cache msg -> (Event msg -> msg) -> Cmd msg
 load location cache toAppMsg =
     let
         route =
-            Route.parseLocation location
+            Route.fromLocation location
     in
         case Dict.get route.name cache of
             Just page ->
