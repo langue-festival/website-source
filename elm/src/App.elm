@@ -23,11 +23,10 @@ type Msg
 type alias Model =
     { route : Route
     , page : Page Msg
-    , yScroll : Int
     , assetsHash : String
     , underConstruction : Bool
     , pageCache : Cache Msg
-    , menuHidden : Bool
+    , template : Template.Model
     }
 
 
@@ -42,15 +41,20 @@ type alias Flags =
 init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
 init flags location =
     let
+        template : Template.Model
+        template =
+            { yScroll = flags.yScroll
+            , menuHidden = True
+            }
+
         model : Model
         model =
             { route = Route.fromLocation location
             , page = Page.empty
-            , yScroll = flags.yScroll
+            , template = template
             , assetsHash = flags.assetsHash
             , underConstruction = flags.underConstruction
-            , pageCache = Loader.loadCache flags.pages
-            , menuHidden = True
+            , pageCache = Loader.loadCache flags.assetsHash flags.pages
             }
     in
         handleUrlChange location model
@@ -68,7 +72,7 @@ handleUrlChange location model =
                 Loader.Error route error ->
                     LoadError route error
     in
-        ( model, Loader.load location model.pageCache loaderEventToAppMsg )
+        ( model, Loader.load location model.assetsHash model.pageCache loaderEventToAppMsg )
 
 
 handlePageLoad : Route -> Page Msg -> Model -> ( Model, Cmd Msg )
@@ -86,6 +90,34 @@ handlePageLoad route page model =
                 newModel ! [ closeMenuCmd, scrollToTop () ]
 
 
+handleYScroll : Int -> Model -> ( Model, Cmd Msg )
+handleYScroll yScroll ({ template } as model) =
+    let
+        newTemplate : Template.Model
+        newTemplate =
+            { template | yScroll = yScroll }
+    in
+        { model | template = newTemplate } ! []
+
+
+handleOpenMenu : Model -> ( Model, Cmd Msg )
+handleOpenMenu ({ template } as model) =
+    let
+        newTemplate =
+            { template | menuHidden = False }
+    in
+        { model | template = newTemplate } ! [ startCloseMenuListener (), scrollToTop () ]
+
+
+handleCloseMenu : Model -> ( Model, Cmd Msg )
+handleCloseMenu ({ template } as model) =
+    let
+        newTemplate =
+            { template | menuHidden = True }
+    in
+        { model | template = newTemplate } ! [ stopCloseMenuListener () ]
+
+
 set404 : Route -> Model -> ( Model, Cmd Msg )
 set404 route model =
     let
@@ -97,7 +129,7 @@ set404 route model =
         newModel =
             { model
                 | route = route
-                , page = Page.parser content
+                , page = Page.parser model.assetsHash content
             }
     in
         newModel ! []
@@ -114,7 +146,7 @@ setViewError route error model =
         newModel =
             { model
                 | route = route
-                , page = Page.parser content
+                , page = Page.parser model.assetsHash content
             }
     in
         newModel ! []
@@ -155,13 +187,13 @@ update msg model =
             handlePageLoad route page { model | pageCache = cache }
 
         OnYScroll offset ->
-            { model | yScroll = offset } ! []
+            handleYScroll offset model
 
         OpenMenu ->
-            { model | menuHidden = False } ! [ startCloseMenuListener (), scrollToTop () ]
+            handleOpenMenu model
 
         CloseMenu ->
-            { model | menuHidden = True } ! [ stopCloseMenuListener () ]
+            handleCloseMenu model
 
 
 responsiveBr : Html Msg
@@ -193,7 +225,7 @@ viewIndex model =
             ]
             [ Html.text "ENTRA" ]
         , Html.div [ Html.Attributes.class "landing-logo" ]
-            [ Html.img [ Asset.src model "assets/images/langue-logo.svg" ] [] ]
+            [ Html.img [ Asset.src model.assetsHash "assets/images/langue-logo.svg" ] [] ]
         ]
     ]
 
@@ -201,26 +233,31 @@ viewIndex model =
 viewContent : Model -> List (Html Msg)
 viewContent model =
     if model.underConstruction then
-        Page.view
-            { model
-                | route = Route.fromName "under-construction"
-                , page = Page.parser "# Sito in costruzione"
-            }
+        let
+            route : Route
+            route =
+                Route.fromName "under-construction"
+
+            page : Page msg
+            page =
+                Page.parser model.assetsHash "# Sito in costruzione"
+        in
+            Page.view route page model.template
     else if model.route.name == "index" then
         viewIndex model
     else
-        Template.header model OpenMenu CloseMenu
-            :: Page.view model
+        Template.header model.template model.route model.assetsHash OpenMenu CloseMenu
+            :: Page.view model.route model.page model.template
 
 
-getRootNodeAttributes : Model -> List (Html.Attribute msg)
-getRootNodeAttributes { menuHidden } =
+rootNodeAttributes : Model -> List (Html.Attribute msg)
+rootNodeAttributes model =
     let
         commonAttributes : List (Html.Attribute msg)
         commonAttributes =
             [ Html.Attributes.id "root-node" ]
     in
-        if menuHidden then
+        if model.template.menuHidden then
             commonAttributes
         else
             Html.Attributes.class "no-scroll" :: commonAttributes
@@ -228,7 +265,7 @@ getRootNodeAttributes { menuHidden } =
 
 view : Model -> Html Msg
 view model =
-    Html.div (getRootNodeAttributes model) <| viewContent model
+    Html.div (rootNodeAttributes model) <| viewContent model
 
 
 port scrollToTop : () -> Cmd msg

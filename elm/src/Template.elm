@@ -1,4 +1,4 @@
-module Template exposing (header, pageAttributes, pageContainerAttributes)
+module Template exposing (Model, header, pageAttributes, pageContainerAttributes)
 
 {-| This modules is an helper to generate common html.
 
@@ -21,16 +21,13 @@ import Route exposing (Route, route, fromName)
 import Asset
 
 
-type alias Model model =
-    { model
-        | route : Route
-        , yScroll : Int
-        , menuHidden : Bool
-        , assetsHash : String
+type alias Model =
+    { yScroll : Int
+    , menuHidden : Bool
     }
 
 
-menuAttributes : Model m -> List (Html.Attribute msg)
+menuAttributes : Model -> List (Html.Attribute msg)
 menuAttributes model =
     let
         commonAttributes : List (Html.Attribute msg)
@@ -43,11 +40,11 @@ menuAttributes model =
             class "opened" :: commonAttributes
 
 
-socialMedia : Model m -> Html msg
-socialMedia model =
+socialMedia : String -> Html msg
+socialMedia assetsHash =
     li [ class "pure-menu-item social-media" ]
         [ a [ href "https://www.facebook.com/LangueFPSL", class "pure-menu-link" ]
-            [ img [ Asset.src model "assets/images/social-media/facebook.png" ] [] ]
+            [ img [ Asset.src assetsHash "assets/images/social-media/facebook.png" ] [] ]
         ]
 
 
@@ -97,16 +94,16 @@ menuItem currentRoute itemName linkRoute =
     menuParentItem currentRoute itemName linkRoute []
 
 
-menu : Model m -> Html msg
-menu model =
+menu : Model -> Route -> String -> Html msg
+menu model currentRoute assetsHash =
     let
         item : String -> Route -> Html msg
         item =
-            menuItem model.route
+            menuItem currentRoute
 
         parentItem : String -> Route -> List (Html msg) -> Html msg
         parentItem =
-            menuParentItem model.route
+            menuParentItem currentRoute
     in
         nav (menuAttributes model)
             [ ul [ class "pure-menu-list" ]
@@ -130,13 +127,13 @@ menu model =
                     ]
                 , item "Sostienici / Support us" <| Route.fromName "sostienici"
                 , item "Ringraziamenti" <| Route.fromName "ringraziamenti"
-                , socialMedia model
+                , socialMedia assetsHash
                 ]
             ]
 
 
-menuToggleButton : Model m -> msg -> msg -> Html msg
-menuToggleButton model openMenuMsg closeMenuMsg =
+menuToggleButton : Model -> String -> msg -> msg -> Html msg
+menuToggleButton model assetsHash openMenuMsg closeMenuMsg =
     let
         toggle : msg
         toggle =
@@ -146,16 +143,16 @@ menuToggleButton model openMenuMsg closeMenuMsg =
                 closeMenuMsg
     in
         button [ class "menu-toggle pure-menu-heading", onClick toggle ]
-            [ img [ Asset.src model "assets/images/menu-icon.svg" ] [] ]
+            [ img [ Asset.src assetsHash "assets/images/menu-icon.svg" ] [] ]
 
 
-logo : Model m -> Html msg
-logo model =
+logo : String -> Html msg
+logo assetsHash =
     a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| fromName "home" ]
-        [ img [ Asset.src model "assets/images/langue-logo.svg" ] [] ]
+        [ img [ Asset.src assetsHash "assets/images/langue-logo.svg" ] [] ]
 
 
-getHeaderAttributes : Model m -> List (Html.Attribute msg)
+getHeaderAttributes : Model -> List (Html.Attribute msg)
 getHeaderAttributes model =
     let
         commonAttributes : List (Html.Attribute msg)
@@ -189,22 +186,20 @@ headerTitle =
         ]
 
 
-{-| Generates an `Html msg` from a `Model`, a `msg`
-to send when the menu is opened and a second `msg`
-to send when it's closed.
+{-| Generates application header.
 
-    Template.header model OpenMenu CloseMenu
+    Template.header model assetsHash OpenMenu CloseMenu
 
 -}
-header : Model m -> msg -> msg -> Html msg
-header model openMenuMsg closeMenuMsg =
+header : Model -> Route -> String -> msg -> msg -> Html msg
+header model currentRoute assetsHash openMenuMsg closeMenuMsg =
     Html.div (getHeaderAttributes model)
         [ Html.header [ class "header-container pure-menu-heading" ]
-            [ menuToggleButton model openMenuMsg closeMenuMsg
+            [ menuToggleButton model assetsHash openMenuMsg closeMenuMsg
             , headerTitle
-            , logo model
+            , logo assetsHash
             ]
-        , menu model
+        , menu model currentRoute assetsHash
         ]
 
 
@@ -217,12 +212,12 @@ pageAttributes =
 
 {-| Produces a list of `Html.Attribute`s for the content's container.
 -}
-pageContainerAttributes : Model m -> List (Html.Attribute msg)
-pageContainerAttributes model =
+pageContainerAttributes : Model -> Route -> List (Html.Attribute msg)
+pageContainerAttributes model currentRoute =
     let
         containerAttributes : List (Html.Attribute msg)
         containerAttributes =
-            [ class model.route.name, class "content-container pure-g" ]
+            [ class currentRoute.name, class "content-container pure-g" ]
     in
         if model.menuHidden then
             containerAttributes

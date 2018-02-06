@@ -41,12 +41,14 @@ const recHash = function (file, hashs = []) {
     return hashs;
 };
 
-const assetsHash = recHash(assetsBasePath)
+const allAssetsHashes = recHash(assetsBasePath)
     .filter(a => ! a.fst.endsWith('.scss'))
     .filter(a => ! a.fst.endsWith('.js'))
     .sort((a, b) => a.fst > b.fst)
     .map(a => a.snd)
-    .reduce((acc, hash) => md5(acc + hash));
+    .reduce((acc, hash) => acc + hash);
+
+const assetsHash = md5(allAssetsHashes);
 
 const options = { mode: 0o644, encoding: 'utf8' };
 

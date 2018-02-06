@@ -14,20 +14,15 @@ import Html.Attributes
 import Html
 
 
-type alias Model model =
-    { model | assetsHash : String }
-
-
-{-| Generates an url to an asset given a `Model` that
-contains an `assetsHash` field and the asset's url.
+{-| Generates an url to an asset given an `assetsHash` and the asset's url.
 Appends `assetsHash` to given url as a query string in order
 to force the web server to send right version of asset.
 
-    Html.img [ src model "assets/image.png" ]
+    Html.img [ src assetsHash "assets/image.png" ]
 
 -}
-src : Model m -> String -> Html.Attribute msg
-src { assetsHash } url =
+src : String -> String -> Html.Attribute msg
+src assetsHash url =
     case assetsHash of
         "" ->
             Html.Attributes.src url

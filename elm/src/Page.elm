@@ -22,6 +22,7 @@ Page contents, parsed markdown.
 
 -}
 
+import Regex exposing (Regex, regex, replace)
 import Route exposing (Route)
 import Html exposing (Html)
 import Markdown
@@ -30,16 +31,6 @@ import Template
 
 type alias Page msg =
     Html msg
-
-
-type alias Model model msg =
-    { model
-        | route : Route
-        , yScroll : Int
-        , page : Page msg
-        , menuHidden : Bool
-        , assetsHash : String
-    }
 
 
 {-| An empty page.
@@ -58,16 +49,31 @@ parserOptions =
     }
 
 
-{-| Parses a markdown formatted string and creates a `Page`.
--}
-parser : String -> Page msg
-parser pageContent =
-    Markdown.toHtmlWith parserOptions Template.pageAttributes pageContent
+markdownAssetRegex : Regex
+markdownAssetRegex =
+    regex "\\(assets/[^ )]+"
 
 
-{-| Takes the page as the field of a `Model` and produces
-a `List (Html msg)`.
+{-| Parses a markdown formatted string and creates a `Page`
+and appends `assetsHash` to the assets as query string.
 -}
-view : Model m msg -> List (Html msg)
-view model =
-    [ Html.section (Template.pageContainerAttributes model) [ model.page ] ]
+parser : String -> String -> Page msg
+parser assetsHash pageContent =
+    let
+        assetUrlReplace : Regex.Match -> String
+        assetUrlReplace { match } =
+            match ++ "?" ++ assetsHash
+
+        page : String
+        page =
+            replace Regex.All markdownAssetRegex assetUrlReplace pageContent
+    in
+        Markdown.toHtmlWith parserOptions Template.pageAttributes page
+
+
+{-| Takes the current route, the page to render, template's model
+and creates a `List (Html msg)` to the current page.
+-}
+view : Route -> Page msg -> Template.Model -> List (Html msg)
+view currentRoute page model =
+    [ Html.section (Template.pageContainerAttributes model currentRoute) [ page ] ]

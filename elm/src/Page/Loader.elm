@@ -37,27 +37,27 @@ type Event msg
 The first string of the pair should contain the route's name,
 while the second string the page content formatted in markdown.
 
-    loadCache [ ( "home", "# Hello, World" ) ]
+    loadCache assetsHash [ ( "home", "# Hello, World" ) ]
 
 -}
-loadCache : List ( String, String ) -> Cache msg
-loadCache pageList =
+loadCache : String -> List ( String, String ) -> Cache msg
+loadCache assetsHash pageList =
     let
         parseMap : ( String, String ) -> ( String, Page msg )
         parseMap ( routeName, content ) =
-            ( routeName, Page.parser content )
+            ( routeName, Page.parser assetsHash content )
     in
         Dict.fromList <| List.map parseMap pageList
 
 
-handleHttpResponse : Route -> Cache msg -> Result Http.Error String -> Event msg
-handleHttpResponse route cache result =
+handleHttpResponse : Route -> String -> Cache msg -> Result Http.Error String -> Event msg
+handleHttpResponse route assetsHash cache result =
     case result of
         Ok content ->
             let
                 page : Page msg
                 page =
-                    Page.parser content
+                    Page.parser assetsHash content
 
                 newCache : Cache msg
                 newCache =
@@ -74,11 +74,11 @@ routeToPageUrl route =
     "pages/" ++ String.toLower route.name ++ ".md"
 
 
-fetch : Route -> Cache msg -> (Event msg -> msg) -> Cmd msg
-fetch route cache toAppMsg =
+fetch : Route -> String -> Cache msg -> (Event msg -> msg) -> Cmd msg
+fetch route assetsHash cache toAppMsg =
     routeToPageUrl route
         |> Http.getString
-        |> Http.send (handleHttpResponse route cache >> toAppMsg)
+        |> Http.send (handleHttpResponse route assetsHash cache >> toAppMsg)
 
 
 {-| Loads a page given a `Navigation.Location`, a `Cache` and a function
@@ -89,8 +89,8 @@ is already present in current cache no request will be made.
     load location pageCache loaderEventToAppMsg
 
 -}
-load : Navigation.Location -> Cache msg -> (Event msg -> msg) -> Cmd msg
-load location cache toAppMsg =
+load : Navigation.Location -> String -> Cache msg -> (Event msg -> msg) -> Cmd msg
+load location assetsHash cache toAppMsg =
     let
         route : Route
         route =
@@ -101,4 +101,4 @@ load location cache toAppMsg =
                 Task.perform toAppMsg <| Task.succeed <| Success route page cache
 
             Nothing ->
-                fetch route cache toAppMsg
+                fetch route assetsHash cache toAppMsg

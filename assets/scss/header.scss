@@ -20,6 +20,7 @@
 
 .header-title {
   font-family: $cooper-hewitt-heavy;
+  font-size: 0.8em;
 
   /* mobile menu non-fixed
   p { margin: 0; }
@@ -34,7 +35,7 @@
 
   .header-langue {
     color: $pink;
-    font-size: 1.2em;
+    font-size: 1.6em;
     font-style: italic;
   }
 
@@ -46,7 +47,7 @@
 .heading-logo {
   position: absolute;
   right: 1em;
-  bottom: 0.9em;
+  bottom: 0.4em;
 
   img {
     max-width: 10em;
