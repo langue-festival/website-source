@@ -88,10 +88,10 @@ app.log = function () {
  *  and caches the new result
  */
 app.cacheFunctionResult = function (fn) {
-    var result;
+    var result = null;
 
     var cachedFunction = function () {
-        return typeof result === 'undefined' ? result = fn() : result;
+        return result === null ? result = fn() : result;
     };
 
     cachedFunction.update = function () {
