@@ -1,8 +1,12 @@
 
-const outputPath = process.argv[2];
+const outputJs = process.argv[2];
+const outputScss = process.argv[3];
 
-if (outputPath === undefined) {
-    console.log('Missing output path parameter');
+if (outputJs === undefined) {
+    console.log('Missing js output path');
+    process.exit(1);
+} else if (outputScss === undefined) {
+    console.log('Missing scss output path');
     process.exit(1);
 }
 
@@ -38,14 +42,20 @@ const recHash = function (file, hashs = []) {
 };
 
 const assetsHash = recHash(assetsBasePath)
+    .filter(a => ! a.fst.endsWith('.scss'))
+    .filter(a => ! a.fst.endsWith('.js'))
     .sort((a, b) => a.fst > b.fst)
-    .map(rec => rec.snd)
+    .map(a => a.snd)
     .reduce((acc, hash) => md5(acc + hash));
 
 const options = { mode: 0o644, encoding: 'utf8' };
 
-fs.writeFileSync(outputPath, 'var assetsHash = "', options);
-fs.appendFileSync(outputPath, assetsHash, options);
-fs.appendFileSync(outputPath, '";\n', options);
+let output = '';
 
-console.log('Successfully generated', outputPath);
+output = 'var assetsHash = "' + assetsHash + '";\n';
+fs.writeFileSync(outputJs, output, options);
+console.log('Successfully generated', outputJs);
+
+output = '$assets-hash: "' + assetsHash + '";\n';
+fs.writeFileSync(outputScss, output, options);
+console.log('Successfully generated', outputScss);

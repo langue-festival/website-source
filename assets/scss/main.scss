@@ -1,16 +1,17 @@
 @import "node_modules/purecss/build/pure-min";
 @import "node_modules/purecss/build/grids-responsive-min";
+@import "build/assets-hash.scss";
 
 $assets-path: "assets";
 $fonts-path: "#{$assets-path}/fonts";
 $images-path: "#{$assets-path}/images";
 
 @function font-url($name) {
-  @return url("#{$fonts-path}/#{$name}");
+  @return url("#{$fonts-path}/#{$name}?#{$assets-hash}");
 }
 
 @function image-url($name) {
-  @return url("#{$images-path}/#{$name}");
+  @return url("#{$images-path}/#{$name}?#{$assets-hash}");
 }
 
 @font-face {

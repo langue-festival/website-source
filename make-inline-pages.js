@@ -1,8 +1,8 @@
 
-const outputPath = process.argv[2];
+const outputJs = process.argv[2];
 
-if (outputPath === undefined) {
-    console.log('Missing output path parameter');
+if (outputJs === undefined) {
+    console.log('Missing js output path');
     process.exit(1);
 }
 
@@ -28,19 +28,19 @@ const appendPages = function (file, options) {
         if (firstAppend) {
             firstAppend = false;
         } else {
-            fs.appendFileSync(outputPath, ',\n', options);
+            fs.appendFileSync(outputJs, ',\n', options);
         }
 
         const output = '    [ "' + route + '", "' + content + '" ]';
 
-        fs.appendFileSync(outputPath, output, options);
+        fs.appendFileSync(outputJs, output, options);
     }
 };
 
 const options = { mode: 0o644, encoding: 'utf8' };
 
-fs.writeFileSync(outputPath, 'var pages = [\n', options);
+fs.writeFileSync(outputJs, 'var pages = [\n', options);
 appendPages(pagesBasePath, options);
-fs.appendFileSync(outputPath, '\n];\n', options);
+fs.appendFileSync(outputJs, '\n];\n', options);
 
-console.log('Successfully generated', outputPath);
+console.log('Successfully generated', outputJs);
