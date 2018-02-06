@@ -26,7 +26,7 @@ type alias Model model =
         | route : Route
         , yScroll : Int
         , menuHidden : Bool
-        , appVersion : String
+        , assetsHash : String
     }
 
 

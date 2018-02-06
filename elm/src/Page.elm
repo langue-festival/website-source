@@ -38,7 +38,7 @@ type alias Model model msg =
         , yScroll : Int
         , page : Page msg
         , menuHidden : Bool
-        , appVersion : String
+        , assetsHash : String
     }
 
 

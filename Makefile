@@ -8,6 +8,7 @@ node_bin		:= $(node_modules)/.bin
 sass_target		:= $(build_dir)/compiled_style.css
 elm_target		:= $(build_dir)/compiled_elm.js
 inline_pages	:= $(build_dir)/compiled_pages.js
+assets_hash		:= $(build_dir)/assets_hash.js
 inliner_target	:= $(base_dir)/index.html
 # node_modules executables
 elm_make	:= $(node_bin)/elm-make
@@ -26,6 +27,7 @@ yarn :
 build-env :
 	@mkdir -p $(build_dir)/assets
 	@ln -sf $(base_dir)/assets/fonts $(build_dir)/assets
+	@node $(base_dir)/make_assets_hash.js $(assets_hash)
 
 check-yarn :
 ifeq ("$(wildcard $(node_bin))", "")
@@ -45,8 +47,7 @@ dev : elm sass
 	@rm -f $(inline_pages)
 
 inliner : yarn elm sass
-	@chmod a+x $(base_dir)/inline_pages.sh
-	@$(base_dir)/inline_pages.sh $(inline_pages)
+	@node $(base_dir)/make_inline_pages.js $(inline_pages)
 	@$(postcss) $(sass_target) --use autoprefixer --replace
 	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(inliner_target)
 

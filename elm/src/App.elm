@@ -24,7 +24,7 @@ type alias Model =
     { route : Route
     , page : Page Msg
     , yScroll : Int
-    , appVersion : String
+    , assetsHash : String
     , underConstruction : Bool
     , pageCache : Cache Msg
     , menuHidden : Bool
@@ -33,7 +33,7 @@ type alias Model =
 
 type alias Flags =
     { pages : List ( String, String )
-    , appVersion : String
+    , assetsHash : String
     , yScroll : Int
     , underConstruction : Bool
     }
@@ -47,7 +47,7 @@ init flags location =
             { route = Route.fromLocation location
             , page = Page.empty
             , yScroll = flags.yScroll
-            , appVersion = flags.appVersion
+            , assetsHash = flags.assetsHash
             , underConstruction = flags.underConstruction
             , pageCache = Loader.loadCache flags.pages
             , menuHidden = True

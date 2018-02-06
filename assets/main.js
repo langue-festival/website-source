@@ -9,6 +9,12 @@ var app = {};
 app.pages = typeof pages === 'object' ? pages : [];
 
 /*
+ * If `assets_hash.js` is loaded, this will
+ *  contain that hash
+ */
+app.assetsHash = typeof assetsHash === 'string' ? assetsHash : '';
+
+/*
  * Boolean flag, if set to `true` then `app.log`
  *  function will log its messages to the console
  */
@@ -38,8 +44,8 @@ app.getElementById = function (id) {
  *  present here then Elm app will make a request
  *  to pages/page-name.md
  *
- * appVersion: for the moment this will just be used
- *  as query string in assets url to download latest versions
+ * assetsHash: an hash of the application assets
+ *  to make sure that the right version is loaded
  *
  * yScroll: initial value of `document.documentElement.scrollTop`
  *
@@ -48,7 +54,7 @@ app.getElementById = function (id) {
  */
 app.flags = {
     pages: app.pages,
-    appVersion: '0.0.2',
+    assetsHash: app.assetsHash,
     yScroll: app.root.scrollTop,
     underConstruction: app.doc.location.hostname === 'www.languefestival.it'
 };
