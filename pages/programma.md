@@ -3,8 +3,7 @@
 Ecco gli ospiti!
 Scarica il [programma](programma.pdf)
 
-Le sezioni
-----------
+<h2 id="le-sezioni">Le sezioni</h2>
 
 Le sezioni rappresentano una componente essenziale di Langue. La partecipazione di tutti costituisce l’unica vera opportunità di arricchirci insieme!
 
@@ -22,8 +21,7 @@ Attraverso la sezione internazionale del festival avremo la possibilità di scop
 Poetucoli di San Lollo [?]
 Intendiamo coinvolgere i bambini della scuola primaria del quartiere e farli partecipare al festival con i loro lavori ai quali si dedicheranno nell’anno scolastico. Le poesie dei Poetucoli verranno distribuite all’interno del quartiere, ai partecipanti del festival e ai passanti, chiunque voglia conoscere cos’è San Lorenzo dalle parole di chi ci cresce.
 
-I luoghi
---------
+<h2 id="i-luoghi">I luoghi</h2>
 
 L’evento principale si terrà in Piazza dell’Immacolata, crocevia di mille rotte studentesche e non. Partners preziosi del festival saranno:
 Giufà Libreria Caffè, dove si svolgeranno presentazioni, letture e interviste: un luogo ristretto e intimo che secondo noi rappresenta con efficacia la densa freschezza dei linguaggi esordienti

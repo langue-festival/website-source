@@ -51,6 +51,8 @@ parserOptions =
 
 markdownAssetRegex : Regex
 markdownAssetRegex =
+    -- TODO select urls in src="...
+    -- TODO test \(.*assets/[^ )]+
     regex "\\(assets/[^ )]+"
 
 

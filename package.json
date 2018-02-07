@@ -12,6 +12,7 @@
         "inliner": "^1.13.0",
         "node-sass": "^4.7.2",
         "postcss-cli": "^4.1.1",
-        "purecss": "^1.0.0"
+        "purecss": "^1.0.0",
+        "stateless-maybe-js": "^1.0.0"
     }
 }

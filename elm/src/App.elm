@@ -15,7 +15,7 @@ type Msg
     = UrlChange Navigation.Location
     | LoadError Route Http.Error
     | PageLoad Route (Page Msg) (Cache Msg)
-    | OnYScroll Int
+    | YScroll Int
     | OpenMenu
     | CloseMenu
 
@@ -186,7 +186,7 @@ update msg model =
         PageLoad route page cache ->
             handlePageLoad route page { model | pageCache = cache }
 
-        OnYScroll offset ->
+        YScroll offset ->
             handleYScroll offset model
 
         OpenMenu ->
@@ -289,8 +289,8 @@ port notifyYScroll : (Int -> msg) -> Sub msg
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ notifyCloseMenu (always CloseMenu)
-        , notifyYScroll OnYScroll
+        [ notifyCloseMenu <| always CloseMenu
+        , notifyYScroll YScroll
         ]
 
 

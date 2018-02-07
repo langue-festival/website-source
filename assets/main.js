@@ -1,27 +1,29 @@
 'use strict';
 
-var app = {};
+var pages, assetsHash,
+
+    app = {};
 
 /*
  * If `compiled_pages.js` is loaded the `pages`
- *  variable will hold pages contens
+ *  variable will hold pages contens.
  */
-app.pages = typeof pages === 'object' ? pages : [];
+app.pages = maybe(pages).getOrElse([]);
 
 /*
  * If `assets_hash.js` is loaded, this will
- *  contain that hash
+ *  contain that hash.
  */
-app.assetsHash = typeof assetsHash === 'string' ? assetsHash : '';
+app.assetsHash = maybe(assetsHash).getOrElse('');
 
 /*
  * Boolean flag, if set to `true` then `app.log`
- *  function will log its messages to the console
+ *  function will log its messages to the console.
  */
 app.verbose = false;
 
 /*
- * Shortcuts to global objects and functions
+ * Shortcuts to global objects and functions.
  */
 app.win = window;
 
@@ -29,28 +31,31 @@ app.doc = document;
 
 app.root = app.doc.documentElement;
 
+/*
+ * Wrapper of global function results in `maybe` monad.
+ */
 app.querySelector = function (query) {
-    return app.doc.querySelector(query);
+    return maybe(app.doc.querySelector(query));
 };
 
 app.getElementById = function (id) {
-    return app.doc.getElementById(id);
+    return maybe(app.doc.getElementById(id));
 };
 
 /*
- * Elm's app flags
+ * Elm's app flags.
  *
  * pages: contains page cache, if a page is not
  *  present here then Elm app will make a request
- *  to pages/page-name.md
+ *  to pages/page-name.md.
  *
  * assetsHash: an hash of the application assets
- *  to make sure that the right version is loaded
+ *  to make sure that the right version is loaded.
  *
- * yScroll: initial value of `document.documentElement.scrollTop`
+ * yScroll: initial value of `document.documentElement.scrollTop`.
  *
  * underConstruction: boolean flag, if `true` the website
- *  will not be shown
+ *  will not be shown.
  */
 app.flags = {
     pages: app.pages,
@@ -60,53 +65,56 @@ app.flags = {
 };
 
 /*
- * Start Elm app
+ * Start Elm app.
  */
 app.elm = Elm.App.fullscreen(app.flags);
 
 /*
  * Will send messages to `console.log` if `app.verbose`
- *  is `true`
- * Calling `app.log()` will set the verbose flag to true
+ *  is `true`.
+ *
+ * Calling `app.log()` will toggle `app.verbose`.
  */
 app.log = function () {
     if (arguments.length === 0) {
-        app.verbose = true;
+        app.verbose = ! app.verbose;
     } else if (app.verbose === true) {
         console.log.apply(null, arguments);
     }
 };
 
 /*
- * Takes a function `fn1` as parameter and creates
- *  a new function `fn2`
- * The first time that fn2 gets called, fn1 will
- *  be called and its result is cached
- * If fn2 gets called again the last result will
- *  be returned without calling fn1
- * The function `fn2.update` will call fn1 again
- *  and caches the new result
+ * Takes a function fn as an argument and creates
+ *  a cached version of that function.
+ *
+ * The first time that the cached function gets called,
+ *  fn will be called, its result cached and then returned.
+ *
+ * If cached function gets called again the cached value
+ *  is returned, without calling fn.
+ *
+ * The cached function also has a property `update` that
+ *  contains a function that will update the cached value.
  */
 app.cacheFunctionResult = function (fn) {
-    var result = null;
-
-    var cachedFunction = function () {
-        return result === null ? result = fn() : result;
+    var cached = function () {
+        return cached.hasOwnProperty('result') ? cached.result : cached.result = fn();
     };
 
-    cachedFunction.update = function () {
-        return result = fn();
+    cached.update = function () {
+        return cached.result = fn();
     };
 
-    return cachedFunction;
+    return cached;
 };
 
 /*
  * Some DOM nodes are created when Elm app is started
- *  and never removed
+ *  and never removed.
+ *
  * In order to not call `getElementById` every time
  *  one of these nodes are needed, we will use
- *  `app.cacheFunctionResult` to cache results
+ *  `app.cacheFunctionResult` to cache results.
  */
 app.cache = {};
 
@@ -128,7 +136,7 @@ app.cache.headerContainer = app.cacheFunctionResult(function () {
 
 /*
  * Will call the update function for each object
- *  in `app.cache`
+ *  in `app.cache`.
  */
 app.cache.update = function () {
     Object.keys(app.cache).forEach(function (key) {
@@ -140,10 +148,11 @@ app.cache.update = function () {
 
 /*
  * Will set `app.underConstruction` flag to `false` and
- *  restart Elm app
+ *  restart Elm app.
+ *
  * At the moment Elm's ports will not be reattached so
  *  the website will not work correctly after this
- *  function gets called
+ *  function gets called.
  */
 app.show = function () {
     var observer = new MutationObserver(function (mutations) {
@@ -153,7 +162,7 @@ app.show = function () {
         app.cache.update();
     });
 
-    app.cache.elmRoot().remove();
+    app.cache.elmRoot().forEach(function (elmRoot) { elmRoot.remove(); });
 
     observer.observe(app.root, { childList: true, subtree: true });
 
@@ -162,12 +171,12 @@ app.show = function () {
 };
 
 /*
- * References to animate functions
+ * References to animate functions.
  */
 app.animate = {};
 
 /*
- * Scrolls the page to top with easing
+ * Scrolls the page to top with easing.
  */
 app.animate.scrollTop = function (duration) {
     var time = 0,
@@ -196,26 +205,34 @@ app.animate.scrollTop = function (duration) {
 };
 
 /*
- * Scrolls the page to the element
+ * Scrolls the page to the element.
+ *
  * Then, if the page has not reached bottom,
- *  will scroll up as the header height
+ *  will scroll up as the header height.
  */
 app.scrollToElement = function (element) {
-    if ( ! element) {
-        return;
-    }
+    var currentOffsetHeight, headerHeight;
 
-    app.cache.elmRoot().style.height = 'auto';
+    // unlocks page's height
+    app.cache.elmRoot().forEach(function (elmRoot) {
+        elmRoot.style.height = 'auto';
+    });
     element.scrollIntoView(true);
 
-    if (app.root.scrollTop + app.win.innerHeight < app.root.offsetHeight) {
-        app.root.scrollTop -= app.cache.headerContainer().offsetHeight;
+    currentOffsetHeight = app.root.scrollTop + app.win.innerHeight;
+
+    headerHeight = app.cache.headerContainer()
+        .map(function (header) { return header.offsetHeight; })
+        .getOrElse(0);
+
+    if (currentOffsetHeight < app.root.offsetHeight) {
+        app.root.scrollTop -= headerHeight;
     }
 };
 
 /*
  * Listen to the scroll event and pass the new yScroll
- *  value to the Elm app
+ *  value to the Elm app.
  */
 app.doc.addEventListener('scroll', function(event) {
     app.elm.ports.notifyYScroll.send(app.root.scrollTop);
@@ -223,10 +240,11 @@ app.doc.addEventListener('scroll', function(event) {
 
 /*
  * Port through which Elm app will ask to scroll
- *  an element with a certain `id` into view
+ *  an element with a certain `id` into view.
+ *
  * If the id doesn't exist when the port is called
  *  then an event listener will wait for any DOM
- *  mutation and then will try again
+ *  mutation and then will try again.
  */
 app.elm.ports.scrollIntoView.subscribe(function (id) {
     var element = app.getElementById(id);
@@ -235,27 +253,29 @@ app.elm.ports.scrollIntoView.subscribe(function (id) {
         element = app.getElementById(id);
 
         app.log('DOM mutations:', mutations);
-        app.log('Scrolling to id:', id, '- element:', element);
+        app.log('Scrolling to id:', id, '- element:', element.getOrElse('not found'));
 
-        app.scrollToElement(element);
+        element.forEach(function (e) { app.scrollToElement(e); });
 
         observer.disconnect();
     });
 
-    if (element) {
-        app.log('Scrolling to id:', id, ' - element:', element);
+    if (element.nonEmpty) {
+        app.log('Scrolling to id:', id, ' - element:', element.get());
 
-        app.scrollToElement(element);
+        app.scrollToElement(element.get());
     } else {
         app.log('Element with id', id, 'not found, waiting for DOM mutations...');
 
-        observer.observe(app.cache.contentContainer(), { childList: true, subtree: true });
+        app.cache.contentContainer().forEach(function (container) {
+            observer.observe(container, { childList: true, subtree: true });
+        });
     }
 });
 
 /*
  * Port through which Elm app will ask to scroll
- *  to the top of the page
+ *  to the top of the page.
  */
 app.elm.ports.scrollToTop.subscribe(function () {
     app.log('Scrolling to top');
@@ -265,10 +285,12 @@ app.elm.ports.scrollToTop.subscribe(function () {
 
 /*
  * Listen to clicks outside the menu area and send a message
- *  to Elm app through `notifyCloseMenu` port when happens
+ *  to Elm app through `notifyCloseMenu` port when happens.
  */
 app.closeMenuListener = function (event) {
-    var clickInsideMenu = app.cache.menu().contains(event.target);
+    var clickInsideMenu = app.cache.menu()
+            .map(function (menu) { return menu.contains(event.target); })
+            .getOrElse(false);
 
     if ( ! clickInsideMenu) {
         app.log('Click outside menu, sending close message');
@@ -279,25 +301,37 @@ app.closeMenuListener = function (event) {
 };
 
 /*
- * Adds `app.closeMenuListener` to the event listener
+ * Adds `app.closeMenuListener` to the event listener.
  */
 app.elm.ports.startCloseMenuListener.subscribe(function () {
+    var menuHeight = app.cache.menu()
+            .map(function (menu) { return menu.offsetHeight; })
+            .getOrElse(0),
+
+        headerHeight = app.cache.headerContainer()
+            .map(function (header) { return header.offsetHeight; })
+            .getOrElse(0);
+
     app.doc.addEventListener('click', app.closeMenuListener, false);
 
     app.log('Opened responsive menu, locking root-node height');
 
     // locks page's height
-    app.cache.elmRoot().style.height = app.cache.menu().offsetHeight + app.cache.headerContainer().offsetHeight + 'px';
+    app.cache.elmRoot().forEach(function (elmRoot) {
+        elmRoot.style.height = menuHeight + headerHeight + 'px';
+    });
 });
 
 /*
- * Removes `app.closeMenuListener` from the event listener
+ * Removes `app.closeMenuListener` from the event listener.
  */
 app.elm.ports.stopCloseMenuListener.subscribe(function () {
     app.doc.removeEventListener('click', app.closeMenuListener, false);
 
     app.log('Closed responsive menu, unlocking root-node height');
 
-    /// unlocks page's height
-    app.cache.elmRoot().style.height = 'auto';
+    // unlocks page's height
+    app.cache.elmRoot().forEach(function (elmRoot) {
+        elmRoot.style.height = 'auto';
+    });
 });

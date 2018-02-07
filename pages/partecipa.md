@@ -3,12 +3,12 @@
 Partecipare a Langue è semplice!
 Siamo una macchina piccola, ma in continua ricerca di espansione. Quindi abbiamo bisogno di tutto l’aiuto che potete garantirci. Ogni forma di partecipazione è egualmente indispensabile per un festival che vive della creatività e generosità dei suoi partecipanti.
 
-Come volontario/a
------------------
+<h2 id="come-volontario-a">Come volontario/a</h2>
+
 Per partecipare come volontario/a del festival ed aiutare nella sua organizzazione oppure comunicare la propria disponibilità per il 26 maggio, scarica direttamente da questa pagina il modulo [pdf modulo volontari] e inviacelo a festival.langue@gmail.com.
 
-Come poeta/poetessa
--------------------
+<h2 id="come-poeta-poetessa">Come poeta/poetessa</h2>
+
 Vi piacerebbe leggere delle vostre poesie durante il festival? Perchè no!
 Compila il modulo [pdf modulo partecipanti] e inviateci le vostre opere (preferibilmente in PDF) a festival.langue@gmail.com entro il 2 maggio 2018.
 

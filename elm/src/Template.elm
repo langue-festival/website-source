@@ -152,8 +152,8 @@ logo assetsHash =
         [ img [ Asset.src assetsHash "assets/images/langue-logo.svg" ] [] ]
 
 
-getHeaderAttributes : Model -> List (Html.Attribute msg)
-getHeaderAttributes model =
+headerAttributes : Model -> List (Html.Attribute msg)
+headerAttributes model =
     let
         commonAttributes : List (Html.Attribute msg)
         commonAttributes =
@@ -193,7 +193,7 @@ headerTitle =
 -}
 header : Model -> Route -> String -> msg -> msg -> Html msg
 header model currentRoute assetsHash openMenuMsg closeMenuMsg =
-    Html.div (getHeaderAttributes model)
+    Html.div (headerAttributes model)
         [ Html.header [ class "header-container pure-menu-heading" ]
             [ menuToggleButton model assetsHash openMenuMsg closeMenuMsg
             , headerTitle
