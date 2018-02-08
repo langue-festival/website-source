@@ -14,7 +14,7 @@ app.pages = maybe(pages).getOrElse([]);
  * If `assets_hash.js` is loaded, this will
  *  contain that hash.
  */
-app.assetsHash = maybe(assetsHash).getOrElse('');
+app.assetsHash = maybe(assetsHash).toString();
 
 /*
  * Boolean flag, if set to `true` then `app.log`
@@ -112,8 +112,8 @@ app.cacheFunctionResult = function (fn) {
  * Some DOM nodes are created when Elm app is started
  *  and never removed.
  *
- * In order to not call `getElementById` every time
- *  one of these nodes are needed, we will use
+ * In order to not call `getElementById` or `querySelector`
+ *  every time one of these nodes are needed, we will use
  *  `app.cacheFunctionResult` to cache results.
  */
 app.cache = {};
@@ -260,17 +260,17 @@ app.elm.ports.scrollIntoView.subscribe(function (id) {
         observer.disconnect();
     });
 
-    if (element.nonEmpty) {
-        app.log('Scrolling to id:', id, ' - element:', element.get());
+    element.forEach(function (el) {
+        app.log('Scrolling to id:', id, ' - element:', el);
 
-        app.scrollToElement(element.get());
-    } else {
+        app.scrollToElement(el);
+    }).orElse(function () {
         app.log('Element with id', id, 'not found, waiting for DOM mutations...');
 
         app.cache.contentContainer().forEach(function (container) {
             observer.observe(container, { childList: true, subtree: true });
         });
-    }
+    });
 });
 
 /*
