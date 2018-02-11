@@ -48,12 +48,17 @@ socialMedia assetsHash =
         ]
 
 
-menuParentItem : Route -> String -> Route -> List (Html msg) -> Html msg
-menuParentItem currentRoute itemName linkRoute items =
+menuParentItem : Route -> String -> Maybe Route -> List (Html msg) -> Html msg
+menuParentItem currentRoute itemName linkRoute childs =
     let
-        numItems : Int
-        numItems =
-            List.length items
+        numChilds : Int
+        numChilds =
+            List.length childs
+
+        linkRouteName : String
+        linkRouteName =
+            Maybe.map .name linkRoute
+                |> Maybe.withDefault ""
 
         attributes1 : List (Html.Attribute msg)
         attributes1 =
@@ -61,37 +66,48 @@ menuParentItem currentRoute itemName linkRoute items =
 
         attributes2 : List (Html.Attribute msg)
         attributes2 =
-            if (numItems > 0 && linkRoute.name == currentRoute.name) || linkRoute == currentRoute then
+            if linkRoute == Just currentRoute then
                 class "pure-menu-selected" :: attributes1
             else
                 attributes1
 
         attributes3 : List (Html.Attribute msg)
         attributes3 =
-            if numItems > 0 then
+            if numChilds > 0 then
                 class "pure-menu-has-children pure-menu-allow-hover" :: attributes2
             else
                 attributes2
 
-        linkHref : Html.Attribute msg
-        linkHref =
-            href <| Route.toUrl linkRoute
+        childItems : Html msg
+        childItems =
+            ul [ class "pure-menu-children" ] childs
 
-        link : Html msg
-        link =
-            a [ linkHref, class "pure-menu-link" ]
-                [ text itemName ]
+        labelAttributes : List (Html.Attribute msg)
+        labelAttributes =
+            [ class "pure-menu-link" ]
+
+        labelText : List (Html msg)
+        labelText =
+            [ text itemName ]
+
+        label : Html msg
+        label =
+            case Maybe.map Route.toUrl linkRoute of
+                Just url ->
+                    a (href url :: labelAttributes) labelText
+
+                Nothing ->
+                    a labelAttributes labelText
     in
-        if numItems > 0 then
-            li attributes3
-                [ link, ul [ class "pure-menu-children" ] items ]
+        if numChilds > 0 then
+            li attributes3 [ label, childItems ]
         else
-            li attributes3 [ link ]
+            li attributes3 [ label ]
 
 
 menuItem : Route -> String -> Route -> Html msg
 menuItem currentRoute itemName linkRoute =
-    menuParentItem currentRoute itemName linkRoute []
+    menuParentItem currentRoute itemName (Just linkRoute) []
 
 
 menu : Model -> Route -> String -> Html msg
@@ -101,32 +117,29 @@ menu model currentRoute assetsHash =
         item =
             menuItem currentRoute
 
-        parentItem : String -> Route -> List (Html msg) -> Html msg
+        parentItem : String -> Maybe Route -> List (Html msg) -> Html msg
         parentItem =
             menuParentItem currentRoute
     in
         nav (menuAttributes model)
             [ ul [ class "pure-menu-list" ]
-                [ item "Home" <| fromName "home"
-                , parentItem "Langue"
-                    (fromName "langue")
-                    [ item "Chi siamo" <| route "langue" "chi-siamo"
-                    , item "Persone importanti" <| route "langue" "persone-importanti"
-                    , item "Contatti" <| route "langue" "contatti"
-                    , item "Info" <| route "langue" "info"
+                [ parentItem "Langue"
+                    (Just <| fromName "langue")
+                    [ item "Chi siamo" <| fromName "chi-siamo"
+                    , item "Contatti" <| fromName "contatti"
                     ]
-                , parentItem "Il programma"
-                    (fromName "programma")
-                    [ item "Le sezioni" <| route "programma" "le-sezioni"
-                    , item "I luoghi" <| route "programma" "i-luoghi"
+                , parentItem "Il festival"
+                    Nothing
+                    [ item "Il programma" <| fromName "programma"
+                    , item "Le sezioni" <| fromName "sezioni"
+                    , item "I luoghi" <| fromName "luoghi"
                     ]
-                , parentItem "Partecipa / Join us"
-                    (fromName "partecipa")
-                    [ item "Come volontario/a" <| route "partecipa" "come-volontario-a"
-                    , item "Come poeta/poetessa" <| route "partecipa" "come-poeta-poetessa"
+                , parentItem "Partecipa"
+                    (Nothing)
+                    [ item "Come volontario/a" <| fromName "partecipa-come-volontario"
+                    , item "Come poeta/poetessa" <| fromName "partecipa-come-poeta"
                     ]
-                , item "Sostienici / Support us" <| Route.fromName "sostienici"
-                , item "Ringraziamenti" <| Route.fromName "ringraziamenti"
+                , item "Sostienici" <| fromName "sostienici"
                 , socialMedia assetsHash
                 ]
             ]

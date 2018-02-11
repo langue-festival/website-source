@@ -220,7 +220,7 @@ viewIndex model =
             , Html.text "26 MAGGIO 2018"
             ]
         , Html.a
-            [ Html.Attributes.href <| Route.toUrl <| Route.fromName "home"
+            [ Html.Attributes.href <| Route.toUrl <| Route.fromName "langue"
             , Html.Attributes.class "enter pure-button"
             ]
             [ Html.text "ENTRA" ]
