@@ -20,7 +20,6 @@
 
 .header-title {
   font-family: $cooper-hewitt-heavy;
-  font-size: 0.8em;
 
   /* mobile menu non-fixed
   p { margin: 0; }
@@ -197,7 +196,7 @@ a:active,
 }
 /**/
 
-@media screen and (min-width: $xl-width) {
+@media screen and (min-width: $lg-width) {
   .pure-menu-list {
     height: 0;
   }
@@ -209,7 +208,7 @@ a:active,
   }
 
   .pure-menu-item:after {
-    left: $menu-font-size-xl;
+    left: $menu-font-size-lg;
   }
 
   .pure-menu-children {
@@ -236,7 +235,7 @@ a:active,
     float: right;
     right: 1em;
     top: unset;
-    margin-top: $menu-margin-xl - 2.7em;
+    margin-top: $menu-margin-lg - 2.7em;
   }
 
   .menu-toggle {
@@ -245,10 +244,19 @@ a:active,
 
   .social-media {
     position: absolute;
-    margin-bottom: 5em;
+    margin-bottom: 7em;
+    margin-right: 0.6em;
     bottom: 0;
-    right: 1.1em;
-    width: 5em;
+    right: 0;
+
+    .pure-menu-link {
+      float: left;
+      padding: 0.4em;
+    }
+
+    .pure-menu-link:focus, .pure-menu-link:hover {
+      background-color: unset;
+    }
   }
 
   #menu {
@@ -262,7 +270,7 @@ a:active,
     border: 0;
     z-index: 4;
     height: 0;
-    top: $menu-margin-xl;
+    top: $menu-margin-lg;
   }
 
   #menu:before {
@@ -270,7 +278,7 @@ a:active,
   }
 
   .header-container {
-    height: $header-height-xl;
+    height: $header-height-lg;
   }
 
   .header-title {
@@ -278,11 +286,12 @@ a:active,
     font-family: $cooper-hewitt-heavy;
 
     .header-title-main {
-      font-size: 1.2em;
+      font-size: 1.6em;
+      margin: 0.5em 0;
     }
 
     .header-langue {
-      font-size: 1.5em;
+      font-size: 1.7em;
     }
 
     .header-title-date {
@@ -300,7 +309,7 @@ a:active,
 
   .roll-up .header-container {
     .header-title, .social-media, .heading-logo {
-      bottom: $header-height-xl - $menu-roll-up-height;
+      bottom: $header-height-lg - $menu-roll-up-height;
       opacity: 0;
     }
   }

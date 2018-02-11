@@ -15,7 +15,7 @@ module Template exposing (Model, header, pageAttributes, pageContainerAttributes
 -}
 
 import Html exposing (Html, a, ul, li, nav, text, button, img)
-import Html.Attributes exposing (id, class, href)
+import Html.Attributes exposing (id, class, href, target)
 import Html.Events exposing (onClick)
 import Route exposing (Route, route, fromName)
 import Asset
@@ -43,8 +43,10 @@ menuAttributes model =
 socialMedia : String -> Html msg
 socialMedia assetsHash =
     li [ class "pure-menu-item social-media" ]
-        [ a [ href "https://www.facebook.com/LangueFPSL", class "pure-menu-link" ]
+        [ a [ href "https://www.facebook.com/LangueFPSL", target "_blank", class "pure-menu-link" ]
             [ img [ Asset.src assetsHash "assets/images/social-media/facebook.png" ] [] ]
+        , a [ href "mailto:festival.langue@gmail.com", class "pure-menu-link" ]
+            [ img [ Asset.src assetsHash "assets/images/social-media/mail.png" ] [] ]
         ]
 
 
@@ -161,7 +163,7 @@ menuToggleButton model assetsHash openMenuMsg closeMenuMsg =
 
 logo : String -> Html msg
 logo assetsHash =
-    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| fromName "home" ]
+    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| fromName "langue" ]
         [ img [ Asset.src assetsHash "assets/images/langue-logo.svg" ] [] ]
 
 

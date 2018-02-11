@@ -51,12 +51,12 @@ $images-path: "#{$assets-path}/images";
  $xl-width: 80em;   /* xl ≥ 1280px */
 
  $header-height: 6em;
- $header-height-xl: 13em;
+ $header-height-lg: 13em;
  $menu-max-width: 25em;
  $menu-top-margin: 1em;
  $menu-font-size: 1.3em;
- $menu-font-size-xl: 1em;
- $menu-margin-xl: 10em;
+ $menu-font-size-lg: 1em;
+ $menu-margin-lg: 10.5em;
 
  $menu-slide-transition: 0.5s;
 
@@ -107,10 +107,10 @@ h1, h2, h3, h4, h5, h6 {
     &, * { font-family: $glacial-indifference; }
 
     min-height: 100%;
-    text-align: left;
     padding: 1em 1em 0 3.3em;
     z-index: 1;
-    font-size: 1.3em;
+    font-size: 1.1em;
+    text-align: justify;
 
     .main-title {
       position: absolute;
@@ -122,21 +122,19 @@ h1, h2, h3, h4, h5, h6 {
       letter-spacing: 0.3em;
       text-align: right;
       color: $dark-blue;
+      width: 12em;
     }
   }
 
   @media screen and (min-width: $md-width) {
     .markdown {
       padding-left: 6em;
-
-      .main-title {
-        transform: translateX(-103%) translateY(-118%) rotate(-90deg);
-      }
+      font-size: 1.3em;
     }
   }
 
-  @media screen and (min-width: $xl-width) {
-    margin-top: $header-height-xl;
+  @media screen and (min-width: $lg-width) {
+    margin-top: $header-height-lg;
   }
 }
 
@@ -162,3 +160,5 @@ h1, h2, h3, h4, h5, h6 {
 @import "index.scss";
 @import "home.scss";
 @import "langue.scss";
+@import "chi-siamo.scss";
+@import "sostienici.scss";
