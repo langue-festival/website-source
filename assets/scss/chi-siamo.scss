@@ -5,15 +5,15 @@
     height: auto;
   }
 
-  .markdown h3:not(:first-of-type) {
-    margin-top: 3em;
-  }
-
   .markdown p:not(:first-of-type) img {
     margin-top: 2em;
   }
 
   @media screen and (min-width: $md-width) {
+    .markdown h3:not(:first-of-type) {
+      margin-top: 3em;
+    }
+
     img {
       float: left;
       margin-right: 1em;

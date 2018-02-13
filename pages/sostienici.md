@@ -16,4 +16,4 @@ Diventa anche tu sostenitore di *Langue*.
 
 Ringraziamo in particolar modo chi in questi mesi ha voluto darci una mano sostanziale nella realizzazione del festival, in particolare Luigi Marinelli, Christos Bintoudis e Francesca Zaccone.
 
-Si ringrazia l’Elettroimpianti di Gilesi e Marinelli per il loro contributo economico a sostegno del festival e lo studio Chiomenti di Milano per le consulenze legali.
+Si ringrazia l’Elettroimpianti di Gilesi e Marinelli per il loro contributo economico a sostegno del festival e l’avv. Maria Beatrice Gilesi per le consulenze legali.
