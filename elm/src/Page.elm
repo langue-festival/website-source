@@ -1,4 +1,4 @@
-module Page exposing (Page, parser, view, empty)
+module Page exposing (Page, parser, empty)
 
 {-| This module is responsible for the parsing and
 converting markdown formatted strings in `Html msg`.
@@ -23,10 +23,8 @@ Page contents, parsed markdown.
 -}
 
 import Regex exposing (Regex, regex, replace)
-import Route exposing (Route)
 import Html exposing (Html)
 import Markdown
-import Template
 
 
 type alias Page msg =
@@ -70,12 +68,4 @@ parser assetsHash pageContent =
         page =
             replace Regex.All markdownAssetRegex assetUrlReplace pageContent
     in
-        Markdown.toHtmlWith parserOptions Template.pageAttributes page
-
-
-{-| Takes the current route, the page to render, template's model
-and creates a `List (Html msg)` to the current page.
--}
-view : Route -> Page msg -> Template.Model -> List (Html msg)
-view currentRoute page model =
-    [ Html.section (Template.pageContainerAttributes model currentRoute) [ page ] ]
+        Markdown.toHtmlWith parserOptions [] page

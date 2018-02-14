@@ -1,0 +1,9 @@
+.contatti {
+  .mail-address {
+    display: block;
+
+    @media screen and (min-width: $sm-width) {
+      display: inline;
+    }
+  }
+}

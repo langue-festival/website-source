@@ -90,6 +90,10 @@ body, #root-node {
   overflow: hidden;
 }
 
+.align-left {
+  text-align: left;
+}
+
 h1, h2, h3, h4, h5, h6 {
   color: $red;
 }
@@ -163,3 +167,4 @@ h1, h2, h3, h4, h5, h6 {
 @import "langue.scss";
 @import "chi-siamo.scss";
 @import "sostienici.scss";
+@import "contatti.scss";

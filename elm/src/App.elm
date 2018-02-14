@@ -7,7 +7,6 @@ import Page exposing (Page)
 import Html.Attributes
 import Navigation
 import Template
-import Asset
 import Http
 
 
@@ -196,58 +195,32 @@ update msg model =
             handleCloseMenu model
 
 
-responsiveBr : Html Msg
-responsiveBr =
-    Html.br [ Html.Attributes.class "rwd-break" ] []
-
-
-viewIndex : Model -> List (Html Msg)
-viewIndex model =
-    [ Html.div [ Html.Attributes.class "content-container landing" ]
-        [ Html.div [ Html.Attributes.class "landing-main pure-g" ]
-            [ Html.p [ Html.Attributes.class "langue pure-u-1" ]
-                [ Html.text "LANGUE" ]
-            , Html.p [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "FESTIVAL ", responsiveBr, Html.text "DELLA" ]
-            , Html.p [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "POESIA ", responsiveBr, Html.text "DI SAN" ]
-            , Html.p [ Html.Attributes.class "pure-u-1" ]
-                [ Html.text "LORENZO" ]
-            ]
-        , Html.p [ Html.Attributes.class "landing-date" ]
-            [ Html.span [ Html.Attributes.class "landing-rome" ]
-                [ Html.text "ROMA, " ]
-            , Html.text "26 MAGGIO 2018"
-            ]
-        , Html.a
-            [ Html.Attributes.href <| Route.toUrl <| Route.fromName "langue"
-            , Html.Attributes.class "enter pure-button"
-            ]
-            [ Html.text "ENTRA" ]
-        , Html.div [ Html.Attributes.class "landing-logo" ]
-            [ Html.img [ Asset.src model.assetsHash "assets/images/langue-logo.svg" ] [] ]
+pageTemplate : Model -> Html Msg
+pageTemplate model =
+    Html.section (Template.pageContainerAttributes model.template model.route)
+        [ Html.div Template.pageAttributes
+            [ model.page ]
         ]
-    ]
 
 
 viewContent : Model -> List (Html Msg)
 viewContent model =
     if model.underConstruction then
         let
-            route : Route
-            route =
-                Route.fromName "under-construction"
-
-            page : Page msg
-            page =
-                Page.parser model.assetsHash "# Sito in costruzione"
+            tmpModel : Model
+            tmpModel =
+                { model
+                    | route = Route.fromName "under-construction"
+                    , page = Page.parser model.assetsHash "# Sito in costruzione"
+                }
         in
-            Page.view route page model.template
+            [ pageTemplate tmpModel ]
     else if model.route.name == "index" then
-        viewIndex model
+        [ model.page ]
     else
-        Template.header model.template model.route model.assetsHash OpenMenu CloseMenu
-            :: Page.view model.route model.page model.template
+        [ Template.header model.template model.route model.assetsHash OpenMenu CloseMenu
+        , pageTemplate model
+        ]
 
 
 rootNodeAttributes : Model -> List (Html.Attribute msg)
