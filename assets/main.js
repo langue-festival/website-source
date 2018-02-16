@@ -61,7 +61,7 @@ app.flags = {
     pages: app.pages,
     assetsHash: app.assetsHash,
     yScroll: app.root.scrollTop,
-    underConstruction: app.doc.location.hostname === 'www.languefestival.it'
+    underConstruction: false
 };
 
 /*
