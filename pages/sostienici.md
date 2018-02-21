@@ -3,7 +3,7 @@
 ## Il tuo contributo
 
 Diventa anche tu sostenitore di *Langue*.
-*Langue* non ha fondi propri e vive della generosità altrui. Ogni contributo fa la differenza.
+Il festival non ha fondi propri e vive della generosità altrui. Ogni contributo fa la differenza.
 
 <form class="paypal-donation" action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
     <input type="hidden" name="cmd" value="_s-xclick">
