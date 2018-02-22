@@ -98,7 +98,7 @@ app.log = function () {
  */
 app.cacheFunctionResult = function (fn) {
     var cached = function () {
-        return cached.hasOwnProperty('result') ? cached.result : cached.result = fn();
+        return cached.hasOwnProperty('result') ? cached.result : cached.update();
     };
 
     cached.update = function () {
@@ -118,6 +118,10 @@ app.cacheFunctionResult = function (fn) {
  */
 app.cache = {};
 
+app.cache.metaDescription = app.cacheFunctionResult(function () {
+    return app.getElementById('meta-description');
+});
+
 app.cache.elmRoot = app.cacheFunctionResult(function () {
     return app.getElementById('root-node');
 });
@@ -133,6 +137,18 @@ app.cache.menu = app.cacheFunctionResult(function () {
 app.cache.headerContainer = app.cacheFunctionResult(function () {
     return app.querySelector('.header-container');
 });
+
+/*
+ * Default values are stored here.
+ */
+app.default = {};
+
+app.default.description =
+    app.cache.metaDescription()
+        .map(function (el) { return el.getAttribute('content'); })
+        .toString();
+
+app.default.title = app.doc.title;
 
 /*
  * Will call the update function for each object
@@ -236,6 +252,28 @@ app.scrollToElement = function (element) {
  */
 app.doc.addEventListener('scroll', function(event) {
     app.elm.ports.notifyYScroll.send(app.root.scrollTop);
+});
+
+/*
+ * Port for dynamic title update.
+ */
+app.elm.ports.setTitle.subscribe(function (title) {
+    var updatedTitle = app.default.title + maybe.string(title)
+                .map(function (t) { return ' | ' + t; })
+                .toString();
+
+    app.doc.title = updatedTitle;
+});
+
+/*
+ * Port for dynamic meta description update.
+ */
+app.elm.ports.setMetaDescription.subscribe(function (desc) {
+    var updatedDesc = maybe.string(desc).getOrElse(app.default.description);
+
+    app.cache.metaDescription().forEach(function (el) {
+        el.setAttribute('content', updatedDesc);
+    });
 });
 
 /*

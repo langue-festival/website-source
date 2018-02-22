@@ -22,20 +22,26 @@ Page contents, parsed markdown.
 
 -}
 
-import Regex exposing (Regex, regex, replace)
+import Regex exposing (Regex, regex, split, find, replace)
 import Html exposing (Html)
 import Markdown
 
 
 type alias Page msg =
-    Html msg
+    { title : Maybe String
+    , description : Maybe String
+    , content : Html msg
+    }
 
 
 {-| An empty page.
 -}
 empty : Page msg
 empty =
-    Html.div [] []
+    { title = Nothing
+    , description = Nothing
+    , content = Html.div [] []
+    }
 
 
 parserOptions : Markdown.Options
@@ -47,25 +53,72 @@ parserOptions =
     }
 
 
-markdownAssetRegex : Regex
-markdownAssetRegex =
-    -- TODO select urls in src="...
-    -- TODO test \(.*assets/[^ )]+
-    regex "\\(assets/[^ )]+"
+descriptionRegex : Regex
+descriptionRegex =
+    regex "description: ?([^\\n]+)\\n"
+
+
+titleRegex : Regex
+titleRegex =
+    regex "<h1[^>]*>([^<]+)</h1>"
+
+
+assetRegex : Regex
+assetRegex =
+    let
+        markdownAssetPattern : String
+        markdownAssetPattern =
+            """\\[[^\\]]*\\]\\(.*assets\\/[^ )]+"""
+
+        htmlAssetPattern : String
+        htmlAssetPattern =
+            """<img.*src="assets\\/[^"]+"""
+
+        assetPattern : String
+        assetPattern =
+            "(" ++ markdownAssetPattern ++ ")|(" ++ htmlAssetPattern ++ ")"
+    in
+        regex assetPattern
 
 
 {-| Parses a markdown formatted string and creates a `Page`
 and appends `assetsHash` to the assets as query string.
 -}
 parser : String -> String -> Page msg
-parser assetsHash pageContent =
+parser assetsHash fullContent =
     let
-        assetUrlReplace : Regex.Match -> String
-        assetUrlReplace { match } =
-            match ++ "?" ++ assetsHash
+        descriptionSplitResult : List String
+        descriptionSplitResult =
+            split Regex.All descriptionRegex fullContent
+                |> List.filter ((/=) "")
 
-        page : String
-        page =
-            replace Regex.All markdownAssetRegex assetUrlReplace pageContent
+        ( description, markdownContent ) =
+            case descriptionSplitResult of
+                desc :: p1 :: p2 ->
+                    ( Just desc, String.join "" (p1 :: p2) )
+
+                _ ->
+                    ( Nothing, fullContent )
+
+        title : Maybe String
+        title =
+            find (Regex.AtMost 1) titleRegex markdownContent
+                |> List.head
+                |> Maybe.map .submatches
+                |> Maybe.withDefault []
+                |> List.head
+                |> Maybe.withDefault Nothing
+
+        assetUrlReplace : Regex.Match -> String
+        assetUrlReplace result =
+            result.match ++ "?" ++ assetsHash
+
+        pageContent : Html msg
+        pageContent =
+            replace Regex.All assetRegex assetUrlReplace markdownContent
+                |> Markdown.toHtmlWith parserOptions []
     in
-        Markdown.toHtmlWith parserOptions [] page
+        { title = title
+        , description = description
+        , content = pageContent
+        }

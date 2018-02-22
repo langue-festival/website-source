@@ -80,13 +80,17 @@ handlePageLoad route page model =
         ( newModel, closeMenuCmd ) =
             { model | route = route, page = page }
                 |> update CloseMenu
+
+        commonCmds : List (Cmd Msg)
+        commonCmds =
+            [ closeMenuCmd, setTitle page.title, setMetaDescription page.description ]
     in
         case route.anchor of
             Just anchor ->
-                newModel ! [ closeMenuCmd, scrollIntoView anchor ]
+                newModel ! (scrollIntoView anchor :: commonCmds)
 
             Nothing ->
-                newModel ! [ closeMenuCmd, scrollToTop () ]
+                newModel ! (scrollToTop () :: commonCmds)
 
 
 handleYScroll : Int -> Model -> ( Model, Cmd Msg )
@@ -199,7 +203,7 @@ pageTemplate : Model -> Html Msg
 pageTemplate model =
     Html.section (Template.pageContainerAttributes model.template model.route)
         [ Html.div Template.pageAttributes
-            [ model.page ]
+            [ model.page.content ]
         ]
 
 
@@ -216,7 +220,7 @@ viewContent model =
         in
             [ pageTemplate tmpModel ]
     else if model.route.name == "index" then
-        [ model.page ]
+        [ model.page.content ]
     else
         [ Template.header model.template model.route model.assetsHash OpenMenu CloseMenu
         , pageTemplate model
@@ -239,6 +243,12 @@ rootNodeAttributes model =
 view : Model -> Html Msg
 view model =
     Html.div (rootNodeAttributes model) <| viewContent model
+
+
+port setTitle : Maybe String -> Cmd msg
+
+
+port setMetaDescription : Maybe String -> Cmd msg
 
 
 port scrollToTop : () -> Cmd msg

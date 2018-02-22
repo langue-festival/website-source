@@ -1,6 +1,6 @@
 # Langue [![Build Status](https://travis-ci.org/langue-festival/langue-festival.github.io.svg?branch=master)](https://travis-ci.org/langue-festival/langue-festival.github.io)
 
-Source code of the *Langue* poetry festival official website.
+Source code of the [Langue](www.languefestival.it) poetry festival official website.
 
 This experiment consists of a single page application written in [Elm](http://elm-lang.org) which loads contents from [Markdown](https://daringfireball.net/projects/markdown) formatted files.
 

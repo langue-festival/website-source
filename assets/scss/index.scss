@@ -4,6 +4,7 @@
   border-top: 0.5em solid $yellow;
   padding: 1.2em 0.8em;
   text-align: left;
+  text-transform: uppercase;
   margin-top: 0;
   position: relative;
 
@@ -12,17 +13,18 @@
   }
 
   .landing-main {
-    p {
-      color: $middle-blue;
-      font-family: $cooper-hewitt-heavy;
-      font-size: 7vmax;
-      margin: 0;
-    }
+    margin: 0;
+  }
 
-    .langue {
-      font-style: italic;
-      color: $pink;
-    }
+  .landing-main * {
+    color: $middle-blue;
+    font-family: $cooper-hewitt-heavy;
+    font-size: 7vmax;
+  }
+
+  .langue {
+    font-style: italic;
+    color: $pink;
   }
 
   .langue:after {
@@ -104,7 +106,7 @@
   }
 
   @media screen and (min-width: $lg-width) {
-    .landing-main p {
+    .landing-main * {
       font-size: 6vmax;
     }
 
