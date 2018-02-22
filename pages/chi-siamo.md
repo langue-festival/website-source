@@ -23,3 +23,25 @@ Nata a Roma e da sempre affezionata al quartiere San Lorenzo. Dopo aver consegui
 ### Emiliano Bovetti
 #### sviluppatore web
 Studente di ingegneria informatica all’università di Roma Tre, appassionato di musica e tecnologia, non perde occasione di cimentarsi nello sviluppo di progetti non accademici. Con *Langue* coglie l’opportunità di creare un piccolo sistema di pubblicazione libero e gratuito. Curioso di scoprire che succede <a target="_blank" href="https://github.com/langue-festival/langue-festival.github.io">dietro le quinte</a>?
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "item": {
+      "@id": "http://www.languefestival.it/#langue",
+      "name": "Langue"
+    }
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "item": {
+      "@id": "http://www.languefestival.it/#chi-siamo",
+      "name": "Chi siamo"
+    }
+  }]
+}
+</script>

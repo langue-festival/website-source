@@ -8,3 +8,25 @@ Per metterti in contatto con noi puoi scrivere direttamente al contatto del fest
   Prisca Baccaille <a class="mail-address" href="mailto:prisca746@hotmail.it">prisca746@hotmail.it</a> <br />
   Emiliano Bovetti <a class="mail-address" href="mailto:emiliano.bovetti@gmail.com">emiliano.bovetti@gmail.com</a> <br />
 </p>
+
+<script type="application/ld+json">
+{
+  "@context": "http://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [{
+    "@type": "ListItem",
+    "position": 1,
+    "item": {
+      "@id": "http://www.languefestival.it/#langue",
+      "name": "Langue"
+    }
+  },{
+    "@type": "ListItem",
+    "position": 2,
+    "item": {
+      "@id": "http://www.languefestival.it/#contatti",
+      "name": "Contatti"
+    }
+  }]
+}
+</script>
