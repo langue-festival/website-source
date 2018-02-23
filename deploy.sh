@@ -23,6 +23,6 @@ ssh-add deploy_key
 
 git config user.name "travis-ci@langue-festival.github.io"
 git config user.email "${COMMIT_AUTHOR_EMAIL}"
-git add -f index.html
+git add -f index.html 404.html
 git commit -m "Deploy to GitHub Pages: ${SHA}"
 git push "${SSH_REPO}" master

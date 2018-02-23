@@ -57,4 +57,4 @@ inliner : yarn elm sass
 clean :
 	@rm -rf $(node_modules) $(build_dir) $(base_dir)/yarn.lock
 	@rm -rf $(elm_dir)/elm-stuff
-	@rm -f index.html
+	@rm -f index.html 404.html

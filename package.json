@@ -1,7 +1,7 @@
 {
     "name": "langue",
     "description": "Official website for the Langue festival",
-    "version": "0.0.2",
+    "version": "0.1.0",
     "license": "GPL-3.0",
     "author": "emilianobovetti",
     "repository": "https://github.com/langue-festival/langue-festival.github.io.git",

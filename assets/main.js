@@ -374,6 +374,10 @@ app.elm.ports.menuClosed.subscribe(function () {
 app.doc.addEventListener('click', function (event) {
     var target = event.target;
 
+    if (target.pathname && target.pathname.indexOf('download/') > -1) {
+        return;
+    }
+
     if (target.hostname === app.hostname) {
         event.preventDefault();
 
