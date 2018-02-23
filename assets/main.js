@@ -366,25 +366,34 @@ app.elm.ports.menuClosed.subscribe(function () {
 
 /*
  * Global click event listener:
- *  - If click is at local link, then
+ *  - If click is targeting a local link non in
+ *      download/, then preventDefault will be called
+ *      and target.href will be passed to `notifyUrlUpdate`
+ *      port.
  *
  *  - If click is located outside the menu, then
- *  `notifyCloseMenu` port will be called
+ *      `notifyCloseMenu` port will be called.
  */
 app.doc.addEventListener('click', function (event) {
     var target = event.target;
 
     if (target.pathname && target.pathname.indexOf('download/') > -1) {
+        app.log('Click on download link:', target.pathname);
+
         return;
     }
 
     if (target.hostname === app.hostname) {
+        app.log('Click on local link:', target.pathname, '(preventDefault)');
+
         event.preventDefault();
 
         return app.elm.ports.notifyUrlUpdate.send(target.href);
     }
 
     if (app.menuOpened === false) {
+        app.log('Click on:', target.pathname, 'menu closed, exit click handler');
+
         return;
     }
 
