@@ -94,7 +94,7 @@ load location assetsHash cache toAppMsg =
     let
         route : Route
         route =
-            Route.fromLocation location
+            Route.fromLocation location |> Debug.log "route"
     in
         case Dict.get route.name cache of
             Just page ->
