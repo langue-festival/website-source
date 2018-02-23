@@ -76,7 +76,10 @@ fromLocation : Navigation.Location -> Route
 fromLocation location =
     case UrlParser.parseHash UrlParser.string location of
         Just path ->
-            parseAnchor path
+            if String.startsWith "!" path then
+                parseAnchor <| String.dropLeft 1 path
+            else
+                parseAnchor path
 
         Nothing ->
             default
@@ -88,7 +91,7 @@ toUrl : Route -> String
 toUrl route =
     case route.anchor of
         Just anchor ->
-            "#" ++ route.name ++ "@" ++ anchor
+            "#!" ++ route.name ++ "@" ++ anchor
 
         Nothing ->
-            "#" ++ route.name
+            "#!" ++ route.name
