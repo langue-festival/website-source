@@ -73,6 +73,9 @@ fromLocation ({ pathname } as location) =
         Just "index.html" ->
             default
 
+        Just "" ->
+            default
+
         Nothing ->
             default
 
