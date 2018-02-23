@@ -17,7 +17,7 @@ module Template exposing (Model, header, pageAttributes, pageContainerAttributes
 import Html exposing (Html, a, ul, li, nav, text, button, img)
 import Html.Attributes exposing (id, class, href, target)
 import Html.Events exposing (onClick)
-import Route exposing (Route, route, fromName)
+import Route exposing (Route, route)
 import Asset
 
 
@@ -126,22 +126,22 @@ menu model currentRoute assetsHash =
         nav (menuAttributes model)
             [ ul [ class "pure-menu-list" ]
                 [ parentItem "Langue"
-                    (Just <| fromName "langue")
-                    [ item "Chi siamo" <| fromName "chi-siamo"
-                    , item "Contatti" <| fromName "contatti"
+                    (Just <| route "langue")
+                    [ item "Chi siamo" <| route "chi-siamo"
+                    , item "Contatti" <| route "contatti"
                     ]
                 , parentItem "Il festival"
                     Nothing
-                    [ item "Il programma" <| fromName "programma"
-                    , item "Le sezioni" <| fromName "sezioni"
-                    , item "I luoghi" <| fromName "luoghi"
+                    [ item "Il programma" <| route "programma"
+                    , item "Le sezioni" <| route "sezioni"
+                    , item "I luoghi" <| route "luoghi"
                     ]
                 , parentItem "Partecipa"
                     (Nothing)
-                    [ item "Come volontario/a" <| fromName "partecipa-come-volontario"
-                    , item "Come poeta/poetessa" <| fromName "partecipa-come-poeta"
+                    [ item "Come volontario/a" <| route "partecipa-come-volontario"
+                    , item "Come poeta/poetessa" <| route "partecipa-come-poeta"
                     ]
-                , item "Sostienici" <| fromName "sostienici"
+                , item "Sostienici" <| route "sostienici"
                 , socialMedia assetsHash
                 ]
             ]
@@ -163,7 +163,7 @@ menuToggleButton model assetsHash openMenuMsg closeMenuMsg =
 
 logo : String -> Html msg
 logo assetsHash =
-    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| fromName "langue" ]
+    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| route "langue" ]
         [ img [ Asset.src assetsHash "assets/images/langue-logo.svg" ] [] ]
 
 

@@ -10,7 +10,7 @@ description: Langue è un festival che si propone di creare un nuovo spazio per 
 
   <p class="landing-date"><span class="landing-rome">Roma, </span>26 maggio 2018</p>
 
-  <a class="enter pure-button" href="#!langue">entra</a>
+  <a class="enter pure-button" href="langue">entra</a>
 
   <div class="landing-logo">
     <img alt="Langue logo" src="assets/images/langue-logo.svg" />

@@ -17,6 +17,7 @@ type Msg
     | YScroll Int
     | OpenMenu
     | CloseMenu
+    | UpdateUrl String
 
 
 type alias Model =
@@ -70,8 +71,12 @@ handleUrlChange location model =
 
                 Loader.Error route error ->
                     LoadError route error
+
+        loadCmd : Cmd Msg
+        loadCmd =
+            Loader.load location model.assetsHash model.pageCache loaderEventToAppMsg
     in
-        ( model, Loader.load location model.assetsHash model.pageCache loaderEventToAppMsg )
+        model ! [ loadCmd ]
 
 
 handlePageLoad : Route -> Page Msg -> Model -> ( Model, Cmd Msg )
@@ -83,7 +88,10 @@ handlePageLoad route page model =
 
         commonCmds : List (Cmd Msg)
         commonCmds =
-            [ closeMenuCmd, setTitle page.title, setMetaDescription page.description ]
+            [ closeMenuCmd
+            , setTitle page.title
+            , setMetaDescription page.description
+            ]
     in
         case route.anchor of
             Just anchor ->
@@ -109,7 +117,7 @@ handleOpenMenu ({ template } as model) =
         newTemplate =
             { template | menuHidden = False }
     in
-        { model | template = newTemplate } ! [ startCloseMenuListener (), scrollToTop () ]
+        { model | template = newTemplate } ! [ menuOpened (), scrollToTop () ]
 
 
 handleCloseMenu : Model -> ( Model, Cmd Msg )
@@ -118,7 +126,7 @@ handleCloseMenu ({ template } as model) =
         newTemplate =
             { template | menuHidden = True }
     in
-        { model | template = newTemplate } ! [ stopCloseMenuListener () ]
+        { model | template = newTemplate } ! [ menuClosed () ]
 
 
 set404 : Route -> Model -> ( Model, Cmd Msg )
@@ -198,6 +206,9 @@ update msg model =
         CloseMenu ->
             handleCloseMenu model
 
+        UpdateUrl url ->
+            model ! [ Navigation.newUrl url ]
+
 
 pageTemplate : Model -> Html Msg
 pageTemplate model =
@@ -214,7 +225,7 @@ viewContent model =
             tmpModel : Model
             tmpModel =
                 { model
-                    | route = Route.fromName "under-construction"
+                    | route = Route.route "under-construction"
                     , page = Page.parser model.assetsHash "# Sito in costruzione"
                 }
         in
@@ -257,10 +268,10 @@ port scrollToTop : () -> Cmd msg
 port scrollIntoView : String -> Cmd msg
 
 
-port startCloseMenuListener : () -> Cmd msg
+port menuOpened : () -> Cmd msg
 
 
-port stopCloseMenuListener : () -> Cmd msg
+port menuClosed : () -> Cmd msg
 
 
 port notifyCloseMenu : (() -> msg) -> Sub msg
@@ -269,11 +280,15 @@ port notifyCloseMenu : (() -> msg) -> Sub msg
 port notifyYScroll : (Int -> msg) -> Sub msg
 
 
+port notifyUrlUpdate : (String -> msg) -> Sub msg
+
+
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
         [ notifyCloseMenu <| always CloseMenu
         , notifyYScroll YScroll
+        , notifyUrlUpdate UpdateUrl
         ]
 
 

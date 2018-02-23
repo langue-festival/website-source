@@ -10,7 +10,6 @@ elm_target			:= $(build_dir)/compiled-elm.js
 inline_pages		:= $(build_dir)/compiled-pages.js
 assets_hash_js		:= $(build_dir)/assets-hash.js
 assets_hash_scss	:= $(build_dir)/assets-hash.scss
-inliner_target		:= $(base_dir)/index.html
 # node_modules executables
 elm_make	:= $(node_bin)/elm-make
 elm_analyse	:= $(node_bin)/elm-analyse
@@ -51,10 +50,11 @@ dev : elm sass
 inliner : yarn elm sass
 	@node $(base_dir)/make-inline-pages.js $(inline_pages)
 	@$(postcss) $(sass_target) --use autoprefixer --replace
-	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(inliner_target)
-	@echo "Successfully generated $(inliner_target)"
+	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > index.html
+	@cp index.html 404.html
+	@echo "Successfully generated index.html, 404.html"
 
 clean :
 	@rm -rf $(node_modules) $(build_dir) $(base_dir)/yarn.lock
 	@rm -rf $(elm_dir)/elm-stuff
-	@rm -f $(inliner_target)
+	@rm -f index.html

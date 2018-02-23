@@ -1,4 +1,4 @@
-module Route exposing (Route, route, fromName, fromLocation, toUrl)
+module Route exposing (Route, route, routeWithAnchor, fromLocation, toUrl)
 
 {-| Module for handling app routes.
 
@@ -10,10 +10,12 @@ module Route exposing (Route, route, fromName, fromLocation, toUrl)
 
 # Common Helpers
 
-@docs route, fromName, fromLocation, toUrl
+@docs route, routeWithAnchor, fromLocation, toUrl
 
 -}
 
+import String exposing (split)
+import List exposing (foldl)
 import Navigation
 import UrlParser
 
@@ -31,58 +33,53 @@ default =
     }
 
 
-parseAnchor : String -> Route
-parseAnchor path =
-    case String.split "@" path of
-        fst :: snd :: _ ->
-            { name = fst
-            , anchor = Just snd
-            }
-
-        fst :: _ ->
-            { name = fst
-            , anchor = Nothing
-            }
-
-        [] ->
-            default
+parseAnchor : Navigation.Location -> Maybe String
+parseAnchor location =
+    UrlParser.parseHash UrlParser.string location
 
 
-{-| Creates a `Route` from a name and an anchor.
+{-| Creates a `Route` from name.
 
-    route "home" "an-anchor"
+    route "home"
 
 -}
-route : String -> String -> Route
-route name anchor =
+route : String -> Route
+route name =
+    { name = name
+    , anchor = Nothing
+    }
+
+
+{-| Creates a `Route` from name and anchor.
+
+    routeWithAnchor "home" "an-anchor"
+
+-}
+routeWithAnchor : String -> String -> Route
+routeWithAnchor name anchor =
     { name = name
     , anchor = Just anchor
     }
 
 
-{-| Creates a `Route` from its name.
-
-    fromName "home"
-
--}
-fromName : String -> Route
-fromName name =
-    { name = name, anchor = Nothing }
-
-
 {-| Parses a `Navigation.Location` and creates a `Route`.
 -}
 fromLocation : Navigation.Location -> Route
-fromLocation location =
-    case UrlParser.parseHash UrlParser.string location of
-        Just path ->
-            if String.startsWith "!" path then
-                parseAnchor <| String.dropLeft 1 path
-            else
-                parseAnchor path
+fromLocation ({ pathname } as location) =
+    case split "/" pathname |> foldl (Just >> always) Nothing of
+        Just "main.html" ->
+            default
+
+        Just "index.html" ->
+            default
 
         Nothing ->
             default
+
+        Just path ->
+            { name = path
+            , anchor = parseAnchor location
+            }
 
 
 {-| Takes ad `Route` and returns a string.
@@ -91,7 +88,7 @@ toUrl : Route -> String
 toUrl route =
     case route.anchor of
         Just anchor ->
-            "#!" ++ route.name ++ "@" ++ anchor
+            route.name ++ "#" ++ anchor
 
         Nothing ->
-            "#!" ++ route.name
+            route.name

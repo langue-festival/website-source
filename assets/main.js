@@ -14,13 +14,18 @@ app.pages = maybe(pages).getOrElse([]);
  * If `assets_hash.js` is loaded, this will
  *  contain that hash.
  */
-app.assetsHash = maybe(assetsHash).toString();
+app.assetsHash = maybe.string(assetsHash).toString();
 
 /*
  * Boolean flag, if set to `true` then `app.log`
  *  function will log its messages to the console.
  */
 app.verbose = false;
+
+/*
+ * Menu state.
+ */
+app.menuOpened = false;
 
 /*
  * Shortcuts to global objects and functions.
@@ -30,6 +35,8 @@ app.win = window;
 app.doc = document;
 
 app.root = app.doc.documentElement;
+
+app.hostname = app.win.location.hostname;
 
 /*
  * Wrapper of global function results in `maybe` monad.
@@ -322,26 +329,9 @@ app.elm.ports.scrollToTop.subscribe(function () {
 });
 
 /*
- * Listen to clicks outside the menu area and send a message
- *  to Elm app through `notifyCloseMenu` port when happens.
+ * Called from Elm app when menu is opened.
  */
-app.closeMenuListener = function (event) {
-    var clickInsideMenu = app.cache.menu()
-            .map(function (menu) { return menu.contains(event.target); })
-            .getOrElse(false);
-
-    if ( ! clickInsideMenu) {
-        app.log('Click outside menu, sending close message');
-
-        app.elm.ports.notifyCloseMenu.send(null);
-        app.doc.removeEventListener('click', app.closeMenuListener, false);
-    }
-};
-
-/*
- * Adds `app.closeMenuListener` to the event listener.
- */
-app.elm.ports.startCloseMenuListener.subscribe(function () {
+app.elm.ports.menuOpened.subscribe(function () {
     var menuHeight = app.cache.menu()
             .map(function (menu) { return menu.offsetHeight; })
             .getOrElse(0),
@@ -350,9 +340,9 @@ app.elm.ports.startCloseMenuListener.subscribe(function () {
             .map(function (header) { return header.offsetHeight; })
             .getOrElse(0);
 
-    app.doc.addEventListener('click', app.closeMenuListener, false);
-
     app.log('Opened responsive menu, locking root-node height');
+
+    app.menuOpened = true;
 
     // locks page's height
     app.cache.elmRoot().forEach(function (elmRoot) {
@@ -361,15 +351,46 @@ app.elm.ports.startCloseMenuListener.subscribe(function () {
 });
 
 /*
- * Removes `app.closeMenuListener` from the event listener.
+ * Called from Elm app when menu is closed.
  */
-app.elm.ports.stopCloseMenuListener.subscribe(function () {
-    app.doc.removeEventListener('click', app.closeMenuListener, false);
-
+app.elm.ports.menuClosed.subscribe(function () {
     app.log('Closed responsive menu, unlocking root-node height');
+
+    app.menuOpened = false;
 
     // unlocks page's height
     app.cache.elmRoot().forEach(function (elmRoot) {
         elmRoot.style.height = 'auto';
     });
 });
+
+/*
+ * Global click event listener:
+ *  - If click is at local link, then
+ *
+ *  - If click is located outside the menu, then
+ *  `notifyCloseMenu` port will be called
+ */
+app.doc.addEventListener('click', function (event) {
+    var target = event.target;
+
+    if (target.hostname === app.hostname) {
+        event.preventDefault();
+
+        return app.elm.ports.notifyUrlUpdate.send(target.href);
+    }
+
+    if (app.menuOpened === false) {
+        return;
+    }
+
+    var clickInsideMenu = app.cache.menu()
+            .map(function (menu) { return menu.contains(target); })
+            .getOrElse(false);
+
+    if (clickInsideMenu === false) {
+        app.log('Click outside menu, sending close message');
+
+        return app.elm.ports.notifyCloseMenu.send(null);
+    }
+}, false);
