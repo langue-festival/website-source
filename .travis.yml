@@ -17,7 +17,7 @@ before_install:
 
 cache:
   directories:
-    - elm/elm-stuff/build-artifacts
+    - elm/elm-stuff
     - sysconfcpus
 
 script:
