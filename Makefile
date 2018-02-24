@@ -51,10 +51,10 @@ inliner : yarn elm sass
 	@node $(base_dir)/make-inline-pages.js $(inline_pages)
 	@$(postcss) $(sass_target) --use autoprefixer --replace
 	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > index.html
-	@cp index.html 404.html
-	@echo "Successfully generated index.html, 404.html"
+	@cp index.html 200.html
+	@echo "Successfully generated index.html, 200.html"
 
 clean :
 	@rm -rf $(node_modules) $(build_dir) $(base_dir)/yarn.lock
 	@rm -rf $(elm_dir)/elm-stuff
-	@rm -f index.html 404.html
+	@rm -f index.html 200.html
