@@ -1,3 +1,6 @@
+description: L'evento si svolgerà in tre luoghi fondanti del quartiere di San Lorenzo, della sua cultura e della sua politica: Piazza dell’Immacolata, Giufà Libreria Caffè e Esc Atelier.
+
+
 <h1 class="main-title">I luoghi</h1>
 
 L’evento si svolgerà in tre luoghi fondanti del quartiere di San Lorenzo, della sua cultura e della sua politica.

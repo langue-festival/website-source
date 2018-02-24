@@ -1,3 +1,5 @@
+description: Il festival è stato organizzato grazie alla partecipazione di numerose persone. Qui potete trovare una breve descrizione di quelle che più hanno contribuito.
+
 <h1 class="main-title">Chi siamo</h1>
 
 ![Foto di Giulia Gilesi](assets/pictures/giulia-gilesi.jpg)
@@ -22,7 +24,7 @@ Nata a Roma e da sempre affezionata al quartiere San Lorenzo. Dopo aver consegui
 
 ### Emiliano Bovetti
 #### sviluppatore web
-Studente di ingegneria informatica all’università di Roma Tre, appassionato di musica e tecnologia, non perde occasione di cimentarsi nello sviluppo di progetti non accademici. Con *Langue* coglie l’opportunità di creare un piccolo sistema di pubblicazione libero e gratuito. Curioso di scoprire che succede <a target="_blank" href="https://github.com/langue-festival/langue-festival.github.io">dietro le quinte</a>?
+Studente di ingegneria informatica all’università di Roma Tre, appassionato di musica e tecnologia, non perde occasione di cimentarsi nello sviluppo di progetti non accademici. Con *Langue* coglie l’opportunità di creare un piccolo sistema di pubblicazione libero e gratuito. Curioso di scoprire che succede <a target="_blank" href="https://github.com/langue-festival/website-source">dietro le quinte</a>?
 
 <script type="application/ld+json">
 {

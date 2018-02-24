@@ -1,3 +1,5 @@
+description: Ogni forma di partecipazione è egualmente indispensabile per un festival che vive della creatività e della generosità dei suoi partecipanti.
+
 <h1 class="main-title">Partecipa</h1>
 
 <h2 id="come-volontario-a">Come volontario/a</h2>

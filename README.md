@@ -1,4 +1,4 @@
-# Langue [![Build Status](https://travis-ci.org/langue-festival/langue-festival.github.io.svg?branch=master)](https://travis-ci.org/langue-festival/langue-festival.github.io)
+# Langue Website Source
 
 Source code of the [Langue](http://www.languefestival.it) poetry festival official website.
 

@@ -1,3 +1,5 @@
+description: Per metterti in contatto con noi puoi scrivere direttamente alla mail generale, oppure all’indirizzo personale di un membro del gruppo.
+
 <h1 class="main-title">Contatti</h1>
 
 Per metterti in contatto con noi puoi scrivere direttamente al contatto del festival <festival.langue@gmail.com>, oppure utilizzare le nostre mail personali:

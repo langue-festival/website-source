@@ -69,7 +69,7 @@ index.html :
 
 deploy-files : inliner
 	@make $(pages)
-	@ln -sf $(deploy_dir)/index.html $(deploy_dir)/404.html
+	@cd $(deploy_dir) && ln -sf index.html 404.html
 	@mkdir -p $(deploy_dir)/assets
 	@cp -r $(base_dir)/assets/fonts $(deploy_dir)/assets/fonts
 	@cp -r $(base_dir)/assets/images $(deploy_dir)/assets/images
@@ -78,5 +78,6 @@ deploy-files : inliner
 	@echo "Successfully generated deploy files in $(deploy_dir)"
 
 clean :
-	@rm -rf $(node_modules) $(deploy_dir) $(build_dir)
 	@rm -rf $(base_dir)/yarn.lock $(elm_dir)/elm-stuff
+	@rm -rf $(node_modules) $(build_dir)
+	#rm -rf $(deploy_dir)

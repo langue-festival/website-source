@@ -1,3 +1,5 @@
+description: Langue si costituisce di diverse sezioni che permettono al pubblico di confrontarsi con alcuni modelli strutturali e/o tematici della poesia contemporanea.
+
 <h1 class="main-title">Le sezioni</h1>
 
 *Langue* si costituisce di diverse sezioni che permettono al pubblico di confrontarsi con alcuni modelli strutturali e/o tematici della poesia contemporanea. Vi ricordiamo inoltre che potete partecipare a ciascuna sezione mandandoci i vostri lavori. Per ulteriori informazioni, vi rimandiamo all’apposita pagina [partecipa](partecipa-come-poeta) del festival.

@@ -1,3 +1,5 @@
+description: Per presentare il tuo lavoro durante il festival, compila il modulo e inviaci le tue opere alla nostra mail.
+
 <h1 class="main-title">Partecipa</h1>
 
 <h2 id="come-poeta-poetessa">Come poeta/poetessa</h2>
