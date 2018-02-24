@@ -9,13 +9,13 @@ This experiment consists of a single page application written in [Elm](http://el
 The compilation involves a Makefile (tested on *Debian* 9 with *GNU* make), requires [yarn](https://yarnpkg.com) and [node](https://nodejs.org).
 Once you have these tools you can build the project as follows:
 
-1. clone the project using `git clone` or download as [zip](https://github.com/langue-festival/langue-festival.github.io/archive/master.zip)
+1. clone the project using `git clone` or download as [zip](https://github.com/langue-festival/website-source/archive/master.zip)
 
-2. point your console at the project path (e.g.: `cd langue-festival.github.io`)
+2. point your console at the project path (e.g.: `cd website-source`)
 
 3. run `make`
 
-This process should create an `index.html` in the current directory with all resources (except for images and fonts) inlined.
+This process should create a directory named `deploy` containing `index.html` and all resources needed.
 
 ## Development environment
 
