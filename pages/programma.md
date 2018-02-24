@@ -1,4 +1,4 @@
-description: Il programma completo del festival sarà pubblicato a metà aprile, tuttavia a breve verranno annunciati alcuni primi nomi degli autori che saranno con noi.
+description: Il programma completo di Langue sarà pubblicato a metà aprile, tuttavia a breve verranno annunciati alcuni primi nomi degli autori che saranno con noi il 26 maggio.
 
 <h1 class="main-title">Il programma</h1>
 

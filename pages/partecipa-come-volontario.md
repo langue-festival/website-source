@@ -1,4 +1,4 @@
-description: Ogni forma di partecipazione è egualmente indispensabile per un festival che vive della creatività e della generosità dei suoi partecipanti.
+description: Ogni forma di partecipazione è egualmente indispensabile: Langue vive della creatività e della generosità dei suoi partecipanti.
 
 <h1 class="main-title">Partecipa</h1>
 

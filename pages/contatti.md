@@ -1,4 +1,4 @@
-description: Per metterti in contatto con noi puoi scrivere direttamente alla mail generale, oppure all’indirizzo personale di un membro del gruppo.
+description: Per metterti in contatto con lo staff di Langue puoi scrivere direttamente alla mail generale, oppure all’indirizzo personale di un membro del gruppo.
 
 <h1 class="main-title">Contatti</h1>
 

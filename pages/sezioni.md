@@ -1,4 +1,4 @@
-description: Langue si costituisce di diverse sezioni che permettono al pubblico di confrontarsi con alcuni modelli strutturali e/o tematici della poesia contemporanea.
+description: Langue si costituisce di diverse sezioni che permettono al pubblico di confrontarsi con alcuni modelli strutturali e/o tematici della poesia contemporanea: Letture Aperte, World Wide Poets, Video Poetry e Tema, San Lollo.
 
 <h1 class="main-title">Le sezioni</h1>
 

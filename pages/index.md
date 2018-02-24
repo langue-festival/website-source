@@ -1,4 +1,4 @@
-description: Langue è un festival che si propone di creare un nuovo spazio per la poesia emergente e non, promuovendo forme e autori che sanno plasmare un linguaggio consolidato nelle parole di un secolo giovane.
+description: Langue è un festival letterario incentrato sulla poesia. L’evento si terrà a Roma, nel quartiere San Lorenzo, il 26 maggio 2018.
 
 <div class="content-container landing">
   <p class="landing-main pure-g">
