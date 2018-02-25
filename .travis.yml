@@ -1,6 +1,6 @@
 sudo: false
 
-language: generic
+language: node_js
 
 cache: yarn
 
@@ -21,7 +21,11 @@ cache:
     - sysconfcpus
 
 script:
+  - git clone https://github.com/langue-festival/langue-festival.github.io.git deploy
   - $TRAVIS_BUILD_DIR/sysconfcpus/bin/sysconfcpus -n 2 make
+
+after_success:
+  - bash deploy.sh
 
 branches:
   only:
