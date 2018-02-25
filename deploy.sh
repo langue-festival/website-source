@@ -15,6 +15,7 @@ encrypted_key_var="encrypted_${ENCRYPTION_LABEL}_key"
 encrypted_iv_var="encrypted_${ENCRYPTION_LABEL}_iv"
 encrypted_key="${!encrypted_key_var}"
 encrypted_iv="${!encrypted_iv_var}"
+
 openssl aes-256-cbc -K "${encrypted_key}" -iv "${encrypted_iv}" -in deploy_key.enc -out deploy_key -d
 chmod 600 deploy_key
 eval $(ssh-agent -s)
