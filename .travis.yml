@@ -34,5 +34,4 @@ branches:
 
 env:
   global:
-    - ENCRYPTION_LABEL: "a2d2f610dfff"
     - COMMIT_AUTHOR_EMAIL: "emiliano.bovetti@gmail.com"
