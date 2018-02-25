@@ -56,6 +56,7 @@ deploy-env :
 	@mkdir -p $(deploy_dir)
 
 inliner : deploy-env yarn elm sass
+	@rm -f $(pages_dir)/*.html
 	@node $(base_dir)/make-inline-pages.js $(inline_pages)
 	@$(postcss) $(sass_target) --use autoprefixer --replace
 	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(deploy_dir)/index.html

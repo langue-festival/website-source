@@ -1,8 +1,8 @@
 #!/bin/bash
 set -e
 
-# Commits to other branches shouldn't try to deploy
-if [ "${TRAVIS_BRANCH}" != "master" ]; then
+# Pull requests and commits to other branches shouldn't try to deploy, just build to verify
+if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "$SOURCE_BRANCH" ]; then
     echo "Branch is not master, skipping deploy."
     exit 0
 fi
