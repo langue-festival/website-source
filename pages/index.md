@@ -3,7 +3,7 @@ description: Langue è un festival letterario incentrato sulla poesia. L’event
 <div class="content-container landing">
   <p class="landing-main pure-g">
     <span class="langue pure-u-1">Langue</span>
-    <span class="pure-u-1">Festival <br class="rwd-break" />della</span>
+    <span class="pure-u-1">festival <br class="rwd-break" />della</span>
     <span class="pure-u-1">poesia <br class="rwd-break" />di San</span>
     <span class="pure-u-1">Lorenzo</span>
   </p>
