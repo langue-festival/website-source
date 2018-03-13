@@ -1,9 +1,14 @@
 #!/bin/bash
+
 set -e
 
-# Pull requests and commits to other branches shouldn't try to deploy, just build to verify
-if [ "$TRAVIS_PULL_REQUEST" != "false" -o "$TRAVIS_BRANCH" != "master" ]; then
-    echo "Skipping deploy"
+if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then
+    echo "skipping deploy on pull request"
+    exit 0
+fi
+
+if [ "$TRAVIS_BRANCH" != "master" ]; then
+    echo "skipping deploy on non master branch"
     exit 0
 fi
 

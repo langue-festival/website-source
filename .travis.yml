@@ -2,8 +2,6 @@ sudo: false
 
 language: generic
 
-cache: yarn
-
 before_install:
   - | # epic build time improvement - see https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
     if [ ! -d sysconfcpus/bin ];
@@ -20,6 +18,7 @@ before_install:
 cache:
   directories:
     - elm/elm-stuff
+    - node_modules
     - sysconfcpus
 
 script:
@@ -34,4 +33,4 @@ branches:
 
 env:
   global:
-    - COMMIT_AUTHOR_EMAIL: "emiliano.bovetti@gmail.com"
+    - COMMIT_AUTHOR_EMAIL=emiliano.bovetti@gmail.com
