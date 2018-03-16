@@ -5,6 +5,7 @@ description: Per presentare il tuo lavoro a Langue il 26 maggio 2018, compila il
 <h2 id="come-poeta-poetessa">Come poeta/poetessa</h2>
 
 Per presentare il tuo lavoro durante il festival, compila il <a target="_blank" href="download/modulo_partecipanti.docx">modulo</a> e inviaci le tue opere (preferibilmente in PDF) a <festival.langue@gmail.com>, entro il **2 maggio 2018**.
+Dall’invio della domanda, ti risponderemo entro *tre settimane*, quindi resta fiducioso!
 
 *Langue* durerà una giornata, per questo prevediamo una selezione qualora il numero di partecipanti diventasse eccessivamente elevato, in modo da garantire un tempo sufficiente a tutti i nostri ospiti. Ogni autore può partecipare ad **una** delle seguenti categorie, ad eccezione della categoria ‘Tema, San Lorenzo’:
 
