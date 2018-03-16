@@ -1,26 +1,26 @@
 # directories
-base_dir		:= $(CURDIR)
-elm_dir			:= $(base_dir)/elm
-pages_dir		:= $(base_dir)/pages
-build_dir		:= $(base_dir)/build
-deploy_dir		:= $(base_dir)/deploy
-node_modules	:= $(base_dir)/node_modules
-node_bin		:= $(node_modules)/.bin
+base_dir := $(CURDIR)
+elm_dir := $(base_dir)/elm
+pages_dir := $(base_dir)/pages
+build_dir := $(base_dir)/build
+deploy_dir := $(base_dir)/deploy
+node_modules := $(base_dir)/node_modules
+node_bin := $(node_modules)/.bin
 # target
-sass_target			:= $(build_dir)/compiled-style.css
-elm_target			:= $(build_dir)/compiled-elm.js
-inline_pages		:= $(build_dir)/compiled-pages.js
-assets_hash_js		:= $(build_dir)/assets-hash.js
-assets_hash_scss	:= $(build_dir)/assets-hash.scss
+sass_target := $(build_dir)/compiled-style.css
+elm_target := $(build_dir)/compiled-elm.js
+inline_pages := $(build_dir)/compiled-pages.js
+assets_hash_js := $(build_dir)/assets-hash.js
+assets_hash_scss := $(build_dir)/assets-hash.scss
 # node_modules executables
-elm_make	:= $(node_bin)/elm-make
-elm_analyse	:= $(node_bin)/elm-analyse
-node_sass	:= $(node_bin)/node-sass
-postcss		:= $(node_bin)/postcss
-inliner		:= $(node_bin)/inliner
+elm_make := $(node_bin)/elm-make
+elm_analyse := $(node_bin)/elm-analyse
+node_sass := $(node_bin)/node-sass
+postcss := $(node_bin)/postcss
+inliner := $(node_bin)/inliner
 # pages
-pages_name	:= $(basename $(notdir $(wildcard $(pages_dir)/*)))
-pages		:= $(addsuffix .html, $(pages_name))
+pages_name := $(basename $(notdir $(wildcard $(pages_dir)/*)))
+pages := $(addsuffix .html, $(pages_name))
 
 .PHONY: elm
 
@@ -81,4 +81,4 @@ deploy-files : inliner
 clean :
 	@rm -rf $(base_dir)/yarn.lock $(elm_dir)/elm-stuff
 	@rm -rf $(node_modules) $(build_dir)
-	#rm -rf $(deploy_dir)
+	@rm -rf $(deploy_dir)
