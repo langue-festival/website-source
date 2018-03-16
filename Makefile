@@ -72,10 +72,10 @@ deploy-files : inliner
 	@make $(pages)
 	@cd $(deploy_dir) && ln -sf index.html 404.html
 	@mkdir -p $(deploy_dir)/assets
-	@cp -r $(base_dir)/assets/fonts $(deploy_dir)/assets/fonts
-	@cp -r $(base_dir)/assets/images $(deploy_dir)/assets/images
-	@cp -r $(base_dir)/assets/pictures $(deploy_dir)/assets/pictures
-	@cp -r $(base_dir)/download $(deploy_dir)
+	@rsync -r $(base_dir)/assets/fonts/. $(deploy_dir)/assets/fonts
+	@rsync -r $(base_dir)/assets/images/. $(deploy_dir)/assets/images
+	@rsync -r $(base_dir)/assets/pictures/. $(deploy_dir)/assets/pictures
+	@rsync -r $(base_dir)/download/. $(deploy_dir)/download
 	@echo "Successfully generated deploy files in $(deploy_dir)"
 
 clean :
