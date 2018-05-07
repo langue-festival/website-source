@@ -9,4 +9,4 @@ L’evento si svolgerà in due luoghi fondanti del quartiere di San Lorenzo, del
 
 - **Libreria Assaggi**, dove si svolgeranno non solo presentazioni, letture e interviste ma per *Langue* ospiterà la sezione della videopoetry e performance dal carattere più sperimentale.
 
-![Mappa langue](assets/images/mappa-langue.svg)
+[![Mappa langue](assets/images/mappa-langue.svg)](assets/images/mappa-langue.jpg)

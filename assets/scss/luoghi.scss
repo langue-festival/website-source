@@ -1,5 +1,9 @@
 .luoghi {
   img {
     max-width: 100%;
+
+    @media screen and (min-width: $md-width) {
+      margin: 0 3em;
+    }
   }
 }
