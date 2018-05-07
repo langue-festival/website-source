@@ -1,4 +1,4 @@
-description: Langue si costituisce di diverse sezioni che permettono al pubblico di confrontarsi con alcuni modelli strutturali e/o tematici della poesia contemporanea: Letture Aperte, World Wide Poets, Video Poetry e Tema, San Lollo.
+description: Langue si costituisce di diverse sezioni che permettono al pubblico di confrontarsi con alcuni modelli strutturali e/o tematici della poesia contemporanea: Letture Aperte, World Wide Poets, Video Poetry.
 
 <h1 class="main-title">Le sezioni</h1>
 
@@ -9,10 +9,6 @@ description: Langue si costituisce di diverse sezioni che permettono al pubblico
 
 ### Video Poetry
 Il genere della *Video Poetry*, al confine tra letteratura e cinema, ha bisogno di un suo pubblico. Per questo motivo abbiamo pensato di portarvene alcuni lavori, per noi fondamentali nella definizione di una tale cultura multimediale. Ad autori italiani si alterneranno testimonianze dall’estero, in una sezione ricca di nuovi spunti.
-
-### Tema, San Lorenzo
-
-Con *Tema, San Lorenzo* speriamo di poter dare una voce propria al quartiere che ci ospita. Autori differenti si confronteranno su questo luogo di complessità e meraviglia, fornendocene una visuale innovativa.
 
 ### World Wide Poets
 Attraverso la sezione internazionale del festival avremo la possibilità di scoprire autori provenienti da realtà e culture diverse, proponendo quindi un ricco incontro di lingue e linguaggi.

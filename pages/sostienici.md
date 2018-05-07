@@ -14,8 +14,10 @@ Il festival non ha fondi propri e vive della generosità altrui. Ogni contributo
   <img alt="" border="0" src="https://www.paypalobjects.com/it_IT/i/scr/pixel.gif" width="1" height="1">
 </form>
 
+È ufficialmente online la nostra campagna su [Produzioni dal basso](http://sostieni.link/17965).
+
 ## Ringraziamenti
 
-Ringraziamo in particolar modo chi in questi mesi ha voluto darci una mano sostanziale nella realizzazione del festival, in particolare Luigi Marinelli, Christos Bintoudis e Francesca Zaccone.
+Ringraziamo in particolar modo chi in questi mesi ci ha davvero aiutato, in particolare Luigi Marinelli, Christos Bintoudis, Francesca Zaccone e il vicepresidente del II Municipio di Roma, Andrea Alemanni, per il suo sostegno durante l’organizzazione del festival.
 
-Si ringrazia l’Elettroimpianti di Gilesi e Marinelli per il loro contributo economico a sostegno del festival e l’avv. Maria Beatrice Gilesi per le consulenze legali.
+Si ringrazia l’Elettroimpianti di Gilesi e Marinelli e la KT per il loro contributo economico a sostegno del festival e l’avv. Maria Beatrice Gilesi per le consulenze legali.

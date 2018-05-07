@@ -2,7 +2,7 @@ description: Langue è un festival che si propone di creare un nuovo spazio per 
 
 <h1 class="main-title">Langue</h1>
 
-*Langue* è un festival che si propone di creare un nuovo spazio per la poesia emergente e non,  promuovendo forme e autori che sanno plasmare un linguaggio consolidato nelle parole di un secolo giovane.
+*Langue* è un festival che si propone di creare un nuovo spazio per la poesia emergente e non, promuovendo forme e autori che sanno plasmare un linguaggio consolidato nelle parole di un secolo giovane.
 
 Il termine che dà il nome a questo festival ha una lunga storia, nonché una consistente ambiguità di fondo. *Langue* viene dal francese e si trasforma in un simbolo culturale nell’opera di de Saussure, ponendosi in contrapposizione al concetto di *parole*. Con il primo termine ci si riferisce al sistema, al vocabolario, alla sintassi; con il secondo ci si riferisce a un qualsiasi atto: un romanzo, un dialogo, un messaggio.
 
