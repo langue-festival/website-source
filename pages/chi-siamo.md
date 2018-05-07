@@ -20,17 +20,17 @@ A lungo abitante del quartiere di San Lorenzo, recentemente si è trasferito a B
 #### Grafica
 Nata a Roma e da sempre affezionata al quartiere San Lorenzo. Dopo aver conseguito la laurea triennale in lettere moderne, presso la Sapienza di Roma, si trasferisce per dedicarsi alla sua vera vocazione: la pittura. Attualmente studia presso l’Accademia di Belle Arti di Firenze.
 
-![Foto di Chiara Guidarelli](assets/pictures/chiara-guidarelli.jpg)
-
-### Chiara Guidarelli
-#### Responsabile Social Media
-Nata a Roma, dopo la laurea triennale in Storia, Antropologia e Religione, decide di proseguire gli studi magistrali in discipline etno-antropologiche, sempre presso la Sapienza. Il quartiere di San Lorenzo rappresenta per lei un punto nevralgico di aggregazione, il luogo per trovarsi e ritrovarsi.
-
 ![Foto di Emiliano Bovetti](assets/pictures/emiliano-bovetti.jpg)
 
 ### Emiliano Bovetti
 #### Sviluppatore Web
 Studente di ingegneria informatica all’università di Roma Tre, appassionato di musica e tecnologia, non perde occasione di cimentarsi nello sviluppo di progetti non accademici. Con *Langue* coglie l’opportunità di creare un piccolo sistema di pubblicazione libero e gratuito. Curioso di scoprire che succede <a target="_blank" href="https://github.com/langue-festival/website-source">dietro le quinte</a>?
+
+![Foto di Chiara Guidarelli](assets/pictures/chiara-guidarelli.jpg)
+
+### Chiara Guidarelli
+#### Responsabile Social Media
+Nata a Roma, dopo la laurea triennale in Storia, Antropologia e Religione, decide di proseguire gli studi magistrali in discipline etno-antropologiche, sempre presso la Sapienza. Il quartiere di San Lorenzo rappresenta per lei un punto nevralgico di aggregazione, il luogo per trovarsi e ritrovarsi.
 
 <script type="application/ld+json">
 {
