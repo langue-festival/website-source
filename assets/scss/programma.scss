@@ -1,0 +1,9 @@
+.programma {
+  img {
+    max-width: 100%;
+
+    @media screen and (min-width: $md-width) {
+      max-width: 80%;
+    }
+  }
+}

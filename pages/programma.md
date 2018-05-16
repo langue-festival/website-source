@@ -6,3 +6,5 @@ La prima edizione di *Langue* - Festival della Poesia di San Lorenzo si svolger√
 
 Saranno con noi in piazza‚Ä¶ Biancamaria Frabotta, Franco Buffoni, Gaia Ginevra Giorgi, Paolo
 Febbraro e tanti altri che verranno annunciati a breve.
+
+[![Programma Langue](assets/images/programma-langue.jpg)](assets/images/programma-langue.jpg)
