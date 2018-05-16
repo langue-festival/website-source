@@ -32,6 +32,12 @@ Studente di ingegneria informatica all’università di Roma Tre, appassionato d
 #### Responsabile Social Media
 Nata a Roma, dopo la laurea triennale in Storia, Antropologia e Religione, decide di proseguire gli studi magistrali in discipline etno-antropologiche, sempre presso la Sapienza. Il quartiere di San Lorenzo rappresenta per lei un punto nevralgico di aggregazione, il luogo per trovarsi e ritrovarsi.
 
+![Foto di Eleonora Muto](assets/pictures/eleonora-muto.jpg)
+
+### Eleonora Muto
+#### Responsabile Social Media
+Studentessa presso la Sapienza, Roma non è il suo luogo di nascita ma quello in cui ha scelto di vivere. Crede fermamente che il dialogo sia una delle esperienze più appaganti che gli esseri umani possano sperimentare. Curiosa e ottimista per il futuro, crede soprattutto che Langue rappresenti una seconda possibilità per tutti noi, per sentirci a casa.
+
 <script type="application/ld+json">
 {
   "@context": "http://schema.org",
