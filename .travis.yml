@@ -34,3 +34,7 @@ branches:
 env:
   global:
     - COMMIT_AUTHOR_EMAIL=emiliano.bovetti@gmail.com
+
+addons:
+  apt:
+    update: true
