@@ -20,4 +20,4 @@ Il festival non ha fondi propri e vive della generosità altrui. Ogni contributo
 
 Ringraziamo in particolar modo chi in questi mesi ci ha davvero aiutato, in particolare Luigi Marinelli, Christos Bintoudis, Francesca Zaccone e il vicepresidente del II Municipio di Roma, Andrea Alemanni, per il suo sostegno durante l’organizzazione del festival.
 
-Si ringrazia l’Elettroimpianti di Gilesi e Marinelli e la KT per il loro contributo economico a sostegno del festival e l’avv. Maria Beatrice Gilesi per le consulenze legali.
+Si ringrazia l’Elettroimpianti di Gilesi e Marinelli e la KT per il loro contributo economico a sostegno del festival, l’avv. Maria Beatrice Gilesi per le consulenze legali ed i professori dell’Istituto Professionale, del Liceo Artistico e del Liceo Musicale Bragaglia di Frosinone.
