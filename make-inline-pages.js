@@ -1,46 +1,46 @@
 
-const outputJs = process.argv[2];
+const outputJs = process.argv[2]
 
 if (outputJs === undefined) {
-    console.log('Missing js output path');
-    process.exit(1);
+  console.log('Missing js output path')
+  process.exit(1)
 }
 
-const fs = require('fs');
-const path = require('path');
+const fs = require('fs')
+const path = require('path')
 
-const pagesBasePath = 'pages';
+const pagesBasePath = 'pages'
 
-let firstAppend = true;
+let firstAppend = true
 
 const appendPages = function (file, options) {
-    if (fs.statSync(file).isDirectory()) {
-        const files = fs.readdirSync(file);
+  if (fs.statSync(file).isDirectory()) {
+    const files = fs.readdirSync(file)
 
-        files.forEach(p => appendPages(path.join(file, p), options));
+    files.forEach(p => appendPages(path.join(file, p), options))
+  } else {
+    const route = path.basename(file, '.md')
+    const content = fs
+      .readFileSync(file, 'utf8')
+      .replace(/"/g, '\\"')
+      .replace(/\n/g, '\\n')
+
+    if (firstAppend) {
+      firstAppend = false
     } else {
-        const route = path.basename(file, '.md');
-        const content = fs
-            .readFileSync(file, 'utf8')
-            .replace(/"/g, '\\"')
-            .replace(/\n/g, '\\n');
-
-        if (firstAppend) {
-            firstAppend = false;
-        } else {
-            fs.appendFileSync(outputJs, ',\n', options);
-        }
-
-        const output = '    [ "' + route + '", "' + content + '" ]';
-
-        fs.appendFileSync(outputJs, output, options);
+      fs.appendFileSync(outputJs, ',\n', options)
     }
-};
 
-const options = { mode: 0o644, encoding: 'utf8' };
+    const output = '    [ "' + route + '", "' + content + '" ]'
 
-fs.writeFileSync(outputJs, 'var pages = [\n', options);
-appendPages(pagesBasePath, options);
-fs.appendFileSync(outputJs, '\n];\n', options);
+    fs.appendFileSync(outputJs, output, options)
+  }
+}
 
-console.log('Successfully generated', outputJs);
+const options = { mode: 0o644, encoding: 'utf8' }
+
+fs.writeFileSync(outputJs, 'var pages = [\n', options)
+appendPages(pagesBasePath, options)
+fs.appendFileSync(outputJs, '\n];\n', options)
+
+console.log('Successfully generated', outputJs)
