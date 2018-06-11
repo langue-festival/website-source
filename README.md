@@ -1,4 +1,4 @@
-# Langue Website Source [![Build Status](https://travis-ci.org/langue-festival/website-source.svg?branch=master)](https://travis-ci.org/langue-festival/website-source)
+# Langue Website Source [![Build Status](https://travis-ci.org/langue-festival/website-source.svg?branch=master)](https://travis-ci.org/langue-festival/website-source) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 Source code of the [Langue](http://www.languefestival.it) poetry festival official website.
 
