@@ -46,14 +46,14 @@ Studentessa presso la Sapienza, Roma non è il suo luogo di nascita ma quello in
     "@type": "ListItem",
     "position": 1,
     "item": {
-      "@id": "http://www.languefestival.it/#langue",
+      "@id": "https://langue-festival.github.io/langue",
       "name": "Langue"
     }
   },{
     "@type": "ListItem",
     "position": 2,
     "item": {
-      "@id": "http://www.languefestival.it/#chi-siamo",
+      "@id": "https://langue-festival.github.io/chi-siamo",
       "name": "Chi siamo"
     }
   }]

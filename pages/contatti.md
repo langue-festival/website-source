@@ -20,14 +20,14 @@ Per metterti in contatto con noi puoi scrivere direttamente al contatto del fest
     "@type": "ListItem",
     "position": 1,
     "item": {
-      "@id": "http://www.languefestival.it/#langue",
+      "@id": "https://langue-festival.github.io/langue",
       "name": "Langue"
     }
   },{
     "@type": "ListItem",
     "position": 2,
     "item": {
-      "@id": "http://www.languefestival.it/#contatti",
+      "@id": "https://langue-festival.github.io/contatti",
       "name": "Contatti"
     }
   }]

@@ -18,7 +18,7 @@ Consapevoli della possibile italianizzazione della parola “langue” abbiamo p
     "@type": "ListItem",
     "position": 1,
     "item": {
-      "@id": "http://www.languefestival.it/#langue",
+      "@id": "https://langue-festival.github.io/langue",
       "name": "Langue"
     }
   }]
