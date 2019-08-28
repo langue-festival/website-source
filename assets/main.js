@@ -76,7 +76,12 @@ app.flags = {
 /*
  * Start Elm app.
  */
-app.elm = Elm.App.fullscreen(app.flags);
+app.elmMount = app.getElementById('elm-mount').get();
+
+app.elm = Elm.App.init({
+  node: app.elmMount,
+  flags: app.flags
+});
 
 /*
  * Will send messages to `console.log` if `app.verbose`
@@ -90,6 +95,8 @@ app.log = function () {
   } else if (app.verbose === true) {
     console.log.apply(null, arguments);
   }
+
+  return arguments[0];
 };
 
 /*
@@ -105,17 +112,19 @@ app.log = function () {
  * The cached function also has a property `update` that
  *  contains a function that will update the cached value.
  */
-app.cacheFunctionResult = function (fn) {
+function cacheFunctionResult (fn) {
+  var empty = {}, result = empty;
+
   function cached () {
-    return cached.hasOwnProperty('result') ? cached.result : cached.update();
+    return result === empty ? cached.update() : result;
   }
 
   cached.update = function () {
-    return (cached.result = fn());
+    return (result = fn());
   };
 
   return cached;
-};
+}
 
 /*
  * Some DOM nodes are created when Elm app is started
@@ -123,41 +132,33 @@ app.cacheFunctionResult = function (fn) {
  *
  * In order to not call `getElementById` or `querySelector`
  *  every time one of these nodes are needed, we will use
- *  `app.cacheFunctionResult` to cache results.
+ *  `cacheFunctionResult` to cache results.
  */
 app.cache = {};
 
-app.cache.metaDescription = app.cacheFunctionResult(function () {
-  return app.getElementById('meta-description');
-});
-
-app.cache.elmRoot = app.cacheFunctionResult(function () {
+app.elmRoot = cacheFunctionResult(function () {
   return app.getElementById('root-node');
 });
 
-app.cache.contentContainer = app.cacheFunctionResult(function () {
+app.cache.metaDescription = cacheFunctionResult(function () {
+  return app.getElementById('meta-description');
+});
+
+app.cache.contentContainer = cacheFunctionResult(function () {
   return app.querySelector('.content-container');
 });
 
-app.cache.menu = app.cacheFunctionResult(function () {
+app.cache.menu = cacheFunctionResult(function () {
   return app.getElementById('menu');
 });
 
-app.cache.headerContainer = app.cacheFunctionResult(function () {
-  return app.querySelector('.header-container');
+app.cache.menuToggle = cacheFunctionResult(function () {
+  return app.querySelector('.menu-toggle');
 });
 
-/*
- * Default values are stored here.
- */
-app.default = {};
-
-app.default.description =
-    app.cache.metaDescription()
-      .map(function (el) { return el.getAttribute('content') })
-      .toString();
-
-app.default.title = app.doc.title;
+app.cache.headerContainer = cacheFunctionResult(function () {
+  return app.querySelector('.header-container');
+});
 
 /*
  * Will call the update function for each object
@@ -170,6 +171,18 @@ app.cache.update = function () {
     typeof update === 'function' && update();
   });
 };
+
+/*
+ * Default values are stored here.
+ */
+app.default = {};
+
+app.default.description =
+    app.cache.metaDescription()
+      .map(function (el) { return el.getAttribute('content') })
+      .toString();
+
+app.default.title = app.doc.title;
 
 /*
  * Will set `app.underConstruction` flag to `false` and
@@ -187,12 +200,13 @@ app.show = function () {
     app.cache.update();
   });
 
-  app.cache.elmRoot().forEach(function (elmRoot) { elmRoot.remove(); });
-
   observer.observe(app.root, { childList: true, subtree: true });
 
   app.flags.underConstruction = false;
-  app.elm = Elm.App.fullscreen(app.flags);
+  app.elm = Elm.App.init({
+    node: app.elmMount,
+    flags: app.flags
+  });
 };
 
 /*
@@ -238,7 +252,7 @@ app.scrollToElement = function (element) {
   var currentOffsetHeight, headerHeight;
 
   // unlocks page's height
-  app.cache.elmRoot().forEach(function (elmRoot) {
+  app.elmRoot().forEach(function (elmRoot) {
     elmRoot.style.height = 'auto';
   });
   element.scrollIntoView(true);
@@ -260,17 +274,6 @@ app.scrollToElement = function (element) {
  */
 app.doc.addEventListener('scroll', function (event) {
   app.elm.ports.notifyYScroll.send(app.root.scrollTop);
-});
-
-/*
- * Port for dynamic title update.
- */
-app.elm.ports.setTitle.subscribe(function (title) {
-  var updatedTitle = app.default.title + maybe.string(title)
-    .map(function (t) { return ' | ' + t })
-    .toString();
-
-  app.doc.title = updatedTitle;
 });
 
 /*
@@ -341,14 +344,16 @@ app.elm.ports.menuOpened.subscribe(function () {
     .map(function (header) { return header.offsetHeight })
     .getOrElse(0);
 
+  // locks page's height
   app.log('Opened responsive menu, locking root-node height');
 
-  app.menuOpened = true;
-
-  // locks page's height
-  app.cache.elmRoot().forEach(function (elmRoot) {
+  app.elmRoot().forEach(function (elmRoot) {
     elmRoot.style.height = menuHeight + headerHeight + 'px';
   });
+
+  app.doc.addEventListener('click', menuCloseNotifier, false);
+
+  app.menuOpened = true;
 });
 
 /*
@@ -357,54 +362,32 @@ app.elm.ports.menuOpened.subscribe(function () {
 app.elm.ports.menuClosed.subscribe(function () {
   app.log('Closed responsive menu, unlocking root-node height');
 
-  app.menuOpened = false;
-
   // unlocks page's height
-  app.cache.elmRoot().forEach(function (elmRoot) {
+  app.elmRoot().forEach(function (elmRoot) {
     elmRoot.style.height = 'auto';
   });
+
+  app.doc.removeEventListener('click', menuCloseNotifier, false);
+
+  app.menuOpened = false;
 });
 
-/*
- * Global click event listener:
- *  - If click is targeting a local link non in
- *      download/, then preventDefault will be called
- *      and target.href will be passed to `notifyUrlUpdate`
- *      port.
- *
- *  - If click is located outside the menu, then
- *      `notifyCloseMenu` port will be called.
- */
-app.doc.addEventListener('click', function (event) {
+function menuCloseNotifier (event) {
   var target = event.target;
-
-  if (target.pathname && target.pathname.indexOf('download/') > -1) {
-    app.log('Click on download link:', target.pathname);
-
-    return;
-  }
-
-  if (target.hostname === app.hostname) {
-    app.log('Click on local link:', target.pathname, '(preventDefault)');
-
-    event.preventDefault();
-
-    return app.elm.ports.notifyUrlUpdate.send(target.href);
-  }
-
-  if (app.menuOpened === false) {
-    app.log('Click on:', target.pathname, 'menu closed, exit click handler');
-
-    return;
-  }
 
   var clickInsideMenu = app.cache.menu()
     .map(function (menu) { return menu.contains(target) })
     .getOrElse(false);
 
-  if (clickInsideMenu === false) {
-    app.log('Click outside menu, sending close message');
+  var clickInsideMenuToggle = app.cache.menuToggle()
+    .map(function (toggle) { return toggle.contains(target) })
+    .getOrElse(false);
 
-    return app.elm.ports.notifyCloseMenu.send(null);
+  if (clickInsideMenu || clickInsideMenuToggle) {
+    return;
   }
-}, false);
+
+  app.log('Click outside menu, sending close message');
+
+  app.elm.ports.notifyCloseMenu.send(null);
+}

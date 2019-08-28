@@ -1,5 +1,7 @@
+---
+title: I luoghi
 description: Langue si svolgerà in due luoghi fondanti del quartiere di San Lorenzo, della sua cultura e della sua politica: Piazza dell’Immacolata, Giufà Libreria Caffè e Esc Atelier.
-
+---
 
 <h1 class="main-title">I luoghi</h1>
 

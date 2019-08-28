@@ -1,4 +1,8 @@
-module Page exposing (Page, parser, empty)
+module Page exposing
+    ( Page
+    , empty
+    , parser
+    )
 
 {-| This module is responsible for the parsing and
 converting markdown formatted strings in `Html msg`.
@@ -22,7 +26,6 @@ Page contents, parsed markdown.
 
 -}
 
-import Regex exposing (Regex, regex, split, find, replace)
 import Html exposing (Html)
 import Markdown
 
@@ -44,6 +47,67 @@ empty =
     }
 
 
+splitBodyFrontMatter : String -> ( List String, String )
+splitBodyFrontMatter fullText =
+    case String.indexes "---" fullText of
+        0 :: end :: _ ->
+            let
+                preambleList : List String
+                preambleList =
+                    String.slice 3 end fullText
+                        |> String.lines
+                        |> List.map String.trim
+                        |> List.filter ((/=) "")
+
+                body : String
+                body =
+                    String.dropLeft (end + 3) fullText
+            in
+            ( preambleList, body )
+
+        _ ->
+            ( [], fullText )
+
+
+readFromRule : String -> String -> Maybe String
+readFromRule rule key =
+    if String.startsWith key rule then
+        String.dropLeft (String.length key + 1) rule
+            |> String.trim
+            |> Just
+
+    else
+        Nothing
+
+
+parseTitle : String -> Page msg -> Page msg
+parseTitle rule page =
+    case readFromRule rule "title" of
+        Just title ->
+            { page | title = Just title }
+
+        Nothing ->
+            page
+
+
+parseDescription : String -> Page msg -> Page msg
+parseDescription rule page =
+    case readFromRule rule "description" of
+        Just desc ->
+            { page | description = Just desc }
+
+        Nothing ->
+            page
+
+
+parseFrontMatter : List String -> Page msg
+parseFrontMatter rules =
+    List.foldl
+        (\rule -> parseTitle rule >> parseDescription rule)
+        empty
+        rules
+
+
 parserOptions : Markdown.Options
 parserOptions =
     { githubFlavored = Nothing
@@ -53,72 +117,20 @@ parserOptions =
     }
 
 
-descriptionRegex : Regex
-descriptionRegex =
-    regex "description: ?([^\\n]+)\\n"
-
-
-titleRegex : Regex
-titleRegex =
-    regex "<h1[^>]*>([^<]+)</h1>"
-
-
-assetRegex : Regex
-assetRegex =
-    let
-        markdownAssetPattern : String
-        markdownAssetPattern =
-            """\\[[^\\]]*\\]\\(.*assets\\/[^ )]+"""
-
-        htmlAssetPattern : String
-        htmlAssetPattern =
-            """<img.*src="assets\\/[^"]+"""
-
-        assetPattern : String
-        assetPattern =
-            "(" ++ markdownAssetPattern ++ ")|(" ++ htmlAssetPattern ++ ")"
-    in
-        regex assetPattern
-
-
-{-| Parses a markdown formatted string and creates a `Page`
-and appends `assetsHash` to the assets as query string.
+{-| Parses a markdown formatted string and creates a `Page`.
 -}
-parser : String -> String -> Page msg
-parser assetsHash fullContent =
+parser : String -> Page msg
+parser fullText =
     let
-        descriptionSplitResult : List String
-        descriptionSplitResult =
-            split Regex.All descriptionRegex fullContent
-                |> List.filter ((/=) "")
+        ( rules, body ) =
+            splitBodyFrontMatter fullText
 
-        ( description, markdownContent ) =
-            case descriptionSplitResult of
-                desc :: p1 :: p2 ->
-                    ( Just desc, String.join "" (p1 :: p2) )
-
-                _ ->
-                    ( Nothing, fullContent )
-
-        title : Maybe String
-        title =
-            find (Regex.AtMost 1) titleRegex markdownContent
-                |> List.head
-                |> Maybe.map .submatches
-                |> Maybe.withDefault []
-                |> List.head
-                |> Maybe.withDefault Nothing
-
-        assetUrlReplace : Regex.Match -> String
-        assetUrlReplace result =
-            result.match ++ "?" ++ assetsHash
+        page : Page msg
+        page =
+            parseFrontMatter rules
 
         pageContent : Html msg
         pageContent =
-            replace Regex.All assetRegex assetUrlReplace markdownContent
-                |> Markdown.toHtmlWith parserOptions []
+            Markdown.toHtmlWith parserOptions [] body
     in
-        { title = title
-        , description = description
-        , content = pageContent
-        }
+    { page | content = pageContent }

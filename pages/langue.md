@@ -1,4 +1,7 @@
+---
+title: Langue
 description: Langue è un festival che si propone di creare un nuovo spazio per la poesia emergente e non, promuovendo forme e autori che sanno plasmare un linguaggio consolidato nelle parole di un secolo giovane.
+---
 
 <h1 class="main-title">Langue</h1>
 

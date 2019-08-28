@@ -1,4 +1,7 @@
+---
+title: Partecipa come poeta
 description: Per presentare il tuo lavoro a Langue il 26 maggio 2018, compila il modulo e invia le tue opere alla nostra mail.
+---
 
 <h1 class="main-title">Partecipa</h1>
 

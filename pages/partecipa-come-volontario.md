@@ -1,4 +1,7 @@
+---
+title: Partecipa come volontario
 description: Ogni forma di partecipazione è egualmente indispensabile: Langue vive della creatività e della generosità dei suoi partecipanti.
+---
 
 <h1 class="main-title">Partecipa</h1>
 

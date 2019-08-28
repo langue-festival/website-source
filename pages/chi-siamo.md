@@ -1,4 +1,7 @@
+---
+title: Chi siamo
 description: Il festival è stato organizzato grazie alla partecipazione di numerose persone. Qui potete trovare una breve descrizione di quelle che più hanno contribuito.
+---
 
 <h1 class="main-title">Chi siamo</h1>
 

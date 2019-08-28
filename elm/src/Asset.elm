@@ -10,8 +10,8 @@ like url generation.
 
 -}
 
-import Html.Attributes
 import Html
+import Html.Attributes
 
 
 {-| Generates an url to an asset given an `assetsHash` and the asset's url.

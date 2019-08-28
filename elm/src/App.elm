@@ -1,27 +1,29 @@
 port module App exposing (main)
 
-import Page.Loader as Loader exposing (Cache)
-import Route exposing (Route)
+import Browser exposing (UrlRequest(..))
+import Browser.Navigation as Navigation
 import Html exposing (Html)
-import Page exposing (Page)
 import Html.Attributes
-import Navigation
-import Template
 import Http
+import Page exposing (Page)
+import Page.Loader as Loader exposing (Cache)
+import Template
+import Url exposing (Url)
 
 
 type Msg
-    = UrlChange Navigation.Location
-    | LoadError Route Http.Error
-    | PageLoad Route (Page Msg) (Cache Msg)
+    = UrlChange Url
+    | LinkClick UrlRequest
+    | LoadError Url Http.Error
+    | PageLoad Url (Page Msg) (Cache Msg)
     | YScroll Int
     | OpenMenu
     | CloseMenu
-    | UpdateUrl String
 
 
 type alias Model =
-    { route : Route
+    { url : Url
+    , key : Navigation.Key
     , page : Page Msg
     , assetsHash : String
     , underConstruction : Bool
@@ -38,8 +40,8 @@ type alias Flags =
     }
 
 
-init : Flags -> Navigation.Location -> ( Model, Cmd Msg )
-init flags location =
+init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
+init flags url navigationKey =
     let
         template : Template.Model
         template =
@@ -49,56 +51,64 @@ init flags location =
 
         model : Model
         model =
-            { route = Route.fromLocation location
+            { url = url
+            , key = navigationKey
             , page = Page.empty
             , template = template
             , assetsHash = flags.assetsHash
             , underConstruction = flags.underConstruction
-            , pageCache = Loader.loadCache flags.assetsHash flags.pages
+            , pageCache = Loader.loadCache flags.pages
             }
     in
-        handleUrlChange location model
+    handleUrlChange url model
 
 
-handleUrlChange : Navigation.Location -> Model -> ( Model, Cmd Msg )
-handleUrlChange location model =
+handleUrlChange : Url -> Model -> ( Model, Cmd Msg )
+handleUrlChange newUrl ({ pageCache } as model) =
     let
         loaderEventToAppMsg : Loader.Event Msg -> Msg
         loaderEventToAppMsg loaderMsg =
             case loaderMsg of
-                Loader.Success route page cache ->
-                    PageLoad route page cache
+                Loader.Success url page cache ->
+                    PageLoad url page cache
 
-                Loader.Error route error ->
-                    LoadError route error
+                Loader.Error url error ->
+                    LoadError url error
+
+        normalizedUrl : Url
+        normalizedUrl =
+            if newUrl.path == "/" then
+                { newUrl | path = "/index" }
+
+            else
+                newUrl
 
         loadCmd : Cmd Msg
         loadCmd =
-            Loader.load location model.assetsHash model.pageCache loaderEventToAppMsg
+            Loader.load normalizedUrl pageCache loaderEventToAppMsg
     in
-        model ! [ loadCmd ]
+    ( model, loadCmd )
 
 
-handlePageLoad : Route -> Page Msg -> Model -> ( Model, Cmd Msg )
-handlePageLoad route page model =
+handlePageLoad : Url -> Page Msg -> Model -> ( Model, Cmd Msg )
+handlePageLoad url page model =
     let
         ( newModel, closeMenuCmd ) =
-            { model | route = route, page = page }
+            { model | url = url, page = page }
                 |> update CloseMenu
 
         commonCmds : List (Cmd Msg)
         commonCmds =
             [ closeMenuCmd
-            , setTitle page.title
             , setMetaDescription page.description
             ]
     in
-        case route.anchor of
-            Just anchor ->
-                newModel ! (scrollIntoView anchor :: commonCmds)
+    case url.fragment of
+        Just fragment ->
+            ( newModel, Cmd.batch <| scrollIntoView fragment :: commonCmds )
 
-            Nothing ->
-                newModel ! (scrollToTop () :: commonCmds)
+        Nothing ->
+            ( newModel, Cmd.batch <| scrollToTop () :: commonCmds )
 
 
 handleYScroll : Int -> Model -> ( Model, Cmd Msg )
@@ -108,29 +118,39 @@ handleYScroll yScroll ({ template } as model) =
         newTemplate =
             { template | yScroll = yScroll }
     in
-        { model | template = newTemplate } ! []
+    ( { model | template = newTemplate }, Cmd.none )
 
 
 handleOpenMenu : Model -> ( Model, Cmd Msg )
 handleOpenMenu ({ template } as model) =
     let
+        newTemplate : Template.Model
         newTemplate =
             { template | menuHidden = False }
+
+        newModel : Model
+        newModel =
+            { model | template = newTemplate }
     in
-        { model | template = newTemplate } ! [ menuOpened (), scrollToTop () ]
+    ( newModel, Cmd.batch [ menuOpened (), scrollToTop () ] )
 
 
 handleCloseMenu : Model -> ( Model, Cmd Msg )
 handleCloseMenu ({ template } as model) =
     let
+        newTemplate : Template.Model
         newTemplate =
             { template | menuHidden = True }
+
+        newModel : Model
+        newModel =
+            { model | template = newTemplate }
     in
-        { model | template = newTemplate } ! [ menuClosed () ]
+    ( newModel, menuClosed () )
 
 
-set404 : Route -> Model -> ( Model, Cmd Msg )
-set404 route model =
+set404 : Url -> Model -> ( Model, Cmd Msg )
+set404 url model =
     let
         content : String
         content =
@@ -139,15 +159,15 @@ set404 route model =
         newModel : Model
         newModel =
             { model
-                | route = route
-                , page = Page.parser model.assetsHash content
+                | url = url
+                , page = Page.parser content
             }
     in
-        newModel ! []
+    ( newModel, Cmd.none )
 
 
-setViewError : Route -> String -> Model -> ( Model, Cmd Msg )
-setViewError route error model =
+setViewError : Url -> String -> Model -> ( Model, Cmd Msg )
+setViewError url error model =
     let
         content : String
         content =
@@ -156,46 +176,54 @@ setViewError route error model =
         newModel : Model
         newModel =
             { model
-                | route = route
-                , page = Page.parser model.assetsHash content
+                | url = url
+                , page = Page.parser content
             }
     in
-        newModel ! []
+    ( newModel, Cmd.none )
 
 
-handleLoadError : Route -> Http.Error -> Model -> ( Model, Cmd Msg )
-handleLoadError route error model =
+handleLoadError : Url -> Http.Error -> Model -> ( Model, Cmd Msg )
+handleLoadError url error model =
     case error of
-        Http.BadUrl url ->
-            setViewError route ("Url non valido: " ++ url) model
+        Http.BadUrl badUrl ->
+            setViewError url ("Invalid URL: " ++ badUrl) model
 
         Http.Timeout ->
-            setViewError route "Timeout" model
+            setViewError url "Timeout" model
 
         Http.NetworkError ->
-            setViewError route "errore di rete" model
+            setViewError url "NetworkError error" model
 
         Http.BadStatus response ->
-            if response.status.code == 404 then
-                set404 route model
-            else
-                setViewError route ("Status: " ++ toString response.status) model
+            if response == 404 then
+                set404 url model
 
-        Http.BadPayload _ response ->
-            setViewError route ("Status: " ++ toString response.status) model
+            else
+                setViewError url ("Status: " ++ String.fromInt response) model
+
+        Http.BadBody body ->
+            setViewError url ("Invalid body: " ++ body) model
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
     case msg of
-        UrlChange location ->
-            handleUrlChange location model
+        UrlChange newUrl ->
+            handleUrlChange newUrl model
 
-        LoadError route error ->
-            handleLoadError route error model
+        -- TODO: handle "download" links
+        LinkClick (Internal url) ->
+            ( model, Navigation.pushUrl model.key <| Url.toString url )
 
-        PageLoad route page cache ->
-            handlePageLoad route page { model | pageCache = cache }
+        LinkClick (External href) ->
+            ( model, Navigation.load href )
+
+        LoadError url error ->
+            handleLoadError url error model
+
+        PageLoad url page cache ->
+            handlePageLoad url page { model | pageCache = cache }
 
         YScroll offset ->
             handleYScroll offset model
@@ -206,13 +234,10 @@ update msg model =
         CloseMenu ->
             handleCloseMenu model
 
-        UpdateUrl url ->
-            model ! [ Navigation.newUrl url ]
-
 
 pageTemplate : Model -> Html Msg
 pageTemplate model =
-    Html.section (Template.pageContainerAttributes model.template model.route)
+    Html.section (Template.pageContainerAttributes model.template model.url)
         [ Html.div Template.pageAttributes
             [ model.page.content ]
         ]
@@ -222,20 +247,36 @@ viewContent : Model -> List (Html Msg)
 viewContent model =
     if model.underConstruction then
         let
-            tmpModel : Model
-            tmpModel =
+            url : Url
+            url =
+                model.url
+
+            newModel : Model
+            newModel =
                 { model
-                    | route = Route.route "under-construction"
-                    , page = Page.parser model.assetsHash "# Sito in costruzione"
+                    | url = { url | path = "under-construction" }
+                    , page = Page.parser "# Sito in costruzione"
                 }
         in
-            [ pageTemplate tmpModel ]
-    else if model.route.name == "index" then
+        [ pageTemplate newModel ]
+
+    else if model.url.path == "/index" then
         [ model.page.content ]
+
     else
-        [ Template.header model.template model.route model.assetsHash OpenMenu CloseMenu
+        [ Template.header model.template model.url model.assetsHash OpenMenu CloseMenu
         , pageTemplate model
         ]
+
+
+pageTitle : Model -> String
+pageTitle { page } =
+    case page.title of
+        Just title ->
+            "Langue Festival | " ++ title
+
+        Nothing ->
+            "Langue Festival"
 
 
 rootNodeAttributes : Model -> List (Html.Attribute msg)
@@ -245,18 +286,19 @@ rootNodeAttributes model =
         commonAttributes =
             [ Html.Attributes.id "root-node" ]
     in
-        if model.template.menuHidden then
-            commonAttributes
-        else
-            Html.Attributes.class "no-scroll" :: commonAttributes
+    if model.template.menuHidden then
+        commonAttributes
+
+    else
+        Html.Attributes.class "no-scroll" :: commonAttributes
 
 
-view : Model -> Html Msg
+view : Model -> Browser.Document Msg
 view model =
-    Html.div (rootNodeAttributes model) <| viewContent model
-
-
-port setTitle : Maybe String -> Cmd msg
+    { title = pageTitle model
+    , body =
+        [ Html.div (rootNodeAttributes model) (viewContent model) ]
+    }
 
 
 port setMetaDescription : Maybe String -> Cmd msg
@@ -280,23 +322,21 @@ port notifyCloseMenu : (() -> msg) -> Sub msg
 port notifyYScroll : (Int -> msg) -> Sub msg
 
 
-port notifyUrlUpdate : (String -> msg) -> Sub msg
-
-
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
         [ notifyCloseMenu <| always CloseMenu
         , notifyYScroll YScroll
-        , notifyUrlUpdate UpdateUrl
         ]
 
 
 main : Program Flags Model Msg
 main =
-    Navigation.programWithFlags UrlChange
+    Browser.application
         { init = init
-        , view = view
-        , update = update
+        , onUrlChange = UrlChange
+        , onUrlRequest = LinkClick
         , subscriptions = subscriptions
+        , update = update
+        , view = view
         }

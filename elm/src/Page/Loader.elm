@@ -1,8 +1,11 @@
-module Page.Loader exposing (Cache, Event(Success, Error), loadCache, load)
+module Page.Loader exposing
+    ( Cache, Event(..)
+    , loadCache, load
+    )
 
 {-| This library is useful to load markdown formatted pages.
 It also cares about caching already loaded pages, so once
-a `Route` is loaded successfully it will be cached.
+a `url.path` is loaded successfully it will be cached.
 
 
 # Definitions
@@ -16,12 +19,11 @@ a `Route` is loaded successfully it will be cached.
 
 -}
 
-import Route exposing (Route)
 import Dict exposing (Dict)
-import Page exposing (Page)
-import Navigation
 import Http
+import Page exposing (Page)
 import Task
+import Url exposing (Url)
 
 
 type alias Cache msg =
@@ -29,76 +31,70 @@ type alias Cache msg =
 
 
 type Event msg
-    = Success Route (Page msg) (Cache msg)
-    | Error Route Http.Error
+    = Success Url (Page msg) (Cache msg)
+    | Error Url Http.Error
 
 
 {-| Creates a cache from a list of `(String, String)`.
-The first string of the pair should contain the route's name,
+The first string of the pair should contain the url.path,
 while the second string the page content formatted in markdown.
 
-    loadCache assetsHash [ ( "home", "# Hello, World" ) ]
+    loadCache [ ( "home", "# Hello, World" ) ]
 
 -}
-loadCache : String -> List ( String, String ) -> Cache msg
-loadCache assetsHash pageList =
+loadCache : List ( String, String ) -> Cache msg
+loadCache pageList =
     let
         parseMap : ( String, String ) -> ( String, Page msg )
-        parseMap ( routeName, content ) =
-            ( routeName, Page.parser assetsHash content )
+        parseMap ( urlPath, text ) =
+            ( urlPath, Page.parser text )
     in
-        Dict.fromList <| List.map parseMap pageList
+    Dict.fromList <| List.map parseMap pageList
 
 
-handleHttpResponse : Route -> String -> Cache msg -> Result Http.Error String -> Event msg
-handleHttpResponse route assetsHash cache result =
+handleHttpResponse : Url -> Cache msg -> Result Http.Error String -> Event msg
+handleHttpResponse url cache result =
     case result of
         Ok content ->
             let
                 page : Page msg
                 page =
-                    Page.parser assetsHash content
+                    Page.parser content
 
                 newCache : Cache msg
                 newCache =
-                    Dict.insert route.name page cache
+                    Dict.insert url.path page cache
             in
-                Success route page newCache
+            Success url page newCache
 
         Err error ->
-            Error route error
+            Error url error
 
 
-routeToPageUrl : Route -> String
-routeToPageUrl route =
-    "pages/" ++ String.toLower route.name ++ ".md"
+pageUrl : Url -> String
+pageUrl url =
+    "pages" ++ String.toLower url.path ++ ".md"
 
 
-fetch : Route -> String -> Cache msg -> (Event msg -> msg) -> Cmd msg
-fetch route assetsHash cache toAppMsg =
-    routeToPageUrl route
-        |> Http.getString
-        |> Http.send (handleHttpResponse route assetsHash cache >> toAppMsg)
+fetch : Url -> Cache msg -> (Event msg -> msg) -> Cmd msg
+fetch url cache toAppMsg =
+    { url = pageUrl url
+    , expect = Http.expectString (handleHttpResponse url cache >> toAppMsg)
+    }
+        |> Http.get
 
 
 {-| Loads a page given a `Navigation.Location`, a `Cache` and a function
 that converts an `Event` to an application `msg`.
-The `Location` is parsed with `Route` module, if the resulting route name
-is already present in current cache no request will be made.
 
     load location pageCache loaderEventToAppMsg
 
 -}
-load : Navigation.Location -> String -> Cache msg -> (Event msg -> msg) -> Cmd msg
-load location assetsHash cache toAppMsg =
-    let
-        route : Route
-        route =
-            Route.fromLocation location
-    in
-        case Dict.get route.name cache of
-            Just page ->
-                Task.perform toAppMsg <| Task.succeed <| Success route page cache
+load : Url -> Cache msg -> (Event msg -> msg) -> Cmd msg
+load url cache toAppMsg =
+    case Dict.get url.path cache of
+        Just page ->
+            Task.perform toAppMsg <| Task.succeed <| Success url page cache
 
-            Nothing ->
-                fetch route assetsHash cache toAppMsg
+        Nothing ->
+            fetch url cache toAppMsg

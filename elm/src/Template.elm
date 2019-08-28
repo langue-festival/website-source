@@ -1,4 +1,8 @@
-module Template exposing (Model, header, pageAttributes, pageContainerAttributes)
+module Template exposing
+    ( header
+    , pageAttributes, pageContainerAttributes
+    , Model
+    )
 
 {-| This modules is an helper to generate common html.
 
@@ -14,11 +18,11 @@ module Template exposing (Model, header, pageAttributes, pageContainerAttributes
 
 -}
 
-import Html exposing (Html, a, ul, li, nav, text, button, img)
-import Html.Attributes exposing (id, class, href, target)
-import Html.Events exposing (onClick)
-import Route exposing (Route, route)
 import Asset
+import Html exposing (Html, a, button, img, li, nav, text, ul)
+import Html.Attributes exposing (class, href, id, target)
+import Html.Events exposing (onClick)
+import Url exposing (Url)
 
 
 type alias Model =
@@ -34,10 +38,11 @@ menuAttributes model =
         commonAttributes =
             [ id "menu" ]
     in
-        if model.menuHidden then
-            class "closed" :: commonAttributes
-        else
-            class "opened" :: commonAttributes
+    if model.menuHidden then
+        class "closed" :: commonAttributes
+
+    else
+        class "opened" :: commonAttributes
 
 
 socialMedia : String -> Html msg
@@ -50,26 +55,28 @@ socialMedia assetsHash =
         ]
 
 
-menuParentItem : Route -> String -> Maybe Route -> List (Html msg) -> Html msg
-menuParentItem currentRoute itemName linkRoute childs =
+menuParentItem : Url -> String -> Maybe String -> List (Html msg) -> Html msg
+menuParentItem currentUrl itemName destPath childs =
     let
         numChilds : Int
         numChilds =
             List.length childs
 
-        linkRouteName : String
-        linkRouteName =
-            Maybe.map .name linkRoute
-                |> Maybe.withDefault ""
-
         attributes1 : List (Html.Attribute msg)
         attributes1 =
             [ class "pure-menu-item" ]
 
+        isPathActive : Maybe String -> Bool
+        isPathActive maybePath =
+            maybePath
+                |> Maybe.map (\path -> String.endsWith path currentUrl.path)
+                |> Maybe.withDefault False
+
         attributes2 : List (Html.Attribute msg)
         attributes2 =
-            if linkRoute == Just currentRoute then
+            if isPathActive destPath then
                 class "pure-menu-selected" :: attributes1
+
             else
                 attributes1
 
@@ -77,6 +84,7 @@ menuParentItem currentRoute itemName linkRoute childs =
         attributes3 =
             if numChilds > 0 then
                 class "pure-menu-has-children pure-menu-allow-hover" :: attributes2
+
             else
                 attributes2
 
@@ -94,57 +102,58 @@ menuParentItem currentRoute itemName linkRoute childs =
 
         label : Html msg
         label =
-            case Maybe.map Route.toUrl linkRoute of
-                Just url ->
-                    a (href url :: labelAttributes) labelText
+            case destPath of
+                Just path ->
+                    a (href path :: labelAttributes) labelText
 
                 Nothing ->
-                    a labelAttributes labelText
+                    a (href "#" :: labelAttributes) labelText
     in
-        if numChilds > 0 then
-            li attributes3 [ label, childItems ]
-        else
-            li attributes3 [ label ]
+    if numChilds > 0 then
+        li attributes3 [ label, childItems ]
+
+    else
+        li attributes3 [ label ]
 
 
-menuItem : Route -> String -> Route -> Html msg
-menuItem currentRoute itemName linkRoute =
-    menuParentItem currentRoute itemName (Just linkRoute) []
+menuItem : Url -> String -> String -> Html msg
+menuItem currentUrl itemName destPath =
+    menuParentItem currentUrl itemName (Just destPath) []
 
 
-menu : Model -> Route -> String -> Html msg
-menu model currentRoute assetsHash =
+menu : Model -> Url -> String -> Html msg
+menu model currentUrl assetsHash =
     let
-        item : String -> Route -> Html msg
+        item : String -> String -> Html msg
         item =
-            menuItem currentRoute
+            menuItem currentUrl
 
-        parentItem : String -> Maybe Route -> List (Html msg) -> Html msg
+        parentItem : String -> Maybe String -> List (Html msg) -> Html msg
         parentItem =
-            menuParentItem currentRoute
+            menuParentItem currentUrl
     in
-        nav (menuAttributes model)
-            [ ul [ class "pure-menu-list" ]
-                [ parentItem "Langue"
-                    (Just <| route "langue")
-                    [ item "Chi siamo" <| route "chi-siamo"
-                    , item "Contatti" <| route "contatti"
-                    ]
-                , parentItem "Il festival"
-                    Nothing
-                    [ item "Il programma" <| route "programma"
-                    , item "Le sezioni" <| route "sezioni"
-                    , item "I luoghi" <| route "luoghi"
-                    ]
-                , parentItem "Partecipa"
-                    (Nothing)
-                    [ item "Come volontario/a" <| route "partecipa-come-volontario"
-                    , item "Come poeta/poetessa" <| route "partecipa-come-poeta"
-                    ]
-                , item "Sostienici" <| route "sostienici"
-                , socialMedia assetsHash
+    nav (menuAttributes model)
+        [ ul [ class "pure-menu-list" ]
+            [ parentItem "Langue"
+                (Just "langue")
+                [ item "Chi siamo" "chi-siamo"
+                , item "Contatti" "contatti"
                 ]
+            , parentItem "Il festival"
+                Nothing
+                [ item "Il programma" "programma"
+                , item "Le sezioni" "sezioni"
+                , item "I luoghi" "luoghi"
+                ]
+            , parentItem "Partecipa"
+                Nothing
+                [ item "Come volontario/a" "partecipa-come-volontario"
+                , item "Come poeta/poetessa" "partecipa-come-poeta"
+                ]
+            , item "Sostienici" "sostienici"
+            , socialMedia assetsHash
             ]
+        ]
 
 
 menuToggleButton : Model -> String -> msg -> msg -> Html msg
@@ -154,16 +163,17 @@ menuToggleButton model assetsHash openMenuMsg closeMenuMsg =
         toggle =
             if model.menuHidden then
                 openMenuMsg
+
             else
                 closeMenuMsg
     in
-        button [ class "menu-toggle pure-menu-heading", onClick toggle ]
-            [ img [ Asset.src assetsHash "assets/images/menu-icon.svg" ] [] ]
+    button [ class "menu-toggle pure-menu-heading", onClick toggle ]
+        [ img [ Asset.src assetsHash "assets/images/menu-icon.svg" ] [] ]
 
 
 logo : String -> Html msg
 logo assetsHash =
-    a [ class "heading-logo pure-menu-heading", href <| Route.toUrl <| route "langue" ]
+    a [ class "heading-logo pure-menu-heading", href "langue" ]
         [ img [ Asset.src assetsHash "assets/images/langue-logo.svg" ] [] ]
 
 
@@ -174,10 +184,11 @@ headerAttributes model =
         commonAttributes =
             [ class "pure-menu" ]
     in
-        if model.yScroll > 10 then
-            class "roll-up" :: commonAttributes
-        else
-            commonAttributes
+    if model.yScroll > 10 then
+        class "roll-up" :: commonAttributes
+
+    else
+        commonAttributes
 
 
 br : Html msg
@@ -206,15 +217,15 @@ headerTitle =
     Template.header model assetsHash OpenMenu CloseMenu
 
 -}
-header : Model -> Route -> String -> msg -> msg -> Html msg
-header model currentRoute assetsHash openMenuMsg closeMenuMsg =
+header : Model -> Url -> String -> msg -> msg -> Html msg
+header model currentUrl assetsHash openMenuMsg closeMenuMsg =
     Html.div (headerAttributes model)
         [ Html.header [ class "header-container pure-menu-heading" ]
             [ menuToggleButton model assetsHash openMenuMsg closeMenuMsg
             , headerTitle
             , logo assetsHash
             ]
-        , menu model currentRoute assetsHash
+        , menu model currentUrl assetsHash
         ]
 
 
@@ -225,16 +236,25 @@ pageAttributes =
     [ class "markdown pure-u-1 pure-u-md-5-6 pure-u-lg-2-3" ]
 
 
+urlToContainerClass : Url -> Html.Attribute msg
+urlToContainerClass { path } =
+    String.split "/" path
+        |> List.foldl (\x _ -> Just x) Nothing
+        |> Maybe.withDefault ""
+        |> class
+
+
 {-| Produces a list of `Html.Attribute`s for the content's container.
 -}
-pageContainerAttributes : Model -> Route -> List (Html.Attribute msg)
-pageContainerAttributes model currentRoute =
+pageContainerAttributes : Model -> Url -> List (Html.Attribute msg)
+pageContainerAttributes model currentUrl =
     let
         containerAttributes : List (Html.Attribute msg)
         containerAttributes =
-            [ class currentRoute.name, class "content-container pure-g" ]
+            [ urlToContainerClass currentUrl, class "content-container pure-g" ]
     in
-        if model.menuHidden then
-            containerAttributes
-        else
-            class "darken" :: containerAttributes
+    if model.menuHidden then
+        containerAttributes
+
+    else
+        class "darken" :: containerAttributes
