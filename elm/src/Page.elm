@@ -1,7 +1,7 @@
 module Page exposing
     ( Page
     , empty
-    , parser
+    , nameFromUrl, parser
     )
 
 {-| This module is responsible for the parsing and
@@ -28,6 +28,7 @@ Page contents, parsed markdown.
 
 import Html exposing (Html)
 import Markdown
+import Url exposing (Url)
 
 
 type alias Page msg =
@@ -45,6 +46,25 @@ empty =
     , description = Nothing
     , content = Html.div [] []
     }
+
+
+foldUrlSegment : String -> Maybe String -> Maybe String
+foldUrlSegment segment acc =
+    case segment of
+        "" ->
+            acc
+
+        _ ->
+            Just segment
+
+
+{-| Get the page name from a URL.
+-}
+nameFromUrl : Url -> String
+nameFromUrl { path } =
+    String.split "/" path
+        |> List.foldl foldUrlSegment Nothing
+        |> Maybe.withDefault ""
 
 
 splitBodyFrontMatter : String -> ( List String, String )

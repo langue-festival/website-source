@@ -36,7 +36,7 @@ type Event msg
 
 
 {-| Creates a cache from a list of `(String, String)`.
-The first string of the pair should contain the url.path,
+The first string of the pair should contain the page name,
 while the second string the page content formatted in markdown.
 
     loadCache [ ( "home", "# Hello, World" ) ]
@@ -46,10 +46,10 @@ loadCache : List ( String, String ) -> Cache msg
 loadCache pageList =
     let
         parseMap : ( String, String ) -> ( String, Page msg )
-        parseMap ( urlPath, text ) =
-            ( urlPath, Page.parser text )
+        parseMap ( pageName, text ) =
+            ( pageName, Page.parser text )
     in
-    Dict.fromList <| List.map parseMap pageList
+    Dict.fromList (List.map parseMap pageList)
 
 
 handleHttpResponse : Url -> Cache msg -> Result Http.Error String -> Event msg
@@ -63,7 +63,7 @@ handleHttpResponse url cache result =
 
                 newCache : Cache msg
                 newCache =
-                    Dict.insert url.path page cache
+                    Dict.insert (Page.nameFromUrl url) page cache
             in
             Success url page newCache
 
@@ -71,30 +71,27 @@ handleHttpResponse url cache result =
             Error url error
 
 
-pageUrl : Url -> String
-pageUrl url =
-    "pages" ++ String.toLower url.path ++ ".md"
-
-
 fetch : Url -> Cache msg -> (Event msg -> msg) -> Cmd msg
 fetch url cache toAppMsg =
-    { url = pageUrl url
+    { url = "pages/" ++ Page.nameFromUrl url ++ ".md"
     , expect = Http.expectString (handleHttpResponse url cache >> toAppMsg)
     }
         |> Http.get
 
 
-{-| Loads a page given a `Navigation.Location`, a `Cache` and a function
+{-| Loads a page given a Url, a `Cache` and a function
 that converts an `Event` to an application `msg`.
 
-    load location pageCache loaderEventToAppMsg
+    load url pageCache loaderEventToAppMsg
 
 -}
 load : Url -> Cache msg -> (Event msg -> msg) -> Cmd msg
 load url cache toAppMsg =
-    case Dict.get url.path cache of
+    case Dict.get (Page.nameFromUrl url) cache of
         Just page ->
-            Task.perform toAppMsg <| Task.succeed <| Success url page cache
+            Success url page cache
+                |> Task.succeed
+                |> Task.perform toAppMsg
 
         Nothing ->
             fetch url cache toAppMsg

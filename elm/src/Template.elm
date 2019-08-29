@@ -22,6 +22,7 @@ import Asset
 import Html exposing (Html, a, button, img, li, nav, text, ul)
 import Html.Attributes exposing (class, href, id, target)
 import Html.Events exposing (onClick)
+import Page
 import Url exposing (Url)
 
 
@@ -236,14 +237,6 @@ pageAttributes =
     [ class "markdown pure-u-1 pure-u-md-5-6 pure-u-lg-2-3" ]
 
 
-urlToContainerClass : Url -> Html.Attribute msg
-urlToContainerClass { path } =
-    String.split "/" path
-        |> List.foldl (\x _ -> Just x) Nothing
-        |> Maybe.withDefault ""
-        |> class
-
-
 {-| Produces a list of `Html.Attribute`s for the content's container.
 -}
 pageContainerAttributes : Model -> Url -> List (Html.Attribute msg)
@@ -251,7 +244,7 @@ pageContainerAttributes model currentUrl =
     let
         containerAttributes : List (Html.Attribute msg)
         containerAttributes =
-            [ urlToContainerClass currentUrl, class "content-container pure-g" ]
+            [ class (Page.nameFromUrl currentUrl), class "content-container pure-g" ]
     in
     if model.menuHidden then
         containerAttributes

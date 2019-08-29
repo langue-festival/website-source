@@ -77,7 +77,7 @@ handleUrlChange newUrl ({ pageCache } as model) =
 
         normalizedUrl : Url
         normalizedUrl =
-            if newUrl.path == "/" then
+            if Page.nameFromUrl newUrl == "" then
                 { newUrl | path = "/index" }
 
             else
