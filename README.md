@@ -19,4 +19,4 @@ This process should create a directory named `deploy` containing `index.html` an
 
 ## Development environment
 
-Running `make dev` will download, setup and compile all that is needed to run this website locally. Once finished you can point your browser to `main.html`.
+Running `make dev` will start a web server, just point your browser to [http://localhost:8000](http://localhost:8000).
