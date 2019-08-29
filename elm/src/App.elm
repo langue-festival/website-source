@@ -40,6 +40,26 @@ type alias Flags =
     }
 
 
+removeTrailingSlash : Url -> Url
+removeTrailingSlash url =
+    let
+        strippedPath : String
+        strippedPath =
+            String.split "/" url.path
+                |> List.filter ((/=) "")
+                |> String.join "/"
+                |> (++) "/"
+    in
+    { url | path = strippedPath }
+
+
+pushUrl : Navigation.Key -> Url -> Cmd Msg
+pushUrl key url =
+    removeTrailingSlash url
+        |> Url.toString
+        |> Navigation.pushUrl key
+
+
 init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
 init flags url navigationKey =
     let
@@ -59,8 +79,12 @@ init flags url navigationKey =
             , underConstruction = flags.underConstruction
             , pageCache = Loader.loadCache flags.pages
             }
+
+        ( newModel, loadCmd ) =
+            handleUrlChange url model
     in
-    handleUrlChange url model
+    -- remove trailing /
+    ( newModel, Cmd.batch [ pushUrl model.key url, loadCmd ] )
 
 
 handleUrlChange : Url -> Model -> ( Model, Cmd Msg )
@@ -212,9 +236,8 @@ update msg model =
         UrlChange newUrl ->
             handleUrlChange newUrl model
 
-        -- TODO: handle "download" links
         LinkClick (Internal url) ->
-            ( model, Navigation.pushUrl model.key <| Url.toString url )
+            ( model, pushUrl model.key url )
 
         LinkClick (External href) ->
             ( model, Navigation.load href )
@@ -325,7 +348,7 @@ port notifyYScroll : (Int -> msg) -> Sub msg
 subscriptions : Model -> Sub Msg
 subscriptions _ =
     Sub.batch
-        [ notifyCloseMenu <| always CloseMenu
+        [ notifyCloseMenu (always CloseMenu)
         , notifyYScroll YScroll
         ]
 
