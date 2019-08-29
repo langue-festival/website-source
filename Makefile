@@ -21,6 +21,7 @@ postcss := $(node_bin)/postcss
 inliner := $(node_bin)/inliner
 # pages
 pages_name := $(basename $(notdir $(wildcard $(pages_dir)/*)))
+pages_path := $(addprefix $(deploy_dir)/, $(pages_name))
 
 .PHONY: all build-env elm-analyse sass dev inliner deploy-files clean
 
@@ -64,15 +65,14 @@ inliner : $(deploy_dir) $(node_bin) elm sass
 	@$(inliner) --inlinemin --noimages $(base_dir)/main.html > $(deploy_dir)/index.html
 	@echo "Successfully generated $(deploy_dir)/index.html"
 
-$(deploy_dir)/index :
+$(deploy_dir)/index.html :
 	:
 
-$(deploy_dir)/% :
-	@mkdir -p $@
-	@cd $@ && ln -sf ../index.html index.html
+$(deploy_dir)/%.html :
+	@cd $(deploy_dir) && ln -sf index.html $(notdir $@)
 
 deploy-files : inliner
-	@make $(addprefix $(deploy_dir)/, $(pages_name))
+	@make $(addsuffix .html, $(pages_path))
 	@cd $(deploy_dir) && ln -sf index.html 404.html
 	@mkdir -p $(deploy_dir)/assets
 	@rsync -r $(base_dir)/assets/fonts/. $(deploy_dir)/assets/fonts

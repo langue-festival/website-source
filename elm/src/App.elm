@@ -40,26 +40,6 @@ type alias Flags =
     }
 
 
-removeTrailingSlash : Url -> Url
-removeTrailingSlash url =
-    let
-        strippedPath : String
-        strippedPath =
-            String.split "/" url.path
-                |> List.filter ((/=) "")
-                |> String.join "/"
-                |> (++) "/"
-    in
-    { url | path = strippedPath }
-
-
-pushUrl : Navigation.Key -> Url -> Cmd Msg
-pushUrl key url =
-    removeTrailingSlash url
-        |> Url.toString
-        |> Navigation.pushUrl key
-
-
 init : Flags -> Url -> Navigation.Key -> ( Model, Cmd Msg )
 init flags url navigationKey =
     let
@@ -79,12 +59,8 @@ init flags url navigationKey =
             , underConstruction = flags.underConstruction
             , pageCache = Loader.loadCache flags.pages
             }
-
-        ( newModel, loadCmd ) =
-            handleUrlChange url model
     in
-    -- remove trailing /
-    ( newModel, Cmd.batch [ pushUrl model.key url, loadCmd ] )
+    handleUrlChange url model
 
 
 handleUrlChange : Url -> Model -> ( Model, Cmd Msg )
@@ -228,6 +204,11 @@ handleLoadError url error model =
 
         Http.BadBody body ->
             setViewError url ("Invalid body: " ++ body) model
+
+
+pushUrl : Navigation.Key -> Url -> Cmd Msg
+pushUrl key url =
+    Navigation.pushUrl key (Url.toString url)
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
