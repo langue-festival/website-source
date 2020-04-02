@@ -1,6 +1,9 @@
 sudo: false
 
-language: generic
+language: node_js
+
+node_js:
+  - 13
 
 before_install:
   - | # epic build time improvement - see https://github.com/elm-lang/elm-compiler/issues/1473#issuecomment-245704142
