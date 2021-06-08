@@ -16,7 +16,7 @@ assets_hash_scss := $(build_dir)/assets-hash.scss
 elm_bin := $(node_bin)/elm
 elm_live := $(node_bin)/elm-live
 elm_analyse := $(node_bin)/elm-analyse
-node_sass := $(node_bin)/node-sass
+sass := $(node_bin)/sass
 postcss := $(node_bin)/postcss
 inliner := $(node_bin)/inliner
 # pages
@@ -42,7 +42,7 @@ elm-analyse : elm
 	cd $(elm_dir) && $(elm_analyse)
 
 sass : $(node_bin) build-env
-	@$(node_sass) --output-style compressed assets/scss/main.scss > $(sass_target)
+	@$(sass) --style=compressed assets/scss/main.scss $(sass_target)
 	@echo "Successfully generated $(sass_target)"
 
 dev : $(node_bin) build-env sass
